@@ -1,118 +1,306 @@
 {
   "twoOption": [
     {
-      "prompt": "如果明天可以少一個痛苦，你選哪個？",
-      "options": ["不用早起", "不用回訊息"]
+      "prompt": {
+        "zh": "如果明天可以少一件生活小麻煩，你會選哪個？",
+        "en": "If tomorrow could remove one small everyday hassle, which would you choose?"
+      },
+      "options": [
+        { "zh": "不用早起", "en": "No early wake-up" },
+        { "zh": "不用回訊息", "en": "No replying to messages" }
+      ]
     },
     {
-      "prompt": "今晚只能留一種娛樂。",
-      "options": ["看劇", "玩遊戲"]
+      "prompt": {
+        "zh": "今晚只能留下一種娛樂，你選哪個？",
+        "en": "You can keep only one kind of entertainment tonight."
+      },
+      "options": [
+        { "zh": "追劇", "en": "Watch shows" },
+        { "zh": "玩遊戲", "en": "Play games" }
+      ]
     },
     {
-      "prompt": "你可以讓一件事自動完成。",
-      "options": ["洗碗", "洗衣服"]
+      "prompt": {
+        "zh": "你可以讓一件家事永遠自動完成。",
+        "en": "You can make one chore finish itself forever."
+      },
+      "options": [
+        { "zh": "洗碗", "en": "Dishes" },
+        { "zh": "洗衣服", "en": "Laundry" }
+      ]
     },
     {
-      "prompt": "週末只能選一種恢復方式。",
-      "options": ["睡到自然醒", "出門曬太陽"]
+      "prompt": {
+        "zh": "這個週末，你只能選一種恢復方式。",
+        "en": "This weekend, you get only one way to recover."
+      },
+      "options": [
+        { "zh": "睡到自然醒", "en": "Sleep until you wake naturally" },
+        { "zh": "出門曬太陽", "en": "Go outside for sunlight" }
+      ]
     },
     {
-      "prompt": "朋友突然約你出門，你比較想要？",
-      "options": ["吃東西", "散步聊天"]
+      "prompt": {
+        "zh": "朋友突然約你出門，哪個比較有吸引力？",
+        "en": "A friend suddenly asks you to go out. What sounds better?"
+      },
+      "options": [
+        { "zh": "去吃東西", "en": "Get food" },
+        { "zh": "散步聊天", "en": "Walk and talk" }
+      ]
     },
     {
-      "prompt": "半夜肚子餓，只能選一個。",
-      "options": ["泡麵", "吐司"]
+      "prompt": {
+        "zh": "半夜肚子餓，只能選一個。",
+        "en": "It is midnight and you are hungry. Pick one."
+      },
+      "options": [
+        { "zh": "泡麵", "en": "Instant noodles" },
+        { "zh": "吐司", "en": "Toast" }
+      ]
     },
     {
-      "prompt": "你可以消失一種生活壓力。",
-      "options": ["遲到壓力", "已讀壓力"]
+      "prompt": {
+        "zh": "你可以消除一個日常壓力。",
+        "en": "You can erase one everyday pressure."
+      },
+      "options": [
+        { "zh": "遲到焦慮", "en": "Being late" },
+        { "zh": "已讀焦慮", "en": "Leaving messages on read" }
+      ]
     },
     {
-      "prompt": "今天只剩一點力氣，你想拿去做什麼？",
-      "options": ["洗澡", "收拾桌面"]
+      "prompt": {
+        "zh": "今天只剩一點點力氣，你會拿去做哪件事？",
+        "en": "You only have a tiny bit of energy left today. What gets it?"
+      },
+      "options": [
+        { "zh": "洗澡", "en": "Shower" },
+        { "zh": "整理桌面", "en": "Clear the desk" }
+      ]
     }
   ],
   "threeOption": [
     {
-      "prompt": "如果今晚突然多出 3 小時，你會用來做什麼？",
-      "options": ["睡覺", "玩遊戲", "整理房間"]
+      "prompt": {
+        "zh": "如果今晚突然多出 3 小時，你會拿去做什麼？",
+        "en": "If you suddenly had 3 extra hours tonight, what would you do?"
+      },
+      "options": [
+        { "zh": "睡覺", "en": "Sleep" },
+        { "zh": "玩遊戲", "en": "Play games" },
+        { "zh": "整理房間", "en": "Clean my room" }
+      ]
     },
     {
-      "prompt": "朋友聚會突然冷場，你會怎麼救場？",
-      "options": ["開新話題", "放一首歌", "拿出桌遊"]
+      "prompt": {
+        "zh": "聚會突然冷場，你會怎麼救場？",
+        "en": "A hangout suddenly gets awkwardly quiet. How do you save it?"
+      },
+      "options": [
+        { "zh": "開新話題", "en": "Start a new topic" },
+        { "zh": "放一首歌", "en": "Put on a song" },
+        { "zh": "拿出桌遊", "en": "Bring out a board game" }
+      ]
     },
     {
-      "prompt": "公司送你一個福利，你選哪個？",
-      "options": ["每週三放假", "每天午餐免費", "永久遠端工作"]
+      "prompt": {
+        "zh": "公司新增一個福利，你選哪個？",
+        "en": "Your company offers one new perk. Which do you pick?"
+      },
+      "options": [
+        { "zh": "每週三放假", "en": "Every Wednesday off" },
+        { "zh": "每天免費午餐", "en": "Free lunch every day" },
+        { "zh": "永遠遠端工作", "en": "Remote work forever" }
+      ]
     },
     {
-      "prompt": "明天早上要開會，今晚只能選一個福利。",
-      "options": ["立刻睡著", "會議取消", "老闆請早餐"]
+      "prompt": {
+        "zh": "明天早上有會議，今晚你最想獲得哪個祝福？",
+        "en": "There is a meeting tomorrow morning. Pick one blessing for tonight."
+      },
+      "options": [
+        { "zh": "秒睡", "en": "Fall asleep instantly" },
+        { "zh": "會議取消", "en": "The meeting gets canceled" },
+        { "zh": "老闆買早餐", "en": "The boss buys breakfast" }
+      ]
     },
     {
-      "prompt": "你可以刪掉生活中一種麻煩。",
-      "options": ["排隊", "找停車位", "回訊息"]
+      "prompt": {
+        "zh": "你可以刪掉一個日常煩躁來源。",
+        "en": "You can delete one everyday annoyance."
+      },
+      "options": [
+        { "zh": "排隊", "en": "Waiting in lines" },
+        { "zh": "找停車位", "en": "Finding parking" },
+        { "zh": "回訊息", "en": "Replying to messages" }
+      ]
     },
     {
-      "prompt": "你們要開一家深夜小店，主打什麼？",
-      "options": ["拉麵", "甜點", "桌遊"]
+      "prompt": {
+        "zh": "你們開了一間深夜小店，招牌會是什麼？",
+        "en": "Your group opens a late-night shop. What is the specialty?"
+      },
+      "options": [
+        { "zh": "拉麵", "en": "Ramen" },
+        { "zh": "甜點", "en": "Dessert" },
+        { "zh": "桌遊", "en": "Board games" }
+      ]
     },
     {
-      "prompt": "旅行突然下大雨，接下來做什麼？",
-      "options": ["改去咖啡廳", "買傘繼續走", "回住處休息"]
+      "prompt": {
+        "zh": "旅行時突然下大雨，接下來怎麼辦？",
+        "en": "It suddenly pours during a trip. What now?"
+      },
+      "options": [
+        { "zh": "找咖啡廳躲雨", "en": "Find a cafe" },
+        { "zh": "買傘繼續走", "en": "Buy umbrellas and continue" },
+        { "zh": "回去休息", "en": "Go back and rest" }
+      ]
     },
     {
-      "prompt": "如果你有一個私人助理，只能幫你一件事。",
-      "options": ["整理行程", "處理訊息", "打掃房間"]
+      "prompt": {
+        "zh": "你得到一位私人助理，但他只會做一件事。",
+        "en": "You get a personal assistant, but they only do one thing."
+      },
+      "options": [
+        { "zh": "整理行程", "en": "Manage my schedule" },
+        { "zh": "處理訊息", "en": "Handle messages" },
+        { "zh": "打掃房間", "en": "Clean my room" }
+      ]
     },
     {
-      "prompt": "朋友生日快到了，你會準備什麼？",
-      "options": ["實用禮物", "驚喜活動", "手寫卡片"]
+      "prompt": {
+        "zh": "朋友生日快到了，你會準備什麼？",
+        "en": "A friend's birthday is coming up. What do you prepare?"
+      },
+      "options": [
+        { "zh": "實用禮物", "en": "A practical gift" },
+        { "zh": "驚喜活動", "en": "A surprise event" },
+        { "zh": "手寫卡片", "en": "A handwritten card" }
+      ]
     },
     {
-      "prompt": "週末只剩半天，你想怎麼用？",
-      "options": ["出門走走", "在家充電", "約人吃飯"]
+      "prompt": {
+        "zh": "週末只剩半天，你想怎麼用？",
+        "en": "You only have half a day left this weekend. How do you use it?"
+      },
+      "options": [
+        { "zh": "出門散步", "en": "Go for a walk" },
+        { "zh": "在家充電", "en": "Recharge at home" },
+        { "zh": "約人吃飯", "en": "Meet someone for food" }
+      ]
     },
     {
-      "prompt": "你可以讓一種東西永遠免費。",
-      "options": ["交通", "咖啡", "電影票"]
+      "prompt": {
+        "zh": "你可以讓一種東西永遠免費。",
+        "en": "You can make one thing free forever."
+      },
+      "options": [
+        { "zh": "交通", "en": "Transportation" },
+        { "zh": "咖啡", "en": "Coffee" },
+        { "zh": "電影票", "en": "Movie tickets" }
+      ]
     },
     {
-      "prompt": "如果今晚要臨時煮宵夜，你選什麼？",
-      "options": ["泡麵加料", "煎蛋吐司", "冷凍水餃"]
+      "prompt": {
+        "zh": "今晚需要一份快速宵夜，你會做什麼？",
+        "en": "You need a quick midnight snack tonight. What do you make?"
+      },
+      "options": [
+        { "zh": "升級泡麵", "en": "Upgraded instant noodles" },
+        { "zh": "蛋吐司", "en": "Egg toast" },
+        { "zh": "冷凍水餃", "en": "Frozen dumplings" }
+      ]
     },
     {
-      "prompt": "朋友遲到 40 分鐘，你最可能怎麼做？",
-      "options": ["繼續等", "先點餐", "改約下次"]
+      "prompt": {
+        "zh": "朋友遲到 40 分鐘，你最可能怎麼做？",
+        "en": "A friend is 40 minutes late. What are you most likely to do?"
+      },
+      "options": [
+        { "zh": "繼續等", "en": "Keep waiting" },
+        { "zh": "先點餐", "en": "Order first" },
+        { "zh": "改約下次", "en": "Reschedule" }
+      ]
     },
     {
-      "prompt": "如果要組一個派對主題，你選哪種？",
-      "options": ["睡衣派對", "懷舊金曲", "神秘交換禮物"]
+      "prompt": {
+        "zh": "如果要辦一個主題派對，你會選哪個？",
+        "en": "If you had to choose a party theme, what would it be?"
+      },
+      "options": [
+        { "zh": "睡衣派對", "en": "Pajama party" },
+        { "zh": "復古金曲", "en": "Throwback hits" },
+        { "zh": "神秘禮物交換", "en": "Mystery gift swap" }
+      ]
     },
     {
-      "prompt": "你可以獲得一個微小超能力。",
-      "options": ["永遠找得到鑰匙", "手機永遠有電", "搭車永遠有座位"]
+      "prompt": {
+        "zh": "你可以擁有一個小小超能力。",
+        "en": "You can have one tiny superpower."
+      },
+      "options": [
+        { "zh": "永遠找到鑰匙", "en": "Always find my keys" },
+        { "zh": "手機永遠有電", "en": "Phone never dies" },
+        { "zh": "搭車永遠有座位", "en": "Always get a seat" }
+      ]
     },
     {
-      "prompt": "三天假期只能選一個目的地。",
-      "options": ["海邊", "山上", "城市小旅行"]
+      "prompt": {
+        "zh": "三天假期只能去一個地方。",
+        "en": "You get a three-day break, but only one destination."
+      },
+      "options": [
+        { "zh": "海邊", "en": "Beach" },
+        { "zh": "山上", "en": "Mountains" },
+        { "zh": "城市小旅行", "en": "City trip" }
+      ]
     },
     {
-      "prompt": "團隊要選一個吉祥物。",
-      "options": ["氣球", "火箭", "杯麵"]
+      "prompt": {
+        "zh": "你的朋友群需要一個吉祥物。",
+        "en": "Your group needs a mascot."
+      },
+      "options": [
+        { "zh": "氣球", "en": "Balloon" },
+        { "zh": "火箭", "en": "Rocket" },
+        { "zh": "杯麵", "en": "Cup noodles" }
+      ]
     },
     {
-      "prompt": "今天所有人都很累，你要提議什麼晚餐？",
-      "options": ["火鍋", "便當", "披薩"]
+      "prompt": {
+        "zh": "大家今天都很累，晚餐你會提議什麼？",
+        "en": "Everyone is tired today. What dinner do you suggest?"
+      },
+      "options": [
+        { "zh": "火鍋", "en": "Hot pot" },
+        { "zh": "便當", "en": "Bento" },
+        { "zh": "披薩", "en": "Pizza" }
+      ]
     },
     {
-      "prompt": "你能讓一件家事自動完成。",
-      "options": ["洗碗", "洗衣服", "倒垃圾"]
+      "prompt": {
+        "zh": "你可以自動化一件家事。",
+        "en": "You can automate one chore."
+      },
+      "options": [
+        { "zh": "洗碗", "en": "Dishes" },
+        { "zh": "洗衣服", "en": "Laundry" },
+        { "zh": "倒垃圾", "en": "Taking out trash" }
+      ]
     },
     {
-      "prompt": "如果要拍一支短影片，你選哪個題材？",
-      "options": ["美食挑戰", "房間改造", "假裝新聞台"]
+      "prompt": {
+        "zh": "如果要拍一支短影片，你會拍什麼？",
+        "en": "If you had to make a short video, what would it be about?"
+      },
+      "options": [
+        { "zh": "美食挑戰", "en": "Food challenge" },
+        { "zh": "房間改造", "en": "Room makeover" },
+        { "zh": "假新聞播報", "en": "Fake news broadcast" }
+      ]
     }
   ]
 }

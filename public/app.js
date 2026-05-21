@@ -1,34 +1,132 @@
-const roleText = {
-  conformer: {
-    title: "合群者",
-    body: "你的答案要成為唯一最多票。平手不算成功，所以你不只要拉人，還要避免另一邊追平。",
+const copy = {
+  zh: {
+    htmlLang: "zh-Hant",
+    eyebrow: "Party game",
+    switchLanguage: "English",
+    intro:
+      "把一顆試探氣球丟進房間，看大家會不會跟上。你可能要把票拉成最大群，也可能要悄悄成為唯一的少數，或是猜中某個人的選擇。每一題都像小小的讀心實驗，直到揭曉才知道誰真的看懂了現場。",
+    nameLabel: "你的名字",
+    namePlaceholder: "例如：Gordon",
+    roomInputLabel: "房號",
+    roomPlaceholder: "可自訂房號，例如 1234",
+    createRoom: "建立房間",
+    joinRoom: "加入房間",
+    roomLabel: "Room",
+    roundLabel: "Round",
+    leaveRoom: "離開房間",
+    lobbyTitle: "等朋友加入",
+    lobbyBody: "3 到 6 人就能開始。把房號分享出去，人到齊後由 Host 開始回合。",
+    startRound: "開始回合",
+    needPlayers: "至少需要 3 人",
+    lockAnswer: "鎖定答案",
+    locked: "已鎖定",
+    lockStatus: (locked, total) => `${locked}/${total} 位玩家已鎖定`,
+    resultsTitle: "本回合結果",
+    nextRound: "下一回合",
+    playersTitle: "玩家",
+    hostTag: "Host",
+    point: "pt",
+    staleRoom: "這個房間已經不存在，所以幫你清掉舊紀錄了。",
+    leftRoom: "你已離開房間。",
+    success: "成功",
+    fail: "失敗",
+    votes: "票",
+    lobbyRound: "Lobby",
+    choiceDivider: "・",
+    roleText: {
+      conformer: {
+        title: "合群者",
+        body: "你的答案要成為唯一最多票。平手不算成功，所以你要把人拉過來，也要防止別的選項追上。",
+      },
+      minority: {
+        title: "少數派",
+        body: "你的答案必須只有你一個人選。你可以輕輕把大家推去別的地方，但不要讓自己看起來太想落單。",
+      },
+      follower: {
+        title: "跟屁蟲",
+        body: "你要和指定玩家選一樣。你可以觀察他、影響他，或假裝你只是剛好同意。",
+      },
+    },
+    phaseText: {
+      lobby: "等待玩家",
+      choosing: "偷偷選一個答案",
+      discussing: "可以討論、改答案，最後鎖定",
+      results: "揭曉時間",
+    },
+    targetPlayer: "你的指定玩家：",
   },
-  minority: {
-    title: "少數派",
-    body: "你的答案要只有你自己選。可以輕輕推開大家，但別露出太想獨走的樣子。",
+  en: {
+    htmlLang: "en",
+    eyebrow: "Party game",
+    switchLanguage: "中文",
+    intro:
+      "Float a choice into the room and see who follows. Maybe you need to build the biggest crowd, maybe you need to slip away as the only outlier, or maybe you are secretly tracking one specific player. Every round is a tiny social read until the reveal shows who understood the room.",
+    nameLabel: "Your name",
+    namePlaceholder: "e.g. Gordon",
+    roomInputLabel: "Room code",
+    roomPlaceholder: "Create or join, e.g. 1234",
+    createRoom: "Create room",
+    joinRoom: "Join room",
+    roomLabel: "Room",
+    roundLabel: "Round",
+    leaveRoom: "Leave room",
+    lobbyTitle: "Waiting for friends",
+    lobbyBody: "Start with 3 to 6 players. Share the room code, then the Host can begin once everyone arrives.",
+    startRound: "Start round",
+    needPlayers: "Need at least 3 players",
+    lockAnswer: "Lock answer",
+    locked: "Locked",
+    lockStatus: (locked, total) => `${locked}/${total} players locked`,
+    resultsTitle: "Round results",
+    nextRound: "Next round",
+    playersTitle: "Players",
+    hostTag: "Host",
+    point: "pt",
+    staleRoom: "That room no longer exists, so your saved room was cleared.",
+    leftRoom: "You left the room.",
+    success: "Success",
+    fail: "Miss",
+    votes: "votes",
+    lobbyRound: "Lobby",
+    choiceDivider: " - ",
+    roleText: {
+      conformer: {
+        title: "Crowd-Puller",
+        body: "Your answer must be the single most popular choice. Ties do not count, so pull people in and stop other options from catching up.",
+      },
+      minority: {
+        title: "Outlier",
+        body: "Your answer must be chosen by you alone. Nudge people away gently, but do not look too eager to stand apart.",
+      },
+      follower: {
+        title: "Shadow",
+        body: "You must match your assigned player. Read them, influence them, or make it look like you simply agree.",
+      },
+    },
+    phaseText: {
+      lobby: "Waiting for players",
+      choosing: "Secretly pick an answer",
+      discussing: "Discuss, switch if you want, then lock in",
+      results: "Reveal time",
+    },
+    targetPlayer: "Your target player: ",
   },
-  follower: {
-    title: "跟屁蟲",
-    body: "你要和指定玩家選一樣。觀察他、影響他，或假裝你只是剛好同意。",
-  },
-};
-
-const phaseText = {
-  lobby: "等待玩家",
-  choosing: "先秘密選一個答案",
-  discussing: "可以討論與改選，準備好就鎖定",
-  results: "結果揭曉",
 };
 
 const state = {
   roomCode: localStorage.getItem("trialBalloonRoom") || "",
   playerId: localStorage.getItem("trialBalloonPlayer") || "",
+  language: localStorage.getItem("trialBalloonLanguage") || "zh",
   room: null,
   polling: null,
 };
 
 const app = document.querySelector("#app");
-const gameTemplateMarkup = document.querySelector("#gameTemplate").outerHTML;
+const gameTemplate = document.querySelector("#gameTemplate");
+
+function t() {
+  return copy[state.language] || copy.zh;
+}
 
 function request(path, body) {
   return fetch(path, {
@@ -61,6 +159,12 @@ function clearSavedRoom() {
   localStorage.removeItem("trialBalloonPlayer");
 }
 
+function setLanguage(language) {
+  state.language = language;
+  localStorage.setItem("trialBalloonLanguage", language);
+  document.documentElement.lang = t().htmlLang;
+}
+
 function normalizeRoomInput(value) {
   return String(value || "")
     .trim()
@@ -81,7 +185,7 @@ function logoMarkup() {
         <span class="logo-string"></span>
       </div>
       <div>
-        <p class="eyebrow">Party game</p>
+        <p class="eyebrow">${t().eyebrow}</p>
         <h1>Trial Balloon</h1>
       </div>
     </div>
@@ -92,29 +196,30 @@ function renderEntry(message = "") {
   clearInterval(state.polling);
   state.polling = null;
   document.body.classList.remove("in-game");
+  document.documentElement.lang = t().htmlLang;
   const savedName = localStorage.getItem("trialBalloonName") || "";
   app.innerHTML = `
     <section class="panel hero-panel">
+      <button type="button" class="language-toggle" id="languageToggle">${t().switchLanguage}</button>
       ${logoMarkup()}
-      <p class="intro-copy">丟出一個選擇，看朋友怎麼跟風。你可能想把大家拉到同一邊，也可能只想偷偷當唯一的少數派；每一票都像在試探空氣，等結果翻開才知道誰真的懂你。</p>
+      <p class="intro-copy">${t().intro}</p>
 
       <form id="entryForm" class="entry">
         <p class="muted" id="entryMessage" ${message ? "" : "hidden"}>${escapeHtml(message)}</p>
         <label>
-          你的名字
-          <input id="nameInput" maxlength="20" autocomplete="nickname" placeholder="例如：Gordon" required value="${escapeHtml(savedName)}" />
+          ${t().nameLabel}
+          <input id="nameInput" maxlength="20" autocomplete="nickname" placeholder="${t().namePlaceholder}" required value="${escapeHtml(savedName)}" />
         </label>
         <label>
-          房號
-          <input id="roomInput" maxlength="4" autocomplete="off" placeholder="可自訂或加入，例如 1234" />
+          ${t().roomInputLabel}
+          <input id="roomInput" maxlength="4" autocomplete="off" placeholder="${t().roomPlaceholder}" />
         </label>
         <div class="button-row">
-          <button type="button" id="createButton">建立房間</button>
-          <button type="submit" class="secondary">加入房間</button>
+          <button type="button" id="createButton">${t().createRoom}</button>
+          <button type="submit" class="secondary">${t().joinRoom}</button>
         </div>
       </form>
     </section>
-    ${gameTemplateMarkup}
   `;
   bindEntryForm();
 }
@@ -124,6 +229,12 @@ function bindEntryForm() {
   const nameInput = document.querySelector("#nameInput");
   const roomInput = document.querySelector("#roomInput");
   const createButton = document.querySelector("#createButton");
+  const languageToggle = document.querySelector("#languageToggle");
+
+  languageToggle.addEventListener("click", () => {
+    setLanguage(state.language === "zh" ? "en" : "zh");
+    renderEntry();
+  });
 
   roomInput.value = normalizeRoomInput(roomInput.value);
   roomInput.addEventListener("input", () => {
@@ -159,12 +270,25 @@ function bindEntryForm() {
 
 function mountGame() {
   document.body.classList.add("in-game");
-  const template = document.querySelector("#gameTemplate");
+  document.documentElement.lang = t().htmlLang;
   app.innerHTML = "";
-  app.append(template.content.cloneNode(true));
+  app.append(gameTemplate.content.cloneNode(true));
+  applyStaticGameCopy();
   bindGameButtons();
   render();
   startPolling();
+}
+
+function applyStaticGameCopy() {
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    element.textContent = t()[element.dataset.i18n] || "";
+  });
+  const leaveButton = app.querySelector("[data-leave-button]");
+  if (leaveButton) leaveButton.textContent = t().leaveRoom;
+  const lockButton = app.querySelector("[data-lock-button]");
+  if (lockButton) lockButton.textContent = t().lockAnswer;
+  const nextButton = app.querySelector("[data-next-button]");
+  if (nextButton) nextButton.textContent = t().nextRound;
 }
 
 function bindGameButtons() {
@@ -224,7 +348,7 @@ function refreshState() {
     })
     .catch(() => {
       clearSavedRoom();
-      renderEntry("上一個房間已經不存在，已清除舊記憶。");
+      renderEntry(t().staleRoom);
     });
 }
 
@@ -232,8 +356,9 @@ function render() {
   const room = state.room;
   if (!room || !app.querySelector("[data-room-code]")) return;
 
+  applyStaticGameCopy();
   app.querySelector("[data-room-code]").textContent = room.code;
-  app.querySelector("[data-round]").textContent = room.round || "Lobby";
+  app.querySelector("[data-round]").textContent = room.round || t().lobbyRound;
 
   renderPlayers(app.querySelector("[data-scoreboard]"), room.players);
   renderLobby(room);
@@ -246,8 +371,8 @@ function renderPlayers(container, players) {
     .map(
       (player) => `
         <div class="player">
-          <span>${escapeHtml(player.name)}${player.isHost ? " · Host" : ""}</span>
-          <span class="score">${player.score} pt</span>
+          <span>${escapeHtml(player.name)}${player.isHost ? ` ${t().choiceDivider} ${t().hostTag}` : ""}</span>
+          <span class="score">${player.score} ${t().point}</span>
         </div>
       `,
     )
@@ -262,7 +387,7 @@ function renderLobby(room) {
   const startButton = app.querySelector("[data-start-button]");
   startButton.hidden = !room.me.isHost;
   startButton.disabled = room.players.length < 3;
-  startButton.textContent = room.players.length < 3 ? "至少需要 3 人" : "開始回合";
+  startButton.textContent = room.players.length < 3 ? t().needPlayers : t().startRound;
 }
 
 function renderGame(room) {
@@ -270,27 +395,27 @@ function renderGame(room) {
   game.hidden = !["choosing", "discussing"].includes(room.phase);
   if (game.hidden) return;
 
-  app.querySelector("[data-phase]").textContent = phaseText[room.phase];
-  app.querySelector("[data-question]").textContent = room.question.prompt;
+  app.querySelector("[data-phase]").textContent = t().phaseText[room.phase];
+  app.querySelector("[data-question]").textContent = localized(room.question.prompt);
   renderRole(room);
   renderOptions(room);
 
   const lockedCount = Object.values(room.locks).filter(Boolean).length;
-  app.querySelector("[data-lock-status]").textContent = `${lockedCount}/${room.players.length} 位玩家已鎖定`;
+  app.querySelector("[data-lock-status]").textContent = t().lockStatus(lockedCount, room.players.length);
 
   const lockButton = app.querySelector("[data-lock-button]");
   lockButton.hidden = false;
   lockButton.disabled = room.me.locked || room.me.choice === null;
-  lockButton.textContent = room.me.locked ? "已鎖定" : "鎖定答案";
+  lockButton.textContent = room.me.locked ? t().locked : t().lockAnswer;
 }
 
 function renderRole(room) {
   const role = room.me.role;
-  const copy = roleText[role.type];
-  const target = role.type === "follower" ? `<p>你的目標玩家：<strong>${escapeHtml(role.targetName)}</strong></p>` : "";
+  const roleCopy = t().roleText[role.type];
+  const target = role.type === "follower" ? `<p>${t().targetPlayer}<strong>${escapeHtml(role.targetName)}</strong></p>` : "";
   app.querySelector("[data-role-card]").innerHTML = `
-    <div class="role-title">${copy.title}</div>
-    <p>${copy.body}</p>
+    <div class="role-title">${roleCopy.title}</div>
+    <p>${roleCopy.body}</p>
     ${target}
   `;
 }
@@ -305,7 +430,7 @@ function renderOptions(room) {
     if (room.me.locked) button.classList.add("locked");
     button.type = "button";
     button.disabled = room.me.locked;
-    button.textContent = `${String.fromCharCode(65 + index)}. ${option}`;
+    button.textContent = `${String.fromCharCode(65 + index)}. ${localized(option)}`;
     button.addEventListener("click", () => choose(index));
     container.append(button);
   });
@@ -331,7 +456,7 @@ function leaveRoom() {
   request("/api/leave", { room, playerId })
     .catch(() => {})
     .finally(() => {
-      renderEntry("你已離開房間。");
+      renderEntry(t().leftRoom);
     });
 }
 
@@ -346,8 +471,8 @@ function renderResults(room) {
       const count = room.results.counts[index] || 0;
       return `
         <div class="count-row">
-          <span>${String.fromCharCode(65 + index)}. ${escapeHtml(option)}</span>
-          <strong>${count} 票</strong>
+          <span>${String.fromCharCode(65 + index)}. ${escapeHtml(localized(option))}</span>
+          <strong>${count} ${t().votes}</strong>
         </div>
       `;
     })
@@ -356,15 +481,16 @@ function renderResults(room) {
   const resultList = app.querySelector("[data-results-list]");
   resultList.innerHTML = room.results.playerResults
     .map((result) => {
-      const label = result.success ? "成功" : "失敗";
+      const label = result.success ? t().success : t().fail;
       const className = result.success ? "success" : "fail";
-      const role = roleText[result.role].title;
-      const option = room.question.options[result.choice];
+      const role = t().roleText[result.role].title;
+      const option = localized(room.question.options[result.choice]);
+      const detail = localized(result.detail);
       return `
         <div class="result">
           <div>
             <strong>${escapeHtml(result.playerName)}</strong>
-            <div class="muted">${role} · ${escapeHtml(option)} · ${escapeHtml(result.detail)}</div>
+            <div class="muted">${role} ${t().choiceDivider} ${escapeHtml(option)} ${t().choiceDivider} ${escapeHtml(detail)}</div>
           </div>
           <span class="${className}">${label}</span>
         </div>
@@ -374,6 +500,14 @@ function renderResults(room) {
 
   const nextButton = app.querySelector("[data-next-button]");
   nextButton.hidden = !room.me.isHost;
+  nextButton.textContent = t().nextRound;
+}
+
+function localized(value) {
+  if (value && typeof value === "object") {
+    return value[state.language] || value.zh || value.en || "";
+  }
+  return value || "";
 }
 
 function escapeHtml(value) {
@@ -384,6 +518,8 @@ function escapeHtml(value) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
+
+setLanguage(state.language);
 
 if (state.roomCode && state.playerId) {
   mountGame();

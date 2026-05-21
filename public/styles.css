@@ -136,6 +136,18 @@ label {
   margin-bottom: 1rem;
 }
 
+.language-toggle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  min-height: 36px;
+  border: 1px solid var(--line);
+  background: #ffffff;
+  color: #40392f;
+  padding: 0 0.75rem;
+  box-shadow: none;
+}
+
 .logo-mark {
   position: relative;
   display: grid;

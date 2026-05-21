@@ -24,10 +24,26 @@ function validateDeck(deck, optionCount, name) {
     throw new Error(`Question deck "${name}" must contain at least one question.`);
   }
   deck.forEach((question, index) => {
-    if (!question.prompt || !Array.isArray(question.options) || question.options.length !== optionCount) {
-      throw new Error(`Question ${name}[${index}] must have a prompt and ${optionCount} options.`);
+    if (!hasLocalizedText(question.prompt) || !Array.isArray(question.options) || question.options.length !== optionCount) {
+      throw new Error(`Question ${name}[${index}] must have bilingual prompt text and ${optionCount} options.`);
     }
+    question.options.forEach((option, optionIndex) => {
+      if (!hasLocalizedText(option)) {
+        throw new Error(`Question ${name}[${index}].options[${optionIndex}] must have zh and en text.`);
+      }
+    });
   });
+}
+
+function hasLocalizedText(value) {
+  return Boolean(
+    value &&
+      typeof value === "object" &&
+      typeof value.zh === "string" &&
+      value.zh.trim() &&
+      typeof value.en === "string" &&
+      value.en.trim(),
+  );
 }
 
 function id(size = 12) {
@@ -199,21 +215,29 @@ function scoreRound(room) {
     const role = room.roles[player.id];
     const choice = room.choices[player.id];
     let success = false;
-    let detail = "";
+    let detail = { zh: "", en: "" };
 
     if (role.type === "conformer") {
       success = uniqueMax !== null && choice === uniqueMax;
-      detail = success ? "你的答案是唯一最多票。" : "你的答案沒有成為唯一最多票。";
+      detail = success
+        ? { zh: "你的答案是唯一最多票。", en: "Your answer was the single most popular choice." }
+        : { zh: "你的答案沒有成為唯一最多票。", en: "Your answer was not the single most popular choice." };
     }
     if (role.type === "minority") {
       success = counts[choice] === 1;
-      detail = success ? "只有你選了這個答案。" : "有人和你選了一樣的答案。";
+      detail = success
+        ? { zh: "只有你選了這個答案。", en: "Only you chose this answer." }
+        : { zh: "有人和你選了一樣的答案。", en: "Someone else chose the same answer." };
     }
     if (role.type === "follower") {
       const targetChoice = room.choices[role.targetId];
       const target = room.players.find((candidate) => candidate.id === role.targetId);
+      const zhTarget = target?.name || "目標玩家";
+      const enTarget = target?.name || "your target player";
       success = choice === targetChoice;
-      detail = success ? `你跟 ${target?.name || "目標玩家"} 選了一樣。` : `你沒有跟 ${target?.name || "目標玩家"} 選一樣。`;
+      detail = success
+        ? { zh: `你跟 ${zhTarget} 選了一樣。`, en: `You matched ${enTarget}.` }
+        : { zh: `你沒有跟 ${zhTarget} 選一樣。`, en: `You did not match ${enTarget}.` };
     }
 
     if (success) player.score += 1;
