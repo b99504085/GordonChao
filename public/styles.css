@@ -1,0 +1,275 @@
+:root {
+  color-scheme: dark;
+  --bg: #101214;
+  --panel: #1a1e22;
+  --panel-2: #222831;
+  --text: #f2efe8;
+  --muted: #a7adb4;
+  --line: #343b44;
+  --accent: #f6c453;
+  --accent-2: #7bdff2;
+  --danger: #ff8a80;
+  --ok: #9be564;
+  --radius: 8px;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Noto Sans TC", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(circle at top left, rgba(246, 196, 83, 0.16), transparent 32rem),
+    var(--bg);
+  color: var(--text);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  min-height: 48px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: #1b1505;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: var(--panel-2);
+  color: var(--text);
+  outline: 1px solid var(--line);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+input {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 0.35rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #0d0f11;
+  color: var(--text);
+  padding: 0 0.85rem;
+  text-transform: none;
+}
+
+.shell {
+  width: min(960px, 100%);
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.panel,
+.topbar {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(26, 30, 34, 0.94);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.24);
+}
+
+.panel {
+  padding: clamp(1rem, 4vw, 2rem);
+}
+
+.compact {
+  margin-top: 1rem;
+  padding: 1rem;
+}
+
+.topbar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 0.85rem 1rem;
+}
+
+.topbar strong {
+  display: block;
+  font-size: 1.45rem;
+  letter-spacing: 0.08em;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0.5rem;
+  font-size: clamp(2.35rem, 9vw, 4.5rem);
+  line-height: 0.95;
+}
+
+h2 {
+  margin-bottom: 0.75rem;
+  font-size: 1.35rem;
+}
+
+.eyebrow {
+  margin-bottom: 0.25rem;
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.muted {
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.entry {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.4rem;
+}
+
+.button-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.leave-button {
+  grid-column: 1 / -1;
+  min-height: 40px;
+}
+
+.players,
+.results-list,
+.counts {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.player,
+.result,
+.count-row,
+.role-card,
+.phase-chip {
+  border-radius: var(--radius);
+  background: var(--panel-2);
+  padding: 0.75rem;
+}
+
+.player,
+.result,
+.count-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.score {
+  color: var(--accent-2);
+  font-weight: 800;
+}
+
+.role-card {
+  margin-bottom: 1rem;
+  border: 1px solid rgba(246, 196, 83, 0.4);
+}
+
+.role-title {
+  margin-bottom: 0.35rem;
+  color: var(--accent);
+  font-weight: 900;
+}
+
+.options {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.option {
+  width: 100%;
+  min-height: 64px;
+  border: 1px solid var(--line);
+  background: #12161a;
+  color: var(--text);
+  text-align: left;
+  padding: 0.85rem;
+}
+
+.option.selected {
+  border-color: var(--accent);
+  background: rgba(246, 196, 83, 0.18);
+}
+
+.option.locked {
+  opacity: 0.72;
+}
+
+[data-lock-button],
+[data-next-button],
+[data-start-button] {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.phase-chip {
+  display: inline-block;
+  margin-bottom: 0.8rem;
+  color: var(--accent-2);
+  font-weight: 800;
+}
+
+.success {
+  color: var(--ok);
+  font-weight: 800;
+}
+
+.fail {
+  color: var(--danger);
+  font-weight: 800;
+}
+
+.scoreboard {
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 760px) {
+  .shell {
+    display: grid;
+    grid-template-columns: 1.35fr 0.8fr;
+    gap: 1rem;
+    align-items: start;
+    padding: 2rem;
+  }
+
+  .topbar,
+  [data-lobby],
+  [data-game],
+  [data-results] {
+    grid-column: 1;
+  }
+
+  .scoreboard {
+    grid-column: 2;
+    grid-row: 2 / span 3;
+    position: sticky;
+    top: 1rem;
+  }
+
+  body:not(.in-game) .shell {
+    display: block;
+  }
+}

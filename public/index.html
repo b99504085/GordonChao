@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Trial Balloon</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main id="app" class="shell">
+      <section class="panel">
+        <p class="eyebrow">Party prototype</p>
+        <h1>Trial Balloon</h1>
+        <p class="muted">用手機加入同一個房間。每回合你有一個秘密動機：拉大家同票、獨自少數，或跟上指定玩家。</p>
+
+        <form id="entryForm" class="entry">
+          <p class="muted" id="entryMessage" hidden></p>
+          <label>
+            你的名字
+            <input id="nameInput" maxlength="20" autocomplete="nickname" placeholder="例如：Gordon" required />
+          </label>
+          <label>
+            房號
+            <input id="roomInput" maxlength="4" autocomplete="off" placeholder="可自訂或加入，例如 1234" />
+          </label>
+          <div class="button-row">
+            <button type="button" id="createButton">建立房間</button>
+            <button type="submit" class="secondary">加入房間</button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <template id="gameTemplate">
+      <section class="topbar">
+        <div>
+          <p class="eyebrow">Room</p>
+          <strong data-room-code></strong>
+        </div>
+        <div>
+          <p class="eyebrow">Round</p>
+          <strong data-round></strong>
+        </div>
+        <button type="button" class="secondary leave-button" data-leave-button>離開房間</button>
+      </section>
+
+      <section class="panel compact" data-lobby hidden>
+        <h2>等待玩家加入</h2>
+        <p class="muted">3 到 6 人即可開始。大家連到同一個網址後輸入房號。</p>
+        <div class="players" data-player-list></div>
+        <button data-start-button hidden>開始第一回合</button>
+      </section>
+
+      <section class="panel compact" data-game hidden>
+        <div class="phase-chip" data-phase></div>
+        <h2 data-question></h2>
+        <div class="role-card" data-role-card></div>
+        <div class="options" data-options></div>
+        <button data-lock-button hidden>鎖定答案</button>
+        <p class="muted" data-lock-status></p>
+      </section>
+
+      <section class="panel compact" data-results hidden>
+        <h2>本回合結果</h2>
+        <div class="counts" data-counts></div>
+        <div class="results-list" data-results-list></div>
+        <button data-next-button hidden>下一回合</button>
+      </section>
+
+      <section class="panel compact scoreboard">
+        <h2>玩家</h2>
+        <div class="players" data-scoreboard></div>
+      </section>
+    </template>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

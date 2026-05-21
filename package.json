@@ -1,0 +1,12 @@
+{
+  "name": "trial-balloon",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local-network party game prototype for Trial Balloon.",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
