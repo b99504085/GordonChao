@@ -1,3 +1,5 @@
+const roleTypes = ["conformer", "minority", "follower"];
+
 const copy = {
   zh: {
     htmlLang: "zh-Hant",
@@ -5,6 +7,14 @@ const copy = {
     switchLanguage: "English",
     intro:
       "把一顆試探氣球丟進房間，看大家會不會跟上。你可能要把票拉成最大群，也可能要悄悄成為唯一的少數，或是猜中某個人的選擇。每一題都像小小的讀心實驗，直到揭曉才知道誰真的看懂了現場。",
+    rulesTitle: "怎麼玩",
+    ruleSteps: [
+      "每位玩家用手機加入同一個房間，Host 開始回合。",
+      "每回合大家會看到同一道題目，但每個人會拿到自己的秘密動機。",
+      "先偷偷選答案，等所有人都選完後，可以討論、說服、試探，也可以改答案。",
+      "大家鎖定後揭曉投票與得分。達成自己秘密動機的人得 1 分。",
+    ],
+    rolesTitle: "三種秘密動機",
     nameLabel: "你的名字",
     namePlaceholder: "例如：Gordon",
     roomInputLabel: "房號",
@@ -36,14 +46,17 @@ const copy = {
     roleText: {
       conformer: {
         title: "合群者",
+        short: "把大家拉到同一邊",
         body: "你的答案要成為唯一最多票。平手不算成功，所以你要把人拉過來，也要防止別的選項追上。",
       },
       minority: {
         title: "少數派",
+        short: "悄悄成為唯一例外",
         body: "你的答案必須只有你一個人選。你可以輕輕把大家推去別的地方，但不要讓自己看起來太想落單。",
       },
       follower: {
         title: "跟屁蟲",
+        short: "盯緊指定玩家",
         body: "你要和指定玩家選一樣。你可以觀察他、影響他，或假裝你只是剛好同意。",
       },
     },
@@ -61,6 +74,14 @@ const copy = {
     switchLanguage: "中文",
     intro:
       "Float a choice into the room and see who follows. Maybe you need to build the biggest crowd, maybe you need to slip away as the only outlier, or maybe you are secretly tracking one specific player. Every round is a tiny social read until the reveal shows who understood the room.",
+    rulesTitle: "How to Play",
+    ruleSteps: [
+      "Everyone joins the same room on their phone, then the Host starts the round.",
+      "Everyone sees the same question, but each player gets a private motive.",
+      "Pick an answer in secret. Once everyone has chosen, discuss, persuade, test the room, and switch if you want.",
+      "When everyone locks in, votes are revealed. Players who complete their private motive score 1 point.",
+    ],
+    rolesTitle: "Three Private Motives",
     nameLabel: "Your name",
     namePlaceholder: "e.g. Gordon",
     roomInputLabel: "Room code",
@@ -92,14 +113,17 @@ const copy = {
     roleText: {
       conformer: {
         title: "Crowd-Puller",
+        short: "Pull the room together",
         body: "Your answer must be the single most popular choice. Ties do not count, so pull people in and stop other options from catching up.",
       },
       minority: {
         title: "Outlier",
+        short: "Be the only exception",
         body: "Your answer must be chosen by you alone. Nudge people away gently, but do not look too eager to stand apart.",
       },
       follower: {
         title: "Shadow",
+        short: "Track your target player",
         body: "You must match your assigned player. Read them, influence them, or make it look like you simply agree.",
       },
     },
@@ -177,6 +201,19 @@ function showError(error) {
   alert(error.message || String(error));
 }
 
+function roleAvatar(type, size = "medium") {
+  return `
+    <span class="role-avatar role-avatar-${type} role-avatar-${size}" aria-hidden="true">
+      <span class="avatar-face">
+        <span class="avatar-eye left"></span>
+        <span class="avatar-eye right"></span>
+        <span class="avatar-mouth"></span>
+      </span>
+      <span class="avatar-symbol"></span>
+    </span>
+  `;
+}
+
 function logoMarkup() {
   return `
     <div class="brand-lockup">
@@ -192,6 +229,36 @@ function logoMarkup() {
   `;
 }
 
+function rulesMarkup() {
+  return `
+    <section class="rules-card" aria-labelledby="rulesTitle">
+      <h2 id="rulesTitle">${t().rulesTitle}</h2>
+      <ol class="rule-list">
+        ${t()
+          .ruleSteps.map((step) => `<li>${escapeHtml(step)}</li>`)
+          .join("")}
+      </ol>
+      <h3>${t().rolesTitle}</h3>
+      <div class="role-guide">
+        ${roleTypes
+          .map((type) => {
+            const role = t().roleText[type];
+            return `
+              <article class="role-guide-card">
+                ${roleAvatar(type, "small")}
+                <div>
+                  <strong>${role.title}</strong>
+                  <p>${role.short}</p>
+                </div>
+              </article>
+            `;
+          })
+          .join("")}
+      </div>
+    </section>
+  `;
+}
+
 function renderEntry(message = "") {
   clearInterval(state.polling);
   state.polling = null;
@@ -203,6 +270,7 @@ function renderEntry(message = "") {
       <button type="button" class="language-toggle" id="languageToggle">${t().switchLanguage}</button>
       ${logoMarkup()}
       <p class="intro-copy">${t().intro}</p>
+      ${rulesMarkup()}
 
       <form id="entryForm" class="entry">
         <p class="muted" id="entryMessage" ${message ? "" : "hidden"}>${escapeHtml(message)}</p>
@@ -414,7 +482,13 @@ function renderRole(room) {
   const roleCopy = t().roleText[role.type];
   const target = role.type === "follower" ? `<p>${t().targetPlayer}<strong>${escapeHtml(role.targetName)}</strong></p>` : "";
   app.querySelector("[data-role-card]").innerHTML = `
-    <div class="role-title">${roleCopy.title}</div>
+    <div class="role-heading">
+      ${roleAvatar(role.type)}
+      <div>
+        <div class="role-title">${roleCopy.title}</div>
+        <p>${roleCopy.short}</p>
+      </div>
+    </div>
     <p>${roleCopy.body}</p>
     ${target}
   `;
@@ -490,7 +564,10 @@ function renderResults(room) {
         <div class="result">
           <div>
             <strong>${escapeHtml(result.playerName)}</strong>
-            <div class="muted">${role} ${t().choiceDivider} ${escapeHtml(option)} ${t().choiceDivider} ${escapeHtml(detail)}</div>
+            <div class="muted result-detail">
+              ${roleAvatar(result.role, "tiny")}
+              <span>${role} ${t().choiceDivider} ${escapeHtml(option)} ${t().choiceDivider} ${escapeHtml(detail)}</span>
+            </div>
           </div>
           <span class="${className}">${label}</span>
         </div>
