@@ -8,10 +8,18 @@
   </head>
   <body>
     <main id="app" class="shell">
-      <section class="panel">
-        <p class="eyebrow">Party prototype</p>
-        <h1>Trial Balloon</h1>
-        <p class="muted">用手機加入同一個房間。每回合你有一個秘密動機：拉大家同票、獨自少數，或跟上指定玩家。</p>
+      <section class="panel hero-panel">
+        <div class="brand-lockup">
+          <div class="logo-mark" aria-hidden="true">
+            <span class="logo-balloon"></span>
+            <span class="logo-string"></span>
+          </div>
+          <div>
+            <p class="eyebrow">Party game</p>
+            <h1>Trial Balloon</h1>
+          </div>
+        </div>
+        <p class="intro-copy">丟出一個選擇，看朋友怎麼跟風。你可能想把大家拉到同一邊，也可能只想偷偷當唯一的少數派；每一票都像在試探空氣，等結果翻開才知道誰真的懂你。</p>
 
         <form id="entryForm" class="entry">
           <p class="muted" id="entryMessage" hidden></p>
@@ -29,49 +37,49 @@
           </div>
         </form>
       </section>
+
+      <template id="gameTemplate">
+        <section class="topbar">
+          <div>
+            <p class="eyebrow">Room</p>
+            <strong data-room-code></strong>
+          </div>
+          <div>
+            <p class="eyebrow">Round</p>
+            <strong data-round></strong>
+          </div>
+          <button type="button" class="secondary leave-button" data-leave-button>離開房間</button>
+        </section>
+
+        <section class="panel compact" data-lobby hidden>
+          <h2>等待朋友加入</h2>
+          <p class="muted">3 到 6 人就能開局。把房號丟給朋友，等大家到齊後由 Host 開始。</p>
+          <div class="players" data-player-list></div>
+          <button data-start-button hidden>開始回合</button>
+        </section>
+
+        <section class="panel compact" data-game hidden>
+          <div class="phase-chip" data-phase></div>
+          <h2 data-question></h2>
+          <div class="role-card" data-role-card></div>
+          <div class="options" data-options></div>
+          <button data-lock-button hidden>鎖定答案</button>
+          <p class="muted" data-lock-status></p>
+        </section>
+
+        <section class="panel compact" data-results hidden>
+          <h2>本回合結果</h2>
+          <div class="counts" data-counts></div>
+          <div class="results-list" data-results-list></div>
+          <button data-next-button hidden>下一回合</button>
+        </section>
+
+        <section class="panel compact scoreboard">
+          <h2>玩家</h2>
+          <div class="players" data-scoreboard></div>
+        </section>
+      </template>
     </main>
-
-    <template id="gameTemplate">
-      <section class="topbar">
-        <div>
-          <p class="eyebrow">Room</p>
-          <strong data-room-code></strong>
-        </div>
-        <div>
-          <p class="eyebrow">Round</p>
-          <strong data-round></strong>
-        </div>
-        <button type="button" class="secondary leave-button" data-leave-button>離開房間</button>
-      </section>
-
-      <section class="panel compact" data-lobby hidden>
-        <h2>等待玩家加入</h2>
-        <p class="muted">3 到 6 人即可開始。大家連到同一個網址後輸入房號。</p>
-        <div class="players" data-player-list></div>
-        <button data-start-button hidden>開始第一回合</button>
-      </section>
-
-      <section class="panel compact" data-game hidden>
-        <div class="phase-chip" data-phase></div>
-        <h2 data-question></h2>
-        <div class="role-card" data-role-card></div>
-        <div class="options" data-options></div>
-        <button data-lock-button hidden>鎖定答案</button>
-        <p class="muted" data-lock-status></p>
-      </section>
-
-      <section class="panel compact" data-results hidden>
-        <h2>本回合結果</h2>
-        <div class="counts" data-counts></div>
-        <div class="results-list" data-results-list></div>
-        <button data-next-button hidden>下一回合</button>
-      </section>
-
-      <section class="panel compact scoreboard">
-        <h2>玩家</h2>
-        <div class="players" data-scoreboard></div>
-      </section>
-    </template>
 
     <script src="/app.js"></script>
   </body>

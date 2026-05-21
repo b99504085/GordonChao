@@ -1,15 +1,15 @@
 const roleText = {
   conformer: {
     title: "合群者",
-    body: "你的答案要成為唯一最多人選的答案。最高票平手不算成功。",
+    body: "你的答案要成為唯一最多票。平手不算成功，所以你不只要拉人，還要避免另一邊追平。",
   },
   minority: {
     title: "少數派",
-    body: "你的答案要只有你自己選。只要有人跟你一樣就失敗。",
+    body: "你的答案要只有你自己選。可以輕輕推開大家，但別露出太想獨走的樣子。",
   },
   follower: {
     title: "跟屁蟲",
-    body: "你要和指定玩家選一樣。可以觀察對方，也可以試著影響對方。",
+    body: "你要和指定玩家選一樣。觀察他、影響他，或假裝你只是剛好同意。",
   },
 };
 
@@ -73,16 +73,30 @@ function showError(error) {
   alert(error.message || String(error));
 }
 
+function logoMarkup() {
+  return `
+    <div class="brand-lockup">
+      <div class="logo-mark" aria-hidden="true">
+        <span class="logo-balloon"></span>
+        <span class="logo-string"></span>
+      </div>
+      <div>
+        <p class="eyebrow">Party game</p>
+        <h1>Trial Balloon</h1>
+      </div>
+    </div>
+  `;
+}
+
 function renderEntry(message = "") {
   clearInterval(state.polling);
   state.polling = null;
   document.body.classList.remove("in-game");
   const savedName = localStorage.getItem("trialBalloonName") || "";
   app.innerHTML = `
-    <section class="panel">
-      <p class="eyebrow">Party prototype</p>
-      <h1>Trial Balloon</h1>
-      <p class="muted">用手機加入同一個房間。每回合你有一個秘密動機：拉大家同票、獨自少數，或跟上指定玩家。</p>
+    <section class="panel hero-panel">
+      ${logoMarkup()}
+      <p class="intro-copy">丟出一個選擇，看朋友怎麼跟風。你可能想把大家拉到同一邊，也可能只想偷偷當唯一的少數派；每一票都像在試探空氣，等結果翻開才知道誰真的懂你。</p>
 
       <form id="entryForm" class="entry">
         <p class="muted" id="entryMessage" ${message ? "" : "hidden"}>${escapeHtml(message)}</p>
