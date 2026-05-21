@@ -28,6 +28,7 @@ const state = {
 };
 
 const app = document.querySelector("#app");
+const gameTemplateMarkup = document.querySelector("#gameTemplate").outerHTML;
 
 function request(path, body) {
   return fetch(path, {
@@ -99,6 +100,7 @@ function renderEntry(message = "") {
         </div>
       </form>
     </section>
+    ${gameTemplateMarkup}
   `;
   bindEntryForm();
 }
