@@ -103,26 +103,41 @@ function randomRolePlan(playerCount) {
   return shuffle(["conformer", "conformer", "minority", "minority", "follower", "follower"]);
 }
 
-function fixedRolePlan(playerCount) {
-  if (playerCount === 3) return shuffle(["conformer", "minority", "follower"]);
-  if (playerCount === 4) return shuffle(["conformer", "conformer", "minority", "follower"]);
-  if (playerCount === 5) return shuffle(["conformer", "conformer", "minority", "minority", "follower"]);
-  return shuffle(["conformer", "conformer", "minority", "minority", "follower", "follower"]);
+function defaultRoleConfigFor(playerCount) {
+  if (playerCount === 3) return { conformer: 1, minority: 1, follower: 1 };
+  if (playerCount === 4) return { conformer: 2, minority: 1, follower: 1 };
+  if (playerCount === 5) return { conformer: 2, minority: 2, follower: 1 };
+  return { conformer: 2, minority: 2, follower: 2 };
 }
 
-function rolePlan(playerCount, mode = "random") {
-  return mode === "fixed" ? fixedRolePlan(playerCount) : randomRolePlan(playerCount);
+function fixedRolePlan(playerCount, config = defaultRoleConfigFor(playerCount)) {
+  return shuffle(Object.entries(config).flatMap(([role, count]) => Array(Number(count)).fill(role)));
 }
 
-function roleConfigFor(playerCount) {
-  const plan = fixedRolePlan(Math.min(Math.max(playerCount, 3), 6));
-  return plan.reduce(
-    (counts, role) => {
-      counts[role] += 1;
-      return counts;
-    },
-    { conformer: 0, minority: 0, follower: 0 },
-  );
+function fixedRoleConfigFor(room) {
+  const playerCount = Math.min(Math.max(room.players.length, 3), 6);
+  return room.fixedRoleConfigs?.[playerCount] || defaultRoleConfigFor(playerCount);
+}
+
+function rolePlan(room) {
+  return room.roleMode === "fixed" ? fixedRolePlan(room.players.length, fixedRoleConfigFor(room)) : randomRolePlan(room.players.length);
+}
+
+function validateFixedRoleConfig(config, playerCount) {
+  const roles = ["conformer", "minority", "follower"];
+  const normalized = {};
+  for (const role of roles) {
+    const count = Number(config?.[role]);
+    if (!Number.isInteger(count) || count < 0 || count > playerCount) {
+      throw new Error("Role counts must be whole numbers between 0 and the player count.");
+    }
+    normalized[role] = count;
+  }
+  const total = Object.values(normalized).reduce((sum, count) => sum + count, 0);
+  if (total !== playerCount) {
+    throw new Error("Fixed role counts must add up to the number of players in the room.");
+  }
+  return normalized;
 }
 
 function makePlayer(name, isHost = false) {
@@ -170,7 +185,7 @@ function serializeRoom(room, playerId) {
     players: room.players.map(publicPlayer),
     hostId: room.hostId,
     roleMode: room.roleMode || "random",
-    fixedRoleConfig: roleConfigFor(room.players.length),
+    fixedRoleConfig: fixedRoleConfigFor(room),
     question: room.question,
     choices: room.choices,
     locks: Object.fromEntries(Object.entries(room.locks).map(([id, locked]) => [id, Boolean(locked)])),
@@ -195,7 +210,7 @@ function serializeRoom(room, playerId) {
 }
 
 function assignRoles(room) {
-  const plan = rolePlan(room.players.length, room.roleMode);
+  const plan = rolePlan(room);
   const available = shuffle(room.players);
   room.roles = {};
   plan.forEach((type) => {
@@ -365,6 +380,7 @@ function createRoom(body) {
     locks: {},
     results: null,
     roleMode: "random",
+    fixedRoleConfigs: {},
     deck: [],
     deckType: null,
   };
@@ -449,6 +465,20 @@ async function routeApi(request, response) {
       if (!player.isHost) throw new Error("Only the host can change room settings.");
       if (room.phase !== "lobby") throw new Error("Role settings can only be changed in the lobby.");
       room.roleMode = body.mode === "fixed" ? "fixed" : "random";
+      return sendJson(response, 200, { room: serializeRoom(room, player.id) });
+    }
+
+    if (url.pathname === "/api/fixed-roles") {
+      if (!player.isHost) throw new Error("Only the host can change room settings.");
+      if (room.phase !== "lobby") throw new Error("Role settings can only be changed in the lobby.");
+      const playerCount = room.players.length;
+      if (playerCount < 3 || playerCount > 6) throw new Error("Fixed role settings need 3 to 6 players.");
+      room.fixedRoleConfigs ||= {};
+      if (body.reset) {
+        delete room.fixedRoleConfigs[playerCount];
+      } else {
+        room.fixedRoleConfigs[playerCount] = validateFixedRoleConfig(body.config, playerCount);
+      }
       return sendJson(response, 200, { room: serializeRoom(room, player.id) });
     }
 

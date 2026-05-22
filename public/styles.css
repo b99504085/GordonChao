@@ -556,10 +556,6 @@ h3 {
   font-weight: 850;
 }
 
-.scoreboard {
-  margin-bottom: 2rem;
-}
-
 .room-settings {
   margin-bottom: 2rem;
 }
@@ -610,6 +606,27 @@ h3 {
   font-weight: 800;
 }
 
+.role-count > span:not(.role-avatar) {
+  flex: 1;
+}
+
+.role-stepper {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.role-stepper button {
+  width: 2rem;
+  min-height: 2rem;
+  padding: 0;
+}
+
+.reset-config-button {
+  width: 100%;
+  min-height: 40px;
+  margin-top: 0.8rem;
+}
+
 @media (min-width: 760px) {
   .shell {
     display: grid;
@@ -626,16 +643,16 @@ h3 {
     grid-column: 1;
   }
 
-  .scoreboard {
-    grid-column: 2;
-    grid-row: 2 / span 3;
-    position: sticky;
-    top: 1rem;
+  [data-lobby] {
+    grid-column: 1;
+    grid-row: 2;
   }
 
   .room-settings {
     grid-column: 2;
-    grid-row: 5;
+    grid-row: 2;
+    position: sticky;
+    top: 1rem;
   }
 
   body:not(.in-game) .shell {

@@ -6,7 +6,7 @@ const copy = {
     eyebrow: "Party game",
     switchLanguage: "English",
     intro:
-      "把一顆試探氣球丟進房間，看大家會不會跟上。你可能要把票拉成最大群，也可能要悄悄成為唯一的少數，或是猜中某個人的選擇。每一題都像小小的讀心實驗，直到揭曉才知道誰真的看懂了現場。",
+      "一場看似普通的聊天遊戲，但其實，每個人都有自己的秘密任務。有人想迎合大眾，有人想與眾不同，也有人正試圖猜中你的想法。透過各式各樣的討論話題，你們會誠實發表意見、亂聊、偷帶風向、互相瞎猜……直到揭曉身份的那一刻，才發現原來剛剛那場聊天比想像中還不單純。",
     rulesTitle: "怎麼玩",
     ruleSteps: [
       "每位玩家用手機加入同一個房間，Host 開始回合。",
@@ -29,9 +29,11 @@ const copy = {
     roleSetupTitle: "角色配置",
     fixedRoleMode: "固定角色配置",
     randomRoleMode: "隨機角色配置",
-    fixedRoleModeBody: "每種人數會使用固定比例，開局前大家都看得到配置。",
-    randomRoleModeBody: "維持原本規則，每回合的角色數量會有一點變化。",
-    hostOnlySetting: "只有 Host 可以切換配置。",
+    fixedRoleModeBody: "Host 可以調整固定角色人數。4 人預設可在合群者 2 或 1、少數派 1 或 2、跟屁蟲 1 之間調整。",
+    randomRoleModeBody: "每回合的角色配置為隨機分布，因此不一定每個角色都會出現，也可能會有某些角色在該回合中沒有登場。",
+    hostOnlySetting: "只有 Host 可以切換與調整配置。",
+    resetDefault: "回到 default 設定",
+    roleConfigHelp: "固定配置的總數會等於目前玩家數。",
     roleCountLine: (role, count) => `${role}：${count} 個`,
     startRound: "開始回合",
     needPlayers: "至少需要 3 人",
@@ -80,7 +82,7 @@ const copy = {
     eyebrow: "Party game",
     switchLanguage: "中文",
     intro:
-      "Float a choice into the room and see who follows. Maybe you need to build the biggest crowd, maybe you need to slip away as the only outlier, or maybe you are secretly tracking one specific player. Every round is a tiny social read until the reveal shows who understood the room.",
+      "A game that looks like an ordinary conversation, but everyone secretly has their own mission. Some players want to blend in with the majority, some want to stand out from the crowd, and some are trying to predict what you’ll choose. Through all kinds of discussion topics, you’ll share honest opinions, chat nonsense, subtly steer the conversation, and make wild guesses together... And when the roles are finally revealed, you’ll realize that the conversation you just had was far less innocent than it seemed.",
     rulesTitle: "How to Play",
     ruleSteps: [
       "Everyone joins the same room on their phone, then the Host starts the round.",
@@ -103,9 +105,11 @@ const copy = {
     roleSetupTitle: "Role Setup",
     fixedRoleMode: "Fixed role setup",
     randomRoleMode: "Random role setup",
-    fixedRoleModeBody: "Each player count uses a fixed role mix, and everyone can see the setup before the round starts.",
-    randomRoleModeBody: "Keep the original rules, with a little role-count variation from round to round.",
-    hostOnlySetting: "Only the Host can change this setting.",
+    fixedRoleModeBody: "The Host can adjust the fixed role counts. For 4 players, the default can shift between 2 or 1 Crowd-Pullers, 1 or 2 Outliers, and 1 Shadow.",
+    randomRoleModeBody: "Each round uses a random role distribution, so not every role is guaranteed to appear. Some roles may be absent in a given round.",
+    hostOnlySetting: "Only the Host can change and adjust this setting.",
+    resetDefault: "Reset to default",
+    roleConfigHelp: "Fixed counts always add up to the current player count.",
     roleCountLine: (role, count) => `${role}: ${count}`,
     startRound: "Start round",
     needPlayers: "Need at least 3 players",
@@ -442,7 +446,6 @@ function render() {
   app.querySelector("[data-room-code]").textContent = room.code;
   app.querySelector("[data-round]").textContent = room.round || t().lobbyRound;
 
-  renderPlayers(app.querySelector("[data-scoreboard]"), room.players);
   renderLobby(room);
   renderRoleSettings(room);
   renderGame(room);
@@ -511,12 +514,25 @@ function renderRoleSettings(room) {
         <div class="role-count">
           ${roleAvatar(type, "tiny")}
           <span>${escapeHtml(t().roleCountLine(role.title, config[type] || 0))}</span>
+          <div class="role-stepper">
+            <button type="button" class="secondary" data-role-delta="-1" data-role-type="${type}" ${room.me.isHost && room.roleMode === "fixed" ? "" : "disabled"}>-</button>
+            <button type="button" class="secondary" data-role-delta="1" data-role-type="${type}" ${room.me.isHost && room.roleMode === "fixed" ? "" : "disabled"}>+</button>
+          </div>
         </div>
       `;
     })
     .join("");
 
-  app.querySelector("[data-role-mode-note]").textContent = room.me.isHost ? "" : t().hostOnlySetting;
+  app.querySelectorAll("[data-role-delta]").forEach((button) => {
+    button.addEventListener("click", () => shiftFixedRole(button.dataset.roleType, Number(button.dataset.roleDelta)));
+  });
+
+  const resetButton = app.querySelector("[data-reset-config]");
+  resetButton.hidden = !room.me.isHost || room.roleMode !== "fixed";
+  resetButton.textContent = t().resetDefault;
+  resetButton.onclick = resetFixedRoles;
+
+  app.querySelector("[data-role-mode-note]").textContent = room.me.isHost ? t().roleConfigHelp : t().hostOnlySetting;
 }
 
 function changeRoleMode(mode) {
@@ -524,6 +540,50 @@ function changeRoleMode(mode) {
     room: state.roomCode,
     playerId: state.playerId,
     mode,
+  })
+    .then((payload) => {
+      state.room = payload.room;
+      render();
+    })
+    .catch(showError);
+}
+
+function shiftFixedRole(type, delta) {
+  const room = state.room;
+  const config = { ...room.fixedRoleConfig };
+  const otherRoles = roleTypes.filter((role) => role !== type);
+  if (delta > 0) {
+    const donor = otherRoles.sort((a, b) => config[b] - config[a]).find((role) => config[role] > 0);
+    if (!donor) return;
+    config[type] += 1;
+    config[donor] -= 1;
+  } else {
+    if (config[type] <= 0) return;
+    const receiver = otherRoles.sort((a, b) => config[a] - config[b])[0];
+    config[type] -= 1;
+    config[receiver] += 1;
+  }
+  saveFixedRoles(config);
+}
+
+function saveFixedRoles(config) {
+  request("/api/fixed-roles", {
+    room: state.roomCode,
+    playerId: state.playerId,
+    config,
+  })
+    .then((payload) => {
+      state.room = payload.room;
+      render();
+    })
+    .catch(showError);
+}
+
+function resetFixedRoles() {
+  request("/api/fixed-roles", {
+    room: state.roomCode,
+    playerId: state.playerId,
+    reset: true,
   })
     .then((payload) => {
       state.room = payload.room;
