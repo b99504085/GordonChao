@@ -379,7 +379,7 @@ function createRoom(body) {
     choices: {},
     locks: {},
     results: null,
-    roleMode: "random",
+    roleMode: "fixed",
     fixedRoleConfigs: {},
     deck: [],
     deckType: null,
