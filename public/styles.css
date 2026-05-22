@@ -101,13 +101,15 @@ label {
 
 .hero-panel::after {
   position: absolute;
-  right: -4rem;
-  bottom: -5rem;
+  right: -7rem;
+  bottom: auto;
+  top: 10rem;
   width: 14rem;
   height: 14rem;
   border-radius: 999px;
   background: rgba(31, 159, 181, 0.1);
   content: "";
+  pointer-events: none;
 }
 
 .compact {
