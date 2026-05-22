@@ -90,7 +90,7 @@ function nextQuestion(room) {
   return room.deck.pop();
 }
 
-function rolePlan(playerCount) {
+function randomRolePlan(playerCount) {
   if (playerCount === 3) {
     return shuffle(["conformer", "minority", Math.random() < 0.5 ? "follower" : "conformer"]);
   }
@@ -101,6 +101,28 @@ function rolePlan(playerCount) {
     return shuffle(["conformer", "conformer", "minority", "minority", "follower"]);
   }
   return shuffle(["conformer", "conformer", "minority", "minority", "follower", "follower"]);
+}
+
+function fixedRolePlan(playerCount) {
+  if (playerCount === 3) return shuffle(["conformer", "minority", "follower"]);
+  if (playerCount === 4) return shuffle(["conformer", "conformer", "minority", "follower"]);
+  if (playerCount === 5) return shuffle(["conformer", "conformer", "minority", "minority", "follower"]);
+  return shuffle(["conformer", "conformer", "minority", "minority", "follower", "follower"]);
+}
+
+function rolePlan(playerCount, mode = "random") {
+  return mode === "fixed" ? fixedRolePlan(playerCount) : randomRolePlan(playerCount);
+}
+
+function roleConfigFor(playerCount) {
+  const plan = fixedRolePlan(Math.min(Math.max(playerCount, 3), 6));
+  return plan.reduce(
+    (counts, role) => {
+      counts[role] += 1;
+      return counts;
+    },
+    { conformer: 0, minority: 0, follower: 0 },
+  );
 }
 
 function makePlayer(name, isHost = false) {
@@ -147,6 +169,8 @@ function serializeRoom(room, playerId) {
     maxPlayers: 6,
     players: room.players.map(publicPlayer),
     hostId: room.hostId,
+    roleMode: room.roleMode || "random",
+    fixedRoleConfig: roleConfigFor(room.players.length),
     question: room.question,
     choices: room.choices,
     locks: Object.fromEntries(Object.entries(room.locks).map(([id, locked]) => [id, Boolean(locked)])),
@@ -171,7 +195,7 @@ function serializeRoom(room, playerId) {
 }
 
 function assignRoles(room) {
-  const plan = rolePlan(room.players.length);
+  const plan = rolePlan(room.players.length, room.roleMode);
   const available = shuffle(room.players);
   room.roles = {};
   plan.forEach((type) => {
@@ -340,6 +364,7 @@ function createRoom(body) {
     choices: {},
     locks: {},
     results: null,
+    roleMode: "random",
     deck: [],
     deckType: null,
   };
@@ -417,6 +442,13 @@ async function routeApi(request, response) {
     if (url.pathname === "/api/start") {
       if (!player.isHost) throw new Error("Only the host can start rounds.");
       startRound(room);
+      return sendJson(response, 200, { room: serializeRoom(room, player.id) });
+    }
+
+    if (url.pathname === "/api/role-mode") {
+      if (!player.isHost) throw new Error("Only the host can change room settings.");
+      if (room.phase !== "lobby") throw new Error("Role settings can only be changed in the lobby.");
+      room.roleMode = body.mode === "fixed" ? "fixed" : "random";
       return sendJson(response, 200, { room: serializeRoom(room, player.id) });
     }
 

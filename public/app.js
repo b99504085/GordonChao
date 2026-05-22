@@ -26,6 +26,13 @@ const copy = {
     leaveRoom: "離開房間",
     lobbyTitle: "等朋友加入",
     lobbyBody: "3 到 6 人就能開始。把房號分享出去，人到齊後由 Host 開始回合。",
+    roleSetupTitle: "角色配置",
+    fixedRoleMode: "固定角色配置",
+    randomRoleMode: "隨機角色配置",
+    fixedRoleModeBody: "每種人數會使用固定比例，開局前大家都看得到配置。",
+    randomRoleModeBody: "維持原本規則，每回合的角色數量會有一點變化。",
+    hostOnlySetting: "只有 Host 可以切換配置。",
+    roleCountLine: (role, count) => `${role}：${count} 個`,
     startRound: "開始回合",
     needPlayers: "至少需要 3 人",
     lockAnswer: "鎖定答案",
@@ -93,6 +100,13 @@ const copy = {
     leaveRoom: "Leave room",
     lobbyTitle: "Waiting for friends",
     lobbyBody: "Start with 3 to 6 players. Share the room code, then the Host can begin once everyone arrives.",
+    roleSetupTitle: "Role Setup",
+    fixedRoleMode: "Fixed role setup",
+    randomRoleMode: "Random role setup",
+    fixedRoleModeBody: "Each player count uses a fixed role mix, and everyone can see the setup before the round starts.",
+    randomRoleModeBody: "Keep the original rules, with a little role-count variation from round to round.",
+    hostOnlySetting: "Only the Host can change this setting.",
+    roleCountLine: (role, count) => `${role}: ${count}`,
     startRound: "Start round",
     needPlayers: "Need at least 3 players",
     lockAnswer: "Lock answer",
@@ -430,6 +444,7 @@ function render() {
 
   renderPlayers(app.querySelector("[data-scoreboard]"), room.players);
   renderLobby(room);
+  renderRoleSettings(room);
   renderGame(room);
   renderResults(room);
 }
@@ -456,6 +471,65 @@ function renderLobby(room) {
   startButton.hidden = !room.me.isHost;
   startButton.disabled = room.players.length < 3;
   startButton.textContent = room.players.length < 3 ? t().needPlayers : t().startRound;
+}
+
+function renderRoleSettings(room) {
+  const panel = app.querySelector("[data-role-settings]");
+  if (!panel) return;
+  panel.hidden = room.phase !== "lobby";
+  if (panel.hidden) return;
+
+  const options = app.querySelector("[data-role-mode-options]");
+  options.innerHTML = ["fixed", "random"]
+    .map((mode) => {
+      const selected = room.roleMode === mode;
+      const label = mode === "fixed" ? t().fixedRoleMode : t().randomRoleMode;
+      const body = mode === "fixed" ? t().fixedRoleModeBody : t().randomRoleModeBody;
+      return `
+        <button
+          type="button"
+          class="mode-option ${selected ? "selected" : ""}"
+          data-role-mode="${mode}"
+          ${room.me.isHost ? "" : "disabled"}
+        >
+          <strong>${label}</strong>
+          <span>${body}</span>
+        </button>
+      `;
+    })
+    .join("");
+
+  options.querySelectorAll("[data-role-mode]").forEach((button) => {
+    button.addEventListener("click", () => changeRoleMode(button.dataset.roleMode));
+  });
+
+  const config = room.fixedRoleConfig || { conformer: 0, minority: 0, follower: 0 };
+  app.querySelector("[data-fixed-config]").innerHTML = roleTypes
+    .map((type) => {
+      const role = t().roleText[type];
+      return `
+        <div class="role-count">
+          ${roleAvatar(type, "tiny")}
+          <span>${escapeHtml(t().roleCountLine(role.title, config[type] || 0))}</span>
+        </div>
+      `;
+    })
+    .join("");
+
+  app.querySelector("[data-role-mode-note]").textContent = room.me.isHost ? "" : t().hostOnlySetting;
+}
+
+function changeRoleMode(mode) {
+  request("/api/role-mode", {
+    room: state.roomCode,
+    playerId: state.playerId,
+    mode,
+  })
+    .then((payload) => {
+      state.room = payload.room;
+      render();
+    })
+    .catch(showError);
 }
 
 function renderGame(room) {
