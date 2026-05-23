@@ -7,6 +7,8 @@ const crypto = require("crypto");
 const PORT = Number(process.env.PORT || 3000);
 const PUBLIC_DIR = path.join(__dirname, "public");
 const QUESTION_FILE = path.join(__dirname, "data", "questions.json");
+const SHEETS_WEBHOOK_URL = process.env.GOOGLE_SHEETS_WEBHOOK_URL || "";
+const SHEETS_WEBHOOK_SECRET = process.env.GOOGLE_SHEETS_WEBHOOK_SECRET || "";
 
 const rooms = new Map();
 const questionDecks = loadQuestionDecks();
@@ -66,6 +68,22 @@ function localizedText(value, locale = "zh") {
 
 function questionKey(question) {
   return localizedText(question?.prompt, "en") || localizedText(question?.prompt, "zh");
+}
+
+function sendSheetEvent(type, payload) {
+  if (!SHEETS_WEBHOOK_URL) return;
+  fetch(SHEETS_WEBHOOK_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      secret: SHEETS_WEBHOOK_SECRET,
+      type,
+      payload,
+      sentAt: new Date().toISOString(),
+    }),
+  }).catch((error) => {
+    console.error(`Google Sheets webhook failed: ${error.message}`);
+  });
 }
 
 function normalizeRoomCode(value) {
@@ -338,6 +356,18 @@ function scoreRound(room) {
   room.metrics.lastRoundDurationSeconds = durationSeconds;
   room.metrics.lastQuestionKey = roundRecord.questionKey;
   room.results = { counts, uniqueMax, playerResults };
+  sendSheetEvent("round_completed", {
+    ...roundRecord,
+    choices: room.choices,
+    counts,
+    uniqueMax,
+    results: playerResults.map((result) => ({
+      playerName: result.playerName,
+      choice: result.choice,
+      role: result.role,
+      success: result.success,
+    })),
+  });
 }
 
 function submitFeedback(room, player, body) {
@@ -359,6 +389,7 @@ function submitFeedback(room, player, body) {
   };
   room.feedback[feedbackKey] = true;
   analytics.feedback.push(record);
+  sendSheetEvent("feedback_submitted", record);
   return record;
 }
 
@@ -512,6 +543,12 @@ function createRoom(body) {
   };
   rooms.set(code, room);
   analytics.roomsCreated += 1;
+  sendSheetEvent("room_created", {
+    roomCode: room.code,
+    hostName: player.name,
+    roleMode: room.roleMode,
+    createdAt: new Date().toISOString(),
+  });
   return { room, player };
 }
 
@@ -523,6 +560,13 @@ function leaveRoom(room, player) {
 
   if (!room.players.length) {
     analytics.roomRoundCounts.push(room.metrics?.roundsPlayed || 0);
+    sendSheetEvent("room_closed", {
+      roomCode: room.code,
+      roundsStarted: room.metrics?.roundsStarted || 0,
+      roundsPlayed: room.metrics?.roundsPlayed || 0,
+      maxPlayers: room.metrics?.maxPlayers || 0,
+      closedAt: new Date().toISOString(),
+    });
     rooms.delete(room.code);
     return;
   }
