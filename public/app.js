@@ -754,6 +754,12 @@ function renderFeedback(room) {
     return;
   }
 
+  const existingForm = feedback.querySelector("[data-feedback-form]");
+  if (existingForm && feedback.dataset.feedbackKey === draftKey) {
+    return;
+  }
+  feedback.dataset.feedbackKey = draftKey;
+
   feedback.innerHTML = `
     <form class="feedback-card" data-feedback-form>
       <h3>${t().feedbackTitle}</h3>
