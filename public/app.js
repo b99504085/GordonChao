@@ -45,6 +45,7 @@ const copy = {
     feedbackPlaceholder: "匿名留一句回饋，例：這題太容易猜、這題很好吵",
     feedbackUp: "好玩",
     feedbackDown: "普通",
+    feedbackHint: "先選 👍 或 👎，可以選填一句匿名回饋，再按送出。",
     sendFeedback: "送出回饋",
     feedbackSent: "已收到，謝謝你的回饋。",
     nextRound: "下一回合",
@@ -127,6 +128,7 @@ const copy = {
     feedbackPlaceholder: "Leave one anonymous note, e.g. too easy to guess, great debate topic",
     feedbackUp: "Fun",
     feedbackDown: "Okay",
+    feedbackHint: "Choose 👍 or 👎, optionally leave one anonymous note, then send.",
     sendFeedback: "Send feedback",
     feedbackSent: "Received. Thanks for the feedback.",
     nextRound: "Next round",
@@ -173,6 +175,11 @@ const state = {
   language: localStorage.getItem("trialBalloonLanguage") || "zh",
   room: null,
   polling: null,
+  feedbackDraft: {
+    key: "",
+    rating: "",
+    comment: "",
+  },
 };
 
 const app = document.querySelector("#app");
@@ -736,7 +743,13 @@ function renderFeedback(room) {
     app.querySelector("[data-results-list]").after(feedback);
   }
 
+  const draftKey = `${room.code}:${room.round}`;
+  if (state.feedbackDraft.key !== draftKey) {
+    state.feedbackDraft = { key: draftKey, rating: "", comment: "" };
+  }
+
   if (room.me.feedbackSubmitted) {
+    state.feedbackDraft = { key: draftKey, rating: "", comment: "" };
     feedback.innerHTML = `<div class="feedback-card feedback-done">${t().feedbackSent}</div>`;
     return;
   }
@@ -744,31 +757,36 @@ function renderFeedback(room) {
   feedback.innerHTML = `
     <form class="feedback-card" data-feedback-form>
       <h3>${t().feedbackTitle}</h3>
+      <p class="muted">${t().feedbackHint}</p>
       <div class="feedback-buttons">
-        <button type="button" class="secondary" data-feedback-rating="up">👍 ${t().feedbackUp}</button>
-        <button type="button" class="secondary" data-feedback-rating="down">👎 ${t().feedbackDown}</button>
+        <button type="button" class="secondary ${state.feedbackDraft.rating === "up" ? "selected" : ""}" data-feedback-rating="up">👍 ${t().feedbackUp}</button>
+        <button type="button" class="secondary ${state.feedbackDraft.rating === "down" ? "selected" : ""}" data-feedback-rating="down">👎 ${t().feedbackDown}</button>
       </div>
-      <textarea data-feedback-comment maxlength="240" placeholder="${escapeHtml(t().feedbackPlaceholder)}"></textarea>
-      <button type="submit" data-feedback-submit disabled>${t().sendFeedback}</button>
+      <textarea data-feedback-comment maxlength="240" placeholder="${escapeHtml(t().feedbackPlaceholder)}">${escapeHtml(state.feedbackDraft.comment)}</textarea>
+      <button type="submit" data-feedback-submit ${state.feedbackDraft.rating ? "" : "disabled"}>${t().sendFeedback}</button>
     </form>
   `;
 
   const form = feedback.querySelector("[data-feedback-form]");
   const submit = feedback.querySelector("[data-feedback-submit]");
-  let rating = "";
+  const commentInput = feedback.querySelector("[data-feedback-comment]");
 
   feedback.querySelectorAll("[data-feedback-rating]").forEach((button) => {
     button.addEventListener("click", () => {
-      rating = button.dataset.feedbackRating;
+      state.feedbackDraft.rating = button.dataset.feedbackRating;
       feedback.querySelectorAll("[data-feedback-rating]").forEach((candidate) => candidate.classList.remove("selected"));
       button.classList.add("selected");
       submit.disabled = false;
     });
   });
 
+  commentInput.addEventListener("input", () => {
+    state.feedbackDraft.comment = commentInput.value;
+  });
+
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-    sendFeedback(rating, feedback.querySelector("[data-feedback-comment]").value);
+    sendFeedback(state.feedbackDraft.rating, state.feedbackDraft.comment);
   });
 }
 
