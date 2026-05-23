@@ -41,6 +41,12 @@ const copy = {
     locked: "已鎖定",
     lockStatus: (locked, total) => `${locked}/${total} 位玩家已鎖定`,
     resultsTitle: "本回合結果",
+    feedbackTitle: "這題好玩嗎？",
+    feedbackPlaceholder: "匿名留一句回饋，例：這題太容易猜、這題很好吵",
+    feedbackUp: "好玩",
+    feedbackDown: "普通",
+    sendFeedback: "送出回饋",
+    feedbackSent: "已收到，謝謝你的回饋。",
     nextRound: "下一回合",
     playersTitle: "玩家",
     hostTag: "Host",
@@ -117,6 +123,12 @@ const copy = {
     locked: "Locked",
     lockStatus: (locked, total) => `${locked}/${total} players locked`,
     resultsTitle: "Round results",
+    feedbackTitle: "Was this question fun?",
+    feedbackPlaceholder: "Leave one anonymous note, e.g. too easy to guess, great debate topic",
+    feedbackUp: "Fun",
+    feedbackDown: "Okay",
+    sendFeedback: "Send feedback",
+    feedbackSent: "Received. Thanks for the feedback.",
     nextRound: "Next round",
     playersTitle: "Players",
     hostTag: "Host",
@@ -709,9 +721,69 @@ function renderResults(room) {
     })
     .join("");
 
+  renderFeedback(room);
+
   const nextButton = app.querySelector("[data-next-button]");
   nextButton.hidden = !room.me.isHost;
   nextButton.textContent = t().nextRound;
+}
+
+function renderFeedback(room) {
+  let feedback = app.querySelector("[data-feedback]");
+  if (!feedback) {
+    feedback = document.createElement("div");
+    feedback.dataset.feedback = "";
+    app.querySelector("[data-results-list]").after(feedback);
+  }
+
+  if (room.me.feedbackSubmitted) {
+    feedback.innerHTML = `<div class="feedback-card feedback-done">${t().feedbackSent}</div>`;
+    return;
+  }
+
+  feedback.innerHTML = `
+    <form class="feedback-card" data-feedback-form>
+      <h3>${t().feedbackTitle}</h3>
+      <div class="feedback-buttons">
+        <button type="button" class="secondary" data-feedback-rating="up">👍 ${t().feedbackUp}</button>
+        <button type="button" class="secondary" data-feedback-rating="down">👎 ${t().feedbackDown}</button>
+      </div>
+      <textarea data-feedback-comment maxlength="240" placeholder="${escapeHtml(t().feedbackPlaceholder)}"></textarea>
+      <button type="submit" data-feedback-submit disabled>${t().sendFeedback}</button>
+    </form>
+  `;
+
+  const form = feedback.querySelector("[data-feedback-form]");
+  const submit = feedback.querySelector("[data-feedback-submit]");
+  let rating = "";
+
+  feedback.querySelectorAll("[data-feedback-rating]").forEach((button) => {
+    button.addEventListener("click", () => {
+      rating = button.dataset.feedbackRating;
+      feedback.querySelectorAll("[data-feedback-rating]").forEach((candidate) => candidate.classList.remove("selected"));
+      button.classList.add("selected");
+      submit.disabled = false;
+    });
+  });
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    sendFeedback(rating, feedback.querySelector("[data-feedback-comment]").value);
+  });
+}
+
+function sendFeedback(rating, comment) {
+  request("/api/feedback", {
+    room: state.roomCode,
+    playerId: state.playerId,
+    rating,
+    comment,
+  })
+    .then((payload) => {
+      state.room = payload.room;
+      render();
+    })
+    .catch(showError);
 }
 
 function localized(value) {

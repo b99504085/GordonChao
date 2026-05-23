@@ -10,6 +10,15 @@ const QUESTION_FILE = path.join(__dirname, "data", "questions.json");
 
 const rooms = new Map();
 const questionDecks = loadQuestionDecks();
+const analytics = {
+  createdAt: new Date().toISOString(),
+  roomsCreated: 0,
+  totalRounds: 0,
+  totalPlayerCount: 0,
+  roomRoundCounts: [],
+  rounds: [],
+  feedback: [],
+};
 
 function loadQuestionDecks() {
   const raw = fs.readFileSync(QUESTION_FILE, "utf8");
@@ -48,6 +57,15 @@ function hasLocalizedText(value) {
 
 function id(size = 12) {
   return crypto.randomBytes(size).toString("base64url");
+}
+
+function localizedText(value, locale = "zh") {
+  if (value && typeof value === "object") return value[locale] || value.zh || value.en || "";
+  return String(value || "");
+}
+
+function questionKey(question) {
+  return localizedText(question?.prompt, "en") || localizedText(question?.prompt, "zh");
 }
 
 function normalizeRoomCode(value) {
@@ -176,6 +194,7 @@ function serializeRoom(room, playerId) {
   const me = room.players.find((player) => player.id === playerId);
   const role = me ? room.roles[playerId] : null;
   const target = role?.targetId ? room.players.find((player) => player.id === role.targetId) : null;
+  const feedbackKey = `${room.round}:${playerId}`;
   return {
     code: room.code,
     phase: room.phase,
@@ -190,6 +209,10 @@ function serializeRoom(room, playerId) {
     choices: room.choices,
     locks: Object.fromEntries(Object.entries(room.locks).map(([id, locked]) => [id, Boolean(locked)])),
     results: room.results,
+    metrics: {
+      roundsPlayed: room.metrics?.roundsPlayed || 0,
+      maxPlayers: room.metrics?.maxPlayers || room.players.length,
+    },
     me: me
       ? {
           id: me.id,
@@ -197,6 +220,7 @@ function serializeRoom(room, playerId) {
           isHost: me.isHost,
           choice: room.choices[playerId] ?? null,
           locked: Boolean(room.locks[playerId]),
+          feedbackSubmitted: Boolean(room.feedback?.[feedbackKey]),
           role: role
             ? {
                 type: role.type,
@@ -233,6 +257,9 @@ function startRound(room) {
   room.round += 1;
   room.phase = "choosing";
   room.question = nextQuestion(room);
+  room.roundStartedAt = Date.now();
+  room.metrics.roundsStarted += 1;
+  room.metrics.maxPlayers = Math.max(room.metrics.maxPlayers, room.players.length);
   room.choices = {};
   room.locks = {};
   room.results = null;
@@ -293,7 +320,98 @@ function scoreRound(room) {
   });
 
   room.phase = "results";
+  const durationSeconds = Math.max(1, Math.round((Date.now() - room.roundStartedAt) / 1000));
+  const roundRecord = {
+    roomCode: room.code,
+    round: room.round,
+    questionKey: questionKey(room.question),
+    question: room.question?.prompt || null,
+    playerCount: room.players.length,
+    roleMode: room.roleMode,
+    durationSeconds,
+    finishedAt: new Date().toISOString(),
+  };
+  analytics.totalRounds += 1;
+  analytics.totalPlayerCount += room.players.length;
+  analytics.rounds.push(roundRecord);
+  room.metrics.roundsPlayed += 1;
+  room.metrics.lastRoundDurationSeconds = durationSeconds;
+  room.metrics.lastQuestionKey = roundRecord.questionKey;
   room.results = { counts, uniqueMax, playerResults };
+}
+
+function submitFeedback(room, player, body) {
+  if (room.phase !== "results") throw new Error("Feedback opens after results.");
+  const rating = body.rating === "down" ? "down" : body.rating === "up" ? "up" : null;
+  if (!rating) throw new Error("Feedback rating must be up or down.");
+  const feedbackKey = `${room.round}:${player.id}`;
+  if (room.feedback[feedbackKey]) throw new Error("You already sent feedback for this round.");
+  const comment = String(body.comment || "").trim().slice(0, 240);
+  const record = {
+    roomCode: room.code,
+    round: room.round,
+    playerCount: room.players.length,
+    questionKey: questionKey(room.question),
+    question: room.question?.prompt || null,
+    rating,
+    comment,
+    createdAt: new Date().toISOString(),
+  };
+  room.feedback[feedbackKey] = true;
+  analytics.feedback.push(record);
+  return record;
+}
+
+function analyticsSummary() {
+  const questionStats = new Map();
+  for (const round of analytics.rounds) {
+    const stats = questionStats.get(round.questionKey) || {
+      questionKey: round.questionKey,
+      question: round.question,
+      plays: 0,
+      totalDurationSeconds: 0,
+      up: 0,
+      down: 0,
+      comments: [],
+    };
+    stats.plays += 1;
+    stats.totalDurationSeconds += round.durationSeconds;
+    questionStats.set(round.questionKey, stats);
+  }
+  for (const item of analytics.feedback) {
+    const stats = questionStats.get(item.questionKey) || {
+      questionKey: item.questionKey,
+      question: item.question,
+      plays: 0,
+      totalDurationSeconds: 0,
+      up: 0,
+      down: 0,
+      comments: [],
+    };
+    stats[item.rating] += 1;
+    if (item.comment) stats.comments.push(item.comment);
+    questionStats.set(item.questionKey, stats);
+  }
+  return {
+    createdAt: analytics.createdAt,
+    roomsCreated: analytics.roomsCreated,
+    totalRounds: analytics.totalRounds,
+    averagePlayersPerRound: analytics.totalRounds ? Number((analytics.totalPlayerCount / analytics.totalRounds).toFixed(2)) : 0,
+    roomsByRoundsPlayed: analytics.roomRoundCounts,
+    activeRooms: Array.from(rooms.values()).map((room) => ({
+      code: room.code,
+      players: room.players.length,
+      roundsStarted: room.metrics?.roundsStarted || 0,
+      roundsPlayed: room.metrics?.roundsPlayed || 0,
+    })),
+    questions: Array.from(questionStats.values())
+      .map((stats) => ({
+        ...stats,
+        averageDurationSeconds: stats.plays ? Number((stats.totalDurationSeconds / stats.plays).toFixed(1)) : 0,
+      }))
+      .sort((a, b) => b.plays - a.plays || b.averageDurationSeconds - a.averageDurationSeconds),
+    feedbackCount: analytics.feedback.length,
+  };
 }
 
 function getRoom(code) {
@@ -381,10 +499,19 @@ function createRoom(body) {
     results: null,
     roleMode: "fixed",
     fixedRoleConfigs: {},
+    feedback: {},
+    metrics: {
+      roundsStarted: 0,
+      roundsPlayed: 0,
+      maxPlayers: 1,
+      lastRoundDurationSeconds: null,
+      lastQuestionKey: null,
+    },
     deck: [],
     deckType: null,
   };
   rooms.set(code, room);
+  analytics.roomsCreated += 1;
   return { room, player };
 }
 
@@ -395,6 +522,7 @@ function leaveRoom(room, player) {
   delete room.locks[player.id];
 
   if (!room.players.length) {
+    analytics.roomRoundCounts.push(room.metrics?.roundsPlayed || 0);
     rooms.delete(room.code);
     return;
   }
@@ -413,6 +541,7 @@ function leaveRoom(room, player) {
     room.choices = {};
     room.locks = {};
     room.results = null;
+    room.roundStartedAt = null;
   }
 }
 
@@ -423,6 +552,10 @@ async function routeApi(request, response) {
     if (request.method === "GET" && url.pathname === "/api/state") {
       const room = getRoom(url.searchParams.get("room"));
       return sendJson(response, 200, serializeRoom(room, url.searchParams.get("playerId")));
+    }
+
+    if (request.method === "GET" && url.pathname === "/api/analytics") {
+      return sendJson(response, 200, analyticsSummary());
     }
 
     if (request.method !== "POST") {
@@ -501,6 +634,11 @@ async function routeApi(request, response) {
       if (room.players.every((candidate) => room.locks[candidate.id])) {
         scoreRound(room);
       }
+      return sendJson(response, 200, { room: serializeRoom(room, player.id) });
+    }
+
+    if (url.pathname === "/api/feedback") {
+      submitFeedback(room, player, body);
       return sendJson(response, 200, { room: serializeRoom(room, player.id) });
     }
 

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Trial Balloon 測試數據</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell analytics-shell">
+      <section class="panel hero-panel">
+        <p class="eyebrow">Playtest analytics</p>
+        <h1>測試數據</h1>
+        <p class="intro-copy">這裡顯示目前伺服器記憶體中的測試資料。Render 或本機伺服器重啟後，這些資料會清空。</p>
+        <div class="analytics-grid" id="summary"></div>
+      </section>
+
+      <section class="panel compact analytics-wide">
+        <h2>題目表現</h2>
+        <div class="analytics-list" id="questions"></div>
+      </section>
+
+      <section class="panel compact analytics-wide">
+        <h2>目前房間</h2>
+        <div class="analytics-list" id="rooms"></div>
+      </section>
+    </main>
+
+    <script>
+      const summary = document.querySelector("#summary");
+      const questions = document.querySelector("#questions");
+      const rooms = document.querySelector("#rooms");
+
+      function text(value) {
+        return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;",
+        })[char]);
+      }
+
+      fetch("/api/analytics")
+        .then((response) => response.json())
+        .then((data) => {
+          summary.innerHTML = [
+            ["建立房間數", data.roomsCreated],
+            ["完成回合數", data.totalRounds],
+            ["平均玩家數", data.averagePlayersPerRound],
+            ["匿名回饋數", data.feedbackCount],
+          ]
+            .map(([label, value]) => `<article class="metric-card"><span>${label}</span><strong>${value}</strong></article>`)
+            .join("");
+
+          questions.innerHTML = data.questions.length
+            ? data.questions
+                .map((item) => {
+                  const title = item.question?.zh || item.questionKey;
+                  return `
+                    <article class="analytics-row">
+                      <strong>${text(title)}</strong>
+                      <span>玩過 ${item.plays} 次 · 平均 ${item.averageDurationSeconds} 秒 · 👍 ${item.up} · 👎 ${item.down}</span>
+                      ${item.comments?.length ? `<p>${item.comments.map(text).join(" / ")}</p>` : ""}
+                    </article>
+                  `;
+                })
+                .join("")
+            : `<p class="muted">還沒有完成回合。</p>`;
+
+          rooms.innerHTML = data.activeRooms.length
+            ? data.activeRooms
+                .map(
+                  (room) => `
+                    <article class="analytics-row">
+                      <strong>${text(room.code)}</strong>
+                      <span>${room.players} 位玩家 · 已開始 ${room.roundsStarted} 局 · 已完成 ${room.roundsPlayed} 局</span>
+                    </article>
+                  `,
+                )
+                .join("")
+            : `<p class="muted">目前沒有進行中的房間。</p>`;
+        })
+        .catch(() => {
+          summary.innerHTML = `<p class="muted">讀取失敗，請確認伺服器有開著。</p>`;
+        });
+    </script>
+  </body>
+</html>
