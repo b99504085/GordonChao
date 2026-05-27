@@ -1,50 +1,56 @@
 const roleTypes = ["conformer", "minority", "follower"];
-const roleCardImages = {
-  conformer: "/assets/roles/conformer-card.png",
-  minority: "/assets/roles/minority-card.png",
-  follower: "/assets/roles/follower-card.png",
+const roleArtImages = {
+  conformer: "/assets/ui/role-conformer.png",
+  minority: "/assets/ui/role-minority.png",
+  follower: "/assets/ui/role-follower.png",
 };
 
 const copy = {
   zh: {
     htmlLang: "zh-Hant",
-    eyebrow: "Party game",
-    switchLanguage: "English",
+    title: "試探氣球",
+    eyebrow: "派對遊戲",
+    switchLanguage: "切換英文",
     intro:
-      "一場看似普通的聊天遊戲，但其實，每個人都有自己的秘密任務。有人想迎合大眾，有人想與眾不同，也有人正試圖猜中你的想法。透過各式各樣的討論話題，你們會誠實發表意見、亂聊、偷帶風向、互相瞎猜……直到揭曉身份的那一刻，才發現原來剛剛那場聊天比想像中還不單純。",
+      "看似普通的聊天，其實每個人都有秘密任務。你的一句話可能是暗示、誤導，也可能是關鍵線索。分享想法、觀察別人、猜測身份，直到揭曉那一刻，才發現這場聊天比想像中還不單純。",
     rulesTitle: "怎麼玩",
     ruleSteps: [
-      "每位玩家用手機加入同一個房間，Host 開始回合。",
-      "每回合大家會看到同一道題目，但每個人會拿到自己的秘密動機。",
-      "先偷偷選答案，等所有人都選完後，可以討論、說服、試探，也可以改答案。",
-      "大家鎖定後揭曉投票與得分。達成自己秘密動機的人得 1 分。",
+      { title: "加入同一房間", body: "主持人開始回合" },
+      { title: "大家看到同一題", body: "各自有秘密任務" },
+      { title: "選擇答案並討論", body: "說服、試探、亂聊都可以" },
+      { title: "揭曉身份與投票", body: "完成任務可得 1 分" },
     ],
     rolesTitle: "三種秘密動機",
+    facts: [
+      { label: "適合 4-10 人", body: "朋友聚會、家庭、同事都適合" },
+      { label: "每局約 15-25 分鐘", body: "輕鬆快速，歡樂不冷場" },
+      { label: "題庫持續更新", body: "各種主題包，越玩越有趣" },
+    ],
     nameLabel: "你的名字",
-    namePlaceholder: "例如：Gordon",
+    namePlaceholder: "例如：小明",
     roomInputLabel: "房號",
     roomPlaceholder: "可自訂房號，例如 1234",
     createRoom: "建立房間",
     joinRoom: "加入房間",
-    roomLabel: "Room",
-    roundLabel: "Round",
+    roomLabel: "房號",
+    roundLabel: "回合",
     leaveRoom: "離開房間",
     lobbyTitle: "等朋友加入",
-    lobbyBody: "3 到 6 人就能開始。把房號分享出去，人到齊後由 Host 開始回合。",
+    lobbyBody: "3 到 6 人就能開始。把房號分享出去，人到齊後由主持人開始回合。",
     roleSetupTitle: "角色配置",
     fixedRoleMode: "固定角色配置",
     randomRoleMode: "隨機角色配置",
-    fixedRoleModeBody: "每局角色數量固定，Host 可自行調整角色配置。",
+    fixedRoleModeBody: "每局角色數量固定，主持人可自行調整角色配置。",
     randomRoleModeBody: "每回合的角色配置為隨機分布，因此不一定每個角色都會出現，也可能會有某些角色在該回合中沒有登場。",
-    hostOnlySetting: "只有 Host 可以切換與調整配置。",
-    resetDefault: "回到 default 設定",
+    hostOnlySetting: "只有主持人可以切換與調整配置。",
+    resetDefault: "回到預設設定",
     roleConfigHelp: "固定配置的總數會等於目前玩家數。",
     roleCountLine: (role, count) => `${role}：${count} 個`,
     startRound: "開始回合",
     needPlayers: "至少需要 3 人",
     lockAnswer: "鎖定答案",
     skipQuestion: "換一題",
-    skipQuestionHint: "Host 可以換題，角色不會重抽。",
+    skipQuestionHint: "主持人可以換題，角色不會重抽。",
     locked: "已鎖定",
     lockStatus: (locked, total) => `${locked}/${total} 位玩家已鎖定`,
     resultsTitle: "本回合結果",
@@ -57,30 +63,43 @@ const copy = {
     feedbackSent: "已收到，謝謝你的回饋。",
     nextRound: "下一回合",
     playersTitle: "玩家",
-    hostTag: "Host",
-    point: "pt",
+    hostTag: "主持人",
+    point: "分",
     staleRoom: "這個房間已經不存在，所以幫你清掉舊紀錄了。",
     leftRoom: "你已離開房間。",
     success: "成功",
     fail: "失敗",
     votes: "票",
-    lobbyRound: "Lobby",
+    lobbyRound: "大廳",
+    defaultHostName: "主持人",
+    defaultPlayerName: "玩家",
     choiceDivider: "・",
+    choiceLabel: "選擇",
+    resultTargetedLine: (name, count) => `${name} 以為自己很低調，但其實被 ${count} 個人盯上。`,
     roleText: {
       conformer: {
         title: "合群者",
         short: "把大家拉到同一邊",
+        goal: "你的目標是讓最多人選擇相同答案！",
         body: "你的答案要成為唯一最多票。平手不算成功，所以你要把人拉過來，也要防止別的選項追上。",
+        successStory: (name, count) => `${name} 是合群者，成功把 ${count} 個人拉到同一邊。`,
+        failStory: (name, count) => `${name} 是合群者，但這次只拉到 ${count} 個人，沒有形成唯一最多票。`,
       },
       minority: {
         title: "少數派",
         short: "悄悄成為唯一例外",
+        goal: "你的目標是成為唯一選擇不同答案的人！",
         body: "你的答案必須只有你一個人選。你可以輕輕把大家推去別的地方，但不要讓自己看起來太想落單。",
+        successStory: (name) => `${name} 是少數派，成為全場唯一例外。`,
+        failStory: (name, count) => `${name} 是少數派，但有 ${count} 個人選了同一邊，沒能成功落單。`,
       },
       follower: {
         title: "跟屁蟲",
         short: "盯緊指定玩家",
+        goal: "你的目標是猜中指定玩家選擇的答案！",
         body: "你要和指定玩家選一樣。你可以觀察他、影響他，或假裝你只是剛好同意。",
+        successStory: (name, target) => `${name} 是跟屁蟲，成功猜中 ${target} 的選擇。`,
+        failStory: (name, target) => `${name} 是跟屁蟲，但這次沒有跟上 ${target} 的答案。`,
       },
     },
     phaseText: {
@@ -93,18 +112,24 @@ const copy = {
   },
   en: {
     htmlLang: "en",
+    title: "Trial Balloon",
     eyebrow: "Party game",
-    switchLanguage: "中文",
+    switchLanguage: "Switch language",
     intro:
       "A game that looks like an ordinary conversation, but everyone secretly has their own mission. Some players want to blend in with the majority, some want to stand out from the crowd, and some are trying to predict what you’ll choose. Through all kinds of discussion topics, you’ll share honest opinions, chat nonsense, subtly steer the conversation, and make wild guesses together... And when the roles are finally revealed, you’ll realize that the conversation you just had was far less innocent than it seemed.",
     rulesTitle: "How to Play",
     ruleSteps: [
-      "Everyone joins the same room on their phone, then the Host starts the round.",
-      "Everyone sees the same question, but each player gets a private motive.",
-      "Pick an answer in secret. Once everyone has chosen, discuss, persuade, test the room, and switch if you want.",
-      "When everyone locks in, votes are revealed. Players who complete their private motive score 1 point.",
+      { title: "Join the same room", body: "The host starts the round" },
+      { title: "Everyone sees the same question", body: "Each player has a secret motive" },
+      { title: "Pick an answer and discuss", body: "Persuade, test, or chat it up" },
+      { title: "Reveal roles and votes", body: "Complete your motive to score 1 point" },
     ],
     rolesTitle: "Three Private Motives",
+    facts: [
+      { label: "4-10 Players", body: "Great for friends, family, or colleagues" },
+      { label: "15-25 Minutes", body: "Quick to learn, fun to play" },
+      { label: "New Topics Regularly", body: "More packs, more laughs, more chaos" },
+    ],
     nameLabel: "Your name",
     namePlaceholder: "e.g. Gordon",
     roomInputLabel: "Room code",
@@ -150,22 +175,35 @@ const copy = {
     fail: "Miss",
     votes: "votes",
     lobbyRound: "Lobby",
+    defaultHostName: "Host",
+    defaultPlayerName: "Player",
     choiceDivider: " - ",
+    choiceLabel: "Picked",
+    resultTargetedLine: (name, count) => `${name} tried to stay low-key, but ${count} player${count === 1 ? "" : "s"} were watching them.`,
     roleText: {
       conformer: {
         title: "Crowd-Puller",
         short: "Pull the room together",
+        goal: "Your goal is to get the most players to choose the same answer!",
         body: "Your answer must be the single most popular choice. Ties do not count, so pull people in and stop other options from catching up.",
+        successStory: (name, count) => `${name} was the Crowd-Puller and successfully pulled ${count} players to the same side.`,
+        failStory: (name, count) => `${name} was the Crowd-Puller, but only gathered ${count} players and missed the clear majority.`,
       },
       minority: {
         title: "Outlier",
         short: "Be the only exception",
+        goal: "Your goal is to be the only one who picks a different answer!",
         body: "Your answer must be chosen by you alone. Nudge people away gently, but do not look too eager to stand apart.",
+        successStory: (name) => `${name} was the Outlier and became the only exception in the room.`,
+        failStory: (name, count) => `${name} was the Outlier, but ${count} players chose the same side.`,
       },
       follower: {
         title: "Shadow",
         short: "Track your target player",
+        goal: "Your goal is to guess what your target player will choose!",
         body: "You must match your assigned player. Read them, influence them, or make it look like you simply agree.",
+        successStory: (name, target) => `${name} was the Shadow and correctly guessed ${target}'s choice.`,
+        failStory: (name, target) => `${name} was the Shadow, but lost track of ${target}'s answer.`,
       },
     },
     phaseText: {
@@ -260,9 +298,21 @@ function roleAvatar(type, size = "medium") {
   `;
 }
 
-function roleCardImage(type, size = "large") {
+function roleArt(type) {
   const role = t().roleText[type];
-  return `<img class="role-card-image role-card-image-${size}" src="${roleCardImages[type]}" alt="${escapeHtml(role.title)}: ${escapeHtml(role.short)}" loading="lazy" />`;
+  return `<img class="role-art" src="${roleArtImages[type]}" alt="${escapeHtml(role.title)}" loading="lazy" />`;
+}
+
+function roleInfoCard(type, context = "guide") {
+  const role = t().roleText[type];
+  return `
+    <article class="role-info-card role-info-card-${type} role-info-card-${context}">
+      <h4>${role.title}</h4>
+      <p class="role-short">${role.short}</p>
+      ${roleArt(type)}
+      <p class="role-goal">${role.goal}</p>
+    </article>
+  `;
 }
 
 function logoMarkup() {
@@ -274,7 +324,7 @@ function logoMarkup() {
       </div>
       <div>
         <p class="eyebrow">${t().eyebrow}</p>
-        <h1>Trial Balloon</h1>
+        <h1>${t().title}</h1>
       </div>
     </div>
   `;
@@ -284,23 +334,32 @@ function rulesMarkup() {
   return `
     <section class="rules-card" aria-labelledby="rulesTitle">
       <h2 id="rulesTitle">${t().rulesTitle}</h2>
-      <ol class="rule-list">
+      <ol class="rule-grid">
         ${t()
-          .ruleSteps.map((step) => `<li>${escapeHtml(step)}</li>`)
+          .ruleSteps.map(
+            (step) => `
+              <li>
+                <strong>${escapeHtml(step.title)}</strong>
+                <span>${escapeHtml(step.body)}</span>
+              </li>
+            `
+          )
           .join("")}
       </ol>
       <h3>${t().rolesTitle}</h3>
       <div class="role-guide">
-        ${roleTypes
-          .map((type) => {
-            const role = t().roleText[type];
-            return `
-              <article class="role-guide-card">
-                ${roleCardImage(type, "guide")}
-                <span class="sr-only">${role.title}: ${role.short}</span>
-              </article>
-            `;
-          })
+        ${roleTypes.map((type) => roleInfoCard(type)).join("")}
+      </div>
+      <div class="feature-strip">
+        ${t()
+          .facts.map(
+            (fact) => `
+              <div>
+                <strong>${escapeHtml(fact.label)}</strong>
+                <span>${escapeHtml(fact.body)}</span>
+              </div>
+            `
+          )
           .join("")}
       </div>
     </section>
@@ -317,6 +376,7 @@ function renderEntry(message = "") {
     <section class="panel hero-panel">
       <button type="button" class="language-toggle" id="languageToggle">${t().switchLanguage}</button>
       ${logoMarkup()}
+      <img class="hero-mascot" src="/assets/ui/hero-mascot.png" alt="" aria-hidden="true" />
       <p class="intro-copy">${t().intro}</p>
       ${rulesMarkup()}
 
@@ -360,7 +420,7 @@ function bindEntryForm() {
   createButton.addEventListener("click", () => {
     const requestedRoom = normalizeRoomInput(roomInput.value);
     request("/api/create", {
-      name: nameInput.value.trim() || "Host",
+      name: nameInput.value.trim() || t().defaultHostName,
       room: requestedRoom,
     })
       .then((payload) => {
@@ -373,7 +433,7 @@ function bindEntryForm() {
   entryForm.addEventListener("submit", (event) => {
     event.preventDefault();
     request("/api/join", {
-      name: nameInput.value.trim() || "Player",
+      name: nameInput.value.trim() || t().defaultPlayerName,
       room: normalizeRoomInput(roomInput.value),
     })
       .then((payload) => {
@@ -665,7 +725,7 @@ function renderRole(room) {
   const roleCopy = t().roleText[role.type];
   const target = role.type === "follower" ? `<p>${t().targetPlayer}<strong>${escapeHtml(role.targetName)}</strong></p>` : "";
   app.querySelector("[data-role-card]").innerHTML = `
-    ${roleCardImage(role.type)}
+    ${roleInfoCard(role.type, "active")}
     <p class="sr-only">${roleCopy.body}</p>
     ${target ? `<div class="role-target">${target}</div>` : ""}
   `;
@@ -711,6 +771,30 @@ function leaveRoom() {
     });
 }
 
+function resultStory(result, room) {
+  const role = t().roleText[result.role];
+  const choiceCount = room.results.counts[result.choice] || 0;
+  const target = room.results.playerResults.find((candidate) => candidate.playerId === result.targetId);
+  const targetName = target?.playerName || (state.language === "zh" ? "指定玩家" : "the target player");
+  if (result.role === "conformer") {
+    return result.success
+      ? role.successStory(result.playerName, choiceCount)
+      : role.failStory(result.playerName, choiceCount);
+  }
+  if (result.role === "minority") {
+    return result.success
+      ? role.successStory(result.playerName)
+      : role.failStory(result.playerName, choiceCount);
+  }
+  return result.success
+    ? role.successStory(result.playerName, targetName)
+    : role.failStory(result.playerName, targetName);
+}
+
+function targetedCountFor(result, room) {
+  return room.results.playerResults.filter((candidate) => candidate.role === "follower" && candidate.targetId === result.playerId).length;
+}
+
 function renderResults(room) {
   const results = app.querySelector("[data-results]");
   results.hidden = room.phase !== "results";
@@ -736,14 +820,16 @@ function renderResults(room) {
       const className = result.success ? "success" : "fail";
       const role = t().roleText[result.role].title;
       const option = localized(room.question.options[result.choice]);
-      const detail = localized(result.detail);
+      const watchedBy = targetedCountFor(result, room);
+      const watchedLine = watchedBy > 0 ? `<p class="result-watch">${escapeHtml(t().resultTargetedLine(result.playerName, watchedBy))}</p>` : "";
       return `
-        <div class="result">
-          <div>
-            <strong>${escapeHtml(result.playerName)}</strong>
-            <div class="muted result-detail">
-              ${roleAvatar(result.role, "tiny")}
-              <span>${role} ${t().choiceDivider} ${escapeHtml(option)} ${t().choiceDivider} ${escapeHtml(detail)}</span>
+        <div class="result result-${result.role}">
+          <div class="result-main">
+            ${roleArt(result.role)}
+            <div>
+              <div class="result-kicker">${escapeHtml(role)} ${t().choiceDivider} ${escapeHtml(t().choiceLabel)} ${escapeHtml(option)}</div>
+              <strong>${escapeHtml(resultStory(result, room))}</strong>
+              ${watchedLine}
             </div>
           </div>
           <span class="${className}">${label}</span>
