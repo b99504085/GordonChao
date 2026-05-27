@@ -24,19 +24,18 @@ const analytics = {
 
 function loadQuestionDecks() {
   const raw = fs.readFileSync(QUESTION_FILE, "utf8");
-  const decks = JSON.parse(raw);
-  validateDeck(decks.twoOption, 2, "twoOption");
-  validateDeck(decks.threeOption, 3, "threeOption");
-  return decks;
+  const deck = JSON.parse(raw);
+  validateDeck(deck.questions, "questions");
+  return deck;
 }
 
-function validateDeck(deck, optionCount, name) {
+function validateDeck(deck, name) {
   if (!Array.isArray(deck) || deck.length === 0) {
     throw new Error(`Question deck "${name}" must contain at least one question.`);
   }
   deck.forEach((question, index) => {
-    if (!hasLocalizedText(question.prompt) || !Array.isArray(question.options) || question.options.length !== optionCount) {
-      throw new Error(`Question ${name}[${index}] must have bilingual prompt text and ${optionCount} options.`);
+    if (!hasLocalizedText(question.prompt) || !Array.isArray(question.options) || question.options.length !== 3) {
+      throw new Error(`Question ${name}[${index}] must have bilingual prompt text and 3 options.`);
     }
     question.options.forEach((option, optionIndex) => {
       if (!hasLocalizedText(option)) {
@@ -113,8 +112,14 @@ function shuffle(items) {
 }
 
 function createDeck(playerCount) {
-  const deck = playerCount === 3 ? questionDecks.twoOption : questionDecks.threeOption;
-  return shuffle(deck);
+  return shuffle(questionDecks.questions).map((question) => playableQuestion(question, playerCount));
+}
+
+function playableQuestion(question, playerCount) {
+  return {
+    ...question,
+    options: playerCount === 3 ? shuffle(question.options).slice(0, 2) : [...question.options],
+  };
 }
 
 function nextQuestion(room) {

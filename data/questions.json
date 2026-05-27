@@ -1,320 +1,15 @@
 {
-  "twoOption": [
+  "questions": [
     {
-      "prompt": {
-        "zh": "如果明天可以少一件生活小麻煩，你會選哪個？",
-        "en": "If tomorrow could remove one small everyday hassle, which would you choose?"
-      },
+      "prompt": { "zh": "如果明天可以少一件生活小麻煩，你會選哪個？", "en": "If tomorrow could remove one small everyday hassle, which would you choose?" },
       "options": [
         { "zh": "不用早起", "en": "No early wake-up" },
-        { "zh": "不用回訊息", "en": "No replying to messages" }
+        { "zh": "不用回訊息", "en": "No replying to messages" },
+        { "zh": "不用找東西", "en": "No searching for misplaced things" }
       ]
     },
     {
-      "prompt": {
-        "zh": "今晚只能留下一種娛樂，你選哪個？",
-        "en": "You can keep only one kind of entertainment tonight."
-      },
-      "options": [
-        { "zh": "追劇", "en": "Watch shows" },
-        { "zh": "玩遊戲", "en": "Play games" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "你可以讓一件家事永遠自動完成。",
-        "en": "You can make one chore finish itself forever."
-      },
-      "options": [
-        { "zh": "洗碗", "en": "Dishes" },
-        { "zh": "洗衣服", "en": "Laundry" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "這個週末，你只能選一種恢復方式。",
-        "en": "This weekend, you get only one way to recover."
-      },
-      "options": [
-        { "zh": "睡到自然醒", "en": "Sleep until you wake naturally" },
-        { "zh": "出門曬太陽", "en": "Go outside for sunlight" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "朋友突然約你出門，哪個比較有吸引力？",
-        "en": "A friend suddenly asks you to go out. What sounds better?"
-      },
-      "options": [
-        { "zh": "去吃東西", "en": "Get food" },
-        { "zh": "散步聊天", "en": "Walk and talk" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "半夜肚子餓，只能選一個。",
-        "en": "It is midnight and you are hungry. Pick one."
-      },
-      "options": [
-        { "zh": "泡麵", "en": "Instant noodles" },
-        { "zh": "吐司", "en": "Toast" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "你可以消除一個日常壓力。",
-        "en": "You can erase one everyday pressure."
-      },
-      "options": [
-        { "zh": "遲到焦慮", "en": "Being late" },
-        { "zh": "已讀焦慮", "en": "Leaving messages on read" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "今天只剩一點點力氣，你會拿去做哪件事？",
-        "en": "You only have a tiny bit of energy left today. What gets it?"
-      },
-      "options": [
-        { "zh": "洗澡", "en": "Shower" },
-        { "zh": "整理桌面", "en": "Clear the desk" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "如果手機今晚會公開一個秘密，你比較不想被公開哪個？",
-        "en": "If your phone exposed one secret tonight, which would you least want revealed?"
-      },
-      "options": [
-        { "zh": "螢幕使用時間", "en": "Screen time" },
-        { "zh": "搜尋紀錄", "en": "Search history" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "朋友群只能保留一種美德，你選哪個？",
-        "en": "Your friend group can keep only one virtue. Which do you choose?"
-      },
-      "options": [
-        { "zh": "準時", "en": "Being on time" },
-        { "zh": "嘴巴夠緊", "en": "Keeping secrets" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "如果今天必須少一種社交能力，你寧可失去哪個？",
-        "en": "If you had to lose one social skill today, which would you rather lose?"
-      },
-      "options": [
-        { "zh": "假裝沒事", "en": "Pretending everything is fine" },
-        { "zh": "秒懂空氣", "en": "Reading the room instantly" }
-      ]
-    }
-  ],
-  "threeOption": [
-    {
-      "prompt": {
-        "zh": "如果今晚突然多出 3 小時，你會拿去做什麼？",
-        "en": "If you suddenly had 3 extra hours tonight, what would you do?"
-      },
-      "options": [
-        { "zh": "睡覺", "en": "Sleep" },
-        { "zh": "玩遊戲", "en": "Play games" },
-        { "zh": "整理房間", "en": "Clean my room" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "聚會突然冷場，你會怎麼救場？",
-        "en": "A hangout suddenly gets awkwardly quiet. How do you save it?"
-      },
-      "options": [
-        { "zh": "開新話題", "en": "Start a new topic" },
-        { "zh": "放一首歌", "en": "Put on a song" },
-        { "zh": "拿出桌遊", "en": "Bring out a board game" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "公司新增一個福利，你選哪個？",
-        "en": "Your company offers one new perk. Which do you pick?"
-      },
-      "options": [
-        { "zh": "每週三放假", "en": "Every Wednesday off" },
-        { "zh": "每天免費午餐", "en": "Free lunch every day" },
-        { "zh": "永遠遠端工作", "en": "Remote work forever" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "明天早上有會議，今晚你最想獲得哪個祝福？",
-        "en": "There is a meeting tomorrow morning. Pick one blessing for tonight."
-      },
-      "options": [
-        { "zh": "秒睡", "en": "Fall asleep instantly" },
-        { "zh": "會議取消", "en": "The meeting gets canceled" },
-        { "zh": "老闆買早餐", "en": "The boss buys breakfast" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "你可以刪掉一個日常煩躁來源。",
-        "en": "You can delete one everyday annoyance."
-      },
-      "options": [
-        { "zh": "排隊", "en": "Waiting in lines" },
-        { "zh": "找停車位", "en": "Finding parking" },
-        { "zh": "回訊息", "en": "Replying to messages" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "你們開了一間深夜小店，招牌會是什麼？",
-        "en": "Your group opens a late-night shop. What is the specialty?"
-      },
-      "options": [
-        { "zh": "拉麵", "en": "Ramen" },
-        { "zh": "甜點", "en": "Dessert" },
-        { "zh": "桌遊", "en": "Board games" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "旅行時突然下大雨，接下來怎麼辦？",
-        "en": "It suddenly pours during a trip. What now?"
-      },
-      "options": [
-        { "zh": "找咖啡廳躲雨", "en": "Find a cafe" },
-        { "zh": "買傘繼續走", "en": "Buy umbrellas and continue" },
-        { "zh": "回去休息", "en": "Go back and rest" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "你得到一位私人助理，但他只會做一件事。",
-        "en": "You get a personal assistant, but they only do one thing."
-      },
-      "options": [
-        { "zh": "整理行程", "en": "Manage my schedule" },
-        { "zh": "處理訊息", "en": "Handle messages" },
-        { "zh": "打掃房間", "en": "Clean my room" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "朋友生日快到了，你會準備什麼？",
-        "en": "A friend's birthday is coming up. What do you prepare?"
-      },
-      "options": [
-        { "zh": "實用禮物", "en": "A practical gift" },
-        { "zh": "驚喜活動", "en": "A surprise event" },
-        { "zh": "手寫卡片", "en": "A handwritten card" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "週末只剩半天，你想怎麼用？",
-        "en": "You only have half a day left this weekend. How do you use it?"
-      },
-      "options": [
-        { "zh": "出門散步", "en": "Go for a walk" },
-        { "zh": "在家充電", "en": "Recharge at home" },
-        { "zh": "約人吃飯", "en": "Meet someone for food" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "你可以讓一種東西永遠免費。",
-        "en": "You can make one thing free forever."
-      },
-      "options": [
-        { "zh": "交通", "en": "Transportation" },
-        { "zh": "咖啡", "en": "Coffee" },
-        { "zh": "電影票", "en": "Movie tickets" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "今晚需要一份快速宵夜，你會做什麼？",
-        "en": "You need a quick midnight snack tonight. What do you make?"
-      },
-      "options": [
-        { "zh": "升級泡麵", "en": "Upgraded instant noodles" },
-        { "zh": "蛋吐司", "en": "Egg toast" },
-        { "zh": "冷凍水餃", "en": "Frozen dumplings" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "朋友遲到 40 分鐘，你最可能怎麼做？",
-        "en": "A friend is 40 minutes late. What are you most likely to do?"
-      },
-      "options": [
-        { "zh": "繼續等", "en": "Keep waiting" },
-        { "zh": "先點餐", "en": "Order first" },
-        { "zh": "改約下次", "en": "Reschedule" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "如果要辦一個主題派對，你會選哪個？",
-        "en": "If you had to choose a party theme, what would it be?"
-      },
-      "options": [
-        { "zh": "睡衣派對", "en": "Pajama party" },
-        { "zh": "復古金曲", "en": "Throwback hits" },
-        { "zh": "神秘禮物交換", "en": "Mystery gift swap" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "你可以擁有一個小小超能力。",
-        "en": "You can have one tiny superpower."
-      },
-      "options": [
-        { "zh": "永遠找到鑰匙", "en": "Always find my keys" },
-        { "zh": "手機永遠有電", "en": "Phone never dies" },
-        { "zh": "搭車永遠有座位", "en": "Always get a seat" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "三天假期只能去一個地方。",
-        "en": "You get a three-day break, but only one destination."
-      },
-      "options": [
-        { "zh": "海邊", "en": "Beach" },
-        { "zh": "山上", "en": "Mountains" },
-        { "zh": "城市小旅行", "en": "City trip" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "你的朋友群需要一個吉祥物。",
-        "en": "Your group needs a mascot."
-      },
-      "options": [
-        { "zh": "氣球", "en": "Balloon" },
-        { "zh": "火箭", "en": "Rocket" },
-        { "zh": "杯麵", "en": "Cup noodles" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "大家今天都很累，晚餐你會提議什麼？",
-        "en": "Everyone is tired today. What dinner do you suggest?"
-      },
-      "options": [
-        { "zh": "火鍋", "en": "Hot pot" },
-        { "zh": "便當", "en": "Bento" },
-        { "zh": "披薩", "en": "Pizza" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "你可以自動化一件家事。",
-        "en": "You can automate one chore."
-      },
+      "prompt": { "zh": "你可以讓一件家事永遠自動完成。", "en": "You can make one chore finish itself forever." },
       "options": [
         { "zh": "洗碗", "en": "Dishes" },
         { "zh": "洗衣服", "en": "Laundry" },
@@ -322,32 +17,87 @@
       ]
     },
     {
-      "prompt": {
-        "zh": "如果要拍一支短影片，你會拍什麼？",
-        "en": "If you had to make a short video, what would it be about?"
-      },
+      "prompt": { "zh": "這個週末，你只能選一種恢復方式。", "en": "This weekend, you get only one way to recover." },
       "options": [
-        { "zh": "美食挑戰", "en": "Food challenge" },
-        { "zh": "房間改造", "en": "Room makeover" },
-        { "zh": "假新聞播報", "en": "Fake news broadcast" }
+        { "zh": "睡到自然醒", "en": "Sleep until you wake naturally" },
+        { "zh": "出門曬太陽", "en": "Go outside for sunlight" },
+        { "zh": "安靜發呆", "en": "Quietly zone out" }
       ]
     },
     {
-      "prompt": {
-        "zh": "如果這個房間要選一個人當末日隊長，隊長最需要哪種能力？",
-        "en": "If this room had to choose an apocalypse captain, what skill matters most?"
-      },
+      "prompt": { "zh": "你可以消除一個日常壓力。", "en": "You can erase one everyday pressure." },
       "options": [
-        { "zh": "冷靜判斷", "en": "Staying calm" },
-        { "zh": "會找資源", "en": "Finding resources" },
-        { "zh": "讓大家不要吵架", "en": "Keeping everyone from fighting" }
+        { "zh": "遲到焦慮", "en": "Being late anxiety" },
+        { "zh": "已讀焦慮", "en": "Message-read anxiety" },
+        { "zh": "做決定焦慮", "en": "Decision anxiety" }
       ]
     },
     {
-      "prompt": {
-        "zh": "如果有一個 App 會誠實評價你的人生狀態，你最怕它顯示什麼？",
-        "en": "If an app honestly rated your life status, what result would scare you most?"
-      },
+      "prompt": { "zh": "如果手機今晚會公開一個秘密，你比較不想被公開哪個？", "en": "If your phone exposed one secret tonight, which would you least want revealed?" },
+      "options": [
+        { "zh": "對話紀錄", "en": "Chat history" },
+        { "zh": "搜尋紀錄", "en": "Search history" },
+        { "zh": "我的最愛相簿", "en": "Favorite photo album" }
+      ]
+    },
+    {
+      "prompt": { "zh": "朋友群只能保留一種美德，你選哪個？", "en": "Your friend group can keep only one virtue. Which do you choose?" },
+      "options": [
+        { "zh": "準時", "en": "Being on time" },
+        { "zh": "嘴巴夠緊", "en": "Keeping secrets" },
+        { "zh": "願意說真話", "en": "Being willing to tell the truth" }
+      ]
+    },
+    {
+      "prompt": { "zh": "如果今天必須少一種社交能力，你寧可失去哪個？", "en": "If you had to lose one social skill today, which would you rather lose?" },
+      "options": [
+        { "zh": "假裝沒事", "en": "Pretending everything is fine" },
+        { "zh": "秒懂空氣", "en": "Reading the room instantly" },
+        { "zh": "記得回訊息", "en": "Remembering to reply" }
+      ]
+    },
+    {
+      "prompt": { "zh": "公司新增一個福利，你選哪個？", "en": "Your company offers one new perk. Which do you pick?" },
+      "options": [
+        { "zh": "每週三放假", "en": "Every Wednesday off" },
+        { "zh": "每天免費午餐", "en": "Free lunch every day" },
+        { "zh": "永遠遠端工作", "en": "Remote work forever" }
+      ]
+    },
+    {
+      "prompt": { "zh": "明天早上有會議，今晚你最想獲得哪個祝福？", "en": "There is a meeting tomorrow morning. Pick one blessing for tonight." },
+      "options": [
+        { "zh": "秒睡", "en": "Fall asleep instantly" },
+        { "zh": "會議取消", "en": "The meeting gets canceled" },
+        { "zh": "老闆買早餐", "en": "The boss buys breakfast" }
+      ]
+    },
+    {
+      "prompt": { "zh": "朋友遲到 40 分鐘，你最可能怎麼做？", "en": "A friend is 40 minutes late. What are you most likely to do?" },
+      "options": [
+        { "zh": "繼續等", "en": "Keep waiting" },
+        { "zh": "罵他", "en": "Scold them" },
+        { "zh": "改約下次", "en": "Reschedule" }
+      ]
+    },
+    {
+      "prompt": { "zh": "你可以擁有一個小小超能力。", "en": "You can have one tiny superpower." },
+      "options": [
+        { "zh": "永遠找到鑰匙", "en": "Always find my keys" },
+        { "zh": "手機永遠有電", "en": "Phone never dies" },
+        { "zh": "搭車永遠有座位", "en": "Always get a seat" }
+      ]
+    },
+    {
+      "prompt": { "zh": "你可以自動化一件家事。", "en": "You can automate one chore." },
+      "options": [
+        { "zh": "洗碗", "en": "Dishes" },
+        { "zh": "洗衣服", "en": "Laundry" },
+        { "zh": "倒垃圾", "en": "Taking out trash" }
+      ]
+    },
+    {
+      "prompt": { "zh": "如果有一個 App 會誠實評價你的人生狀態，你最怕它顯示什麼？", "en": "If an app honestly rated your life status, what result would scare you most?" },
       "options": [
         { "zh": "你其實很累", "en": "You are actually exhausted" },
         { "zh": "你逃避太多事", "en": "You avoid too many things" },
@@ -355,10 +105,7 @@
       ]
     },
     {
-      "prompt": {
-        "zh": "如果今晚每個人都要公開一個小缺點，哪種最容易被原諒？",
-        "en": "If everyone had to reveal one small flaw tonight, which is easiest to forgive?"
-      },
+      "prompt": { "zh": "如果今晚每個人都要公開一個小缺點，哪種最容易被原諒？", "en": "If everyone had to reveal one small flaw tonight, which is easiest to forgive?" },
       "options": [
         { "zh": "容易已讀不回", "en": "Forgetting to reply" },
         { "zh": "常常臨時改主意", "en": "Changing plans last minute" },
@@ -366,10 +113,7 @@
       ]
     },
     {
-      "prompt": {
-        "zh": "如果朋友群要立一條新憲法，第一條應該是什麼？",
-        "en": "If your friend group wrote a constitution, what should Article One be?"
-      },
+      "prompt": { "zh": "如果朋友群要立一條新憲法，第一條應該是什麼？", "en": "If your friend group wrote a constitution, what should Article One be?" },
       "options": [
         { "zh": "截圖不能外流", "en": "Screenshots stay inside the group" },
         { "zh": "遲到要請飲料", "en": "Late people buy drinks" },
@@ -377,91 +121,171 @@
       ]
     },
     {
-      "prompt": {
-        "zh": "如果你的個性要被做成商品，最像哪一種？",
-        "en": "If your personality became a product, what would it be?"
-      },
-      "options": [
-        { "zh": "便利商店咖啡", "en": "Convenience store coffee" },
-        { "zh": "深夜客服", "en": "Late-night customer support" },
-        { "zh": "限量盲盒", "en": "Limited mystery box" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "如果明天開始大家都能看到你的情緒字幕，你最想隱藏哪一種？",
-        "en": "If everyone could see your emotion subtitles tomorrow, which would you hide?"
-      },
-      "options": [
-        { "zh": "我其實不想出門", "en": "I actually do not want to go out" },
-        { "zh": "我現在有點尷尬", "en": "This is a little awkward" },
-        { "zh": "我正在偷想晚餐", "en": "I am secretly thinking about dinner" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "如果聚會中突然要選一個人代表大家發言，最重要的是什麼？",
-        "en": "If one person had to speak for the whole group, what matters most?"
-      },
-      "options": [
-        { "zh": "講話好聽", "en": "Sounding convincing" },
-        { "zh": "不會亂承諾", "en": "Not overpromising" },
-        { "zh": "知道大家底線", "en": "Knowing everyone's limits" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "如果你可以把一種社交尷尬永久刪除，你選哪個？",
-        "en": "If you could delete one social awkwardness forever, which would you choose?"
-      },
-      "options": [
-        { "zh": "叫錯名字", "en": "Calling someone the wrong name" },
-        { "zh": "講笑話沒人笑", "en": "A joke landing with silence" },
-        { "zh": "兩個人同時讓路", "en": "Two people dodging the same way" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "如果你的朋友群要被拍成影集，第一集最適合叫什麼？",
-        "en": "If your friend group became a series, what should Episode One be called?"
-      },
-      "options": [
-        { "zh": "我們真的有計畫嗎", "en": "Do We Actually Have a Plan?" },
-        { "zh": "先吃再說", "en": "Food First, Decisions Later" },
-        { "zh": "這句不要截圖", "en": "Do Not Screenshot That" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "如果今晚的聊天會被變成一種天氣，最像哪個？",
-        "en": "If tonight's conversation became weather, what would it be?"
-      },
-      "options": [
-        { "zh": "午後雷陣雨", "en": "Sudden afternoon storm" },
-        { "zh": "舒服微風", "en": "Comfortable breeze" },
-        { "zh": "濃霧警報", "en": "Heavy fog warning" }
-      ]
-    },
-    {
-      "prompt": {
-        "zh": "如果可以偷看大家對你的第一印象，你最想知道哪一項？",
-        "en": "If you could see everyone's first impression of you, what would you want to know?"
-      },
+      "prompt": { "zh": "如果可以偷看大家對你的第一印象，你最想知道哪一項？", "en": "If you could see everyone's first impression of you, what would you want to know?" },
       "options": [
         { "zh": "看起來好不好相處", "en": "Whether I seem easy to get along with" },
         { "zh": "看起來聰不聰明", "en": "Whether I seem smart" },
-        { "zh": "看起來像不像會遲到", "en": "Whether I seem like I would be late" }
+        { "zh": "長得好不好看", "en": "Whether I seem attractive" }
       ]
     },
     {
-      "prompt": {
-        "zh": "如果每個人都有一個隱藏稱號，你最想要哪種？",
-        "en": "If everyone had a hidden title, which one would you want?"
-      },
+      "prompt": { "zh": "如果這群人是一個冒險小隊，最可能缺少哪種人？", "en": "If this group were an adventure squad, what kind of person would it most likely be missing?" },
       "options": [
-        { "zh": "氣氛修理師", "en": "Mood Repair Specialist" },
-        { "zh": "冷場觀察員", "en": "Awkward Silence Analyst" },
-        { "zh": "臨時起義軍師", "en": "Last-Minute Strategy Captain" }
+        { "zh": "冷靜的策略家", "en": "A calm strategist" },
+        { "zh": "敢衝的行動派", "en": "A bold action-taker" },
+        { "zh": "負責把大家拉回現實的人", "en": "Someone who brings everyone back to reality" }
+      ]
+    },
+    {
+      "prompt": { "zh": "如果大家一起合租，最可能先引爆衝突的是什麼？", "en": "If everyone shared a place, what would most likely cause the first conflict?" },
+      "options": [
+        { "zh": "誰都不想倒垃圾", "en": "Nobody wants to take out the trash" },
+        { "zh": "冰箱裡的食物歸屬不明", "en": "Unclear ownership of food in the fridge" },
+        { "zh": "有人太晚睡還太吵", "en": "Someone stays up too late and makes noise" }
+      ]
+    },
+    {
+      "prompt": { "zh": "第一次見面時，你最容易被哪種人吸引注意？", "en": "When meeting someone for the first time, who most easily catches your attention?" },
+      "options": [
+        { "zh": "很會接話的人", "en": "Someone who responds smoothly" },
+        { "zh": "安靜但有神秘感的人", "en": "Someone quiet but mysterious" },
+        { "zh": "笑點很奇怪的人", "en": "Someone with a strange sense of humor" }
+      ]
+    },
+    {
+      "prompt": { "zh": "如果朋友的另一半第一次加入聚會，最加分的是什麼？", "en": "If a friend's partner joins the hangout for the first time, what is the biggest plus?" },
+      "options": [
+        { "zh": "自然融入大家", "en": "Blending in naturally" },
+        { "zh": "不刻意表現但很有禮貌", "en": "Being polite without trying too hard" },
+        { "zh": "有自己的幽默感", "en": "Having their own sense of humor" }
+      ]
+    },
+    {
+      "prompt": { "zh": "你覺得最容易讓人誤會成曖昧的行為是？", "en": "What behavior is most easily mistaken for flirting?" },
+      "options": [
+        { "zh": "回訊息太快太認真", "en": "Replying too quickly and seriously" },
+        { "zh": "記得太多小細節", "en": "Remembering too many little details" },
+        { "zh": "嘴上嫌棄但一直關心", "en": "Acting annoyed but always caring" }
+      ]
+    },
+    {
+      "prompt": { "zh": "如果要判斷一個人適不適合交往，你最看重哪個瞬間？", "en": "When judging whether someone is good relationship material, which moment matters most?" },
+      "options": [
+        { "zh": "壓力下怎麼說話", "en": "How they speak under pressure" },
+        { "zh": "對服務人員的態度", "en": "How they treat service staff" },
+        { "zh": "計畫被打亂時的反應", "en": "How they react when plans fall apart" }
+      ]
+    },
+    {
+      "prompt": { "zh": "如果人生可以開一個外掛，你最想要哪一種？", "en": "If life allowed one cheat code, which would you want most?" },
+      "options": [
+        { "zh": "永遠知道別人的真實想法", "en": "Always know what people really think" },
+        { "zh": "所有選擇都能預覽後果", "en": "Preview the outcome of every choice" },
+        { "zh": "想認真時就能立刻進入狀態", "en": "Enter focus mode whenever you want" }
+      ]
+    },
+    {
+      "prompt": { "zh": "你最希望旅伴在旅途中具備哪種能力？", "en": "What ability would you most want in a travel companion?" },
+      "options": [
+        { "zh": "找路和處理突發狀況", "en": "Finding the way and handling surprises" },
+        { "zh": "發現好吃好玩的地方", "en": "Finding good food and fun places" },
+        { "zh": "讓大家累的時候不要吵起來", "en": "Keeping everyone from fighting when tired" }
+      ]
+    },
+    {
+      "prompt": { "zh": "如果只能選一種旅行風格，你會選哪個？", "en": "If you could choose only one travel style, which would it be?" },
+      "options": [
+        { "zh": "行程排滿才有賺到", "en": "A packed schedule feels worth it" },
+        { "zh": "每天只排一件大事，其他隨緣", "en": "One main plan per day, then go with the flow" },
+        { "zh": "不查太多，到了再說", "en": "Do little research and decide after arriving" }
+      ]
+    },
+    {
+      "prompt": { "zh": "如果家人聚會要變得更舒服，最需要減少什麼？", "en": "For family gatherings to feel more comfortable, what needs to be reduced most?" },
+      "options": [
+        { "zh": "一直問近況和人生計畫", "en": "Constant questions about life plans" },
+        { "zh": "每個人都滑手機", "en": "Everyone scrolling on their phones" },
+        { "zh": "誰要負責收拾的模糊地帶", "en": "The unclear question of who cleans up" }
+      ]
+    },
+    {
+      "prompt": { "zh": "如果這個房間突然變成一個真人實境節目，節目名稱最像哪個？", "en": "If this room suddenly became a reality show, what would the title be?" },
+      "options": [
+        { "zh": "今天到底誰在帶風向", "en": "Who Is Steering the Room Today?" },
+        { "zh": "大家都說沒有但其實都有事", "en": "Everyone Says Nothing Is Going On" },
+        { "zh": "表面和平，內心戰爭", "en": "Peace Outside, War Inside" }
+      ]
+    },
+    {
+      "prompt": { "zh": "如果要在這場遊戲裡隱藏自己的真實目的，最有效的方法是？", "en": "What is the most effective way to hide your real motive in this game?" },
+      "options": [
+        { "zh": "講得很像真心話", "en": "Make it sound like a sincere opinion" },
+        { "zh": "跟著大家笑但不表態", "en": "Laugh along without taking a stance" },
+        { "zh": "故意提出一個很合理的假理由", "en": "Offer a very reasonable fake reason" }
+      ]
+    },
+    {
+      "prompt": { "zh": "如果大家一起準備一頓晚餐，最可能先讓場面失控的是什麼？", "en": "If everyone cooked dinner together, what would most likely make things go off the rails first?" },
+      "options": [
+        { "zh": "有人一直改菜單", "en": "Someone keeps changing the menu" },
+        { "zh": "有人邊煮邊偷吃", "en": "Someone keeps snacking while cooking" },
+        { "zh": "有人說要幫忙但只會站著聊天", "en": "Someone says they will help but only stands around chatting" }
+      ]
+    },
+    {
+      "prompt": { "zh": "如果你要讓大家相信一個很荒謬的故事，最有效的方法是什麼？", "en": "If you wanted everyone to believe a ridiculous story, what would work best?" },
+      "options": [
+        { "zh": "講得非常具體", "en": "Tell it with very specific details" },
+        { "zh": "找一個人先附和你", "en": "Get one person to agree first" },
+        { "zh": "假裝這件事其實不重要", "en": "Act like it is not important" }
+      ]
+    },
+    {
+      "prompt": { "zh": "你覺得真正穩定的關係，最需要哪一種默契？", "en": "What kind of unspoken understanding matters most in a truly stable relationship?" },
+      "options": [
+        { "zh": "知道什麼時候不要追問", "en": "Knowing when not to keep asking" },
+        { "zh": "吵架後還願意回來講清楚", "en": "Still being willing to talk after a fight" },
+        { "zh": "不用表現完美也不怕被討厭", "en": "Not fearing rejection when you are not perfect" }
+      ]
+    },
+    {
+      "prompt": { "zh": "如果你只能被誤會一種，你比較能接受哪一種？", "en": "If you had to be misunderstood in one way, which could you accept most?" },
+      "options": [
+        { "zh": "被以為太冷淡", "en": "Being seen as too cold" },
+        { "zh": "被以為太天真", "en": "Being seen as too naive" },
+        { "zh": "被以為太有野心", "en": "Being seen as too ambitious" }
+      ]
+    },
+    {
+      "prompt": { "zh": "如果未來的你只能寄回一句提醒，你希望他提醒什麼？", "en": "If your future self could send back only one reminder, what should it be?" },
+      "options": [
+        { "zh": "不要把害怕當成理性", "en": "Do not mistake fear for rationality" },
+        { "zh": "不要把忙碌當成進步", "en": "Do not mistake busyness for progress" },
+        { "zh": "不要把習慣當成喜歡", "en": "Do not mistake habit for liking something" }
+      ]
+    },
+    {
+      "prompt": { "zh": "如果旅途中突然多出半天空檔，你會怎麼用？", "en": "If half a free day suddenly opened up during a trip, how would you use it?" },
+      "options": [
+        { "zh": "找一個景點補滿", "en": "Fill it with one more attraction" },
+        { "zh": "找一家店坐很久", "en": "Sit in one place for a long time" },
+        { "zh": "亂走到哪算哪", "en": "Wander and see where you end up" }
+      ]
+    },
+    {
+      "prompt": { "zh": "如果這場聚會其實是一個秘密實驗，研究主題最可能是什麼？", "en": "If this hangout were actually a secret experiment, what would it most likely study?" },
+      "options": [
+        { "zh": "人類如何被一句話帶偏", "en": "How humans get steered by one sentence" },
+        { "zh": "大家多快會假裝有共識", "en": "How quickly people pretend to agree" },
+        { "zh": "誰最會把尷尬變成笑點", "en": "Who is best at turning awkwardness into a joke" }
+      ]
+    },
+    {
+      "prompt": { "zh": "如果你想在遊戲裡看起來最無辜，你會怎麼做？", "en": "If you wanted to look the most innocent in the game, what would you do?" },
+      "options": [
+        { "zh": "先承認一點小缺點", "en": "Admit one tiny flaw first" },
+        { "zh": "把問題丟回給大家", "en": "Throw the question back to everyone" },
+        { "zh": "用很真誠的語氣講廢話", "en": "Say nonsense in a very sincere tone" }
       ]
     }
   ]
