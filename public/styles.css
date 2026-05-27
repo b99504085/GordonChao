@@ -226,7 +226,9 @@ h3 {
 
 .hero-mascot {
   display: block;
-  width: min(12rem, 48vw);
+  max-width: 100%;
+  width: min(19rem, 92%);
+  height: auto;
   margin: 0 auto 0.85rem;
 }
 
@@ -280,6 +282,7 @@ h3 {
 .rule-grid strong {
   margin-bottom: 0.25rem;
   font-size: 1.02rem;
+  word-break: keep-all;
 }
 
 .rule-grid span {
@@ -1043,23 +1046,24 @@ textarea {
   }
 
   .hero-panel {
-    padding-right: 17rem;
+    min-height: 31rem;
+    padding-right: clamp(20rem, 42vw, 32rem);
   }
 
   .hero-mascot {
     position: absolute;
-    top: 3.9rem;
-    right: 2.4rem;
-    width: 14rem;
+    top: 3rem;
+    right: clamp(1rem, 3vw, 2rem);
+    width: clamp(22rem, 39vw, 31rem);
     margin: 0;
   }
 
   .rules-card {
-    margin-right: -15rem;
+    margin-right: 0;
   }
 
   .rule-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .role-guide {
@@ -1098,8 +1102,13 @@ textarea {
   }
 
   h1 {
-    font-size: 2.2rem;
+    font-size: 2.45rem;
     line-height: 1;
+  }
+
+  .hero-mascot {
+    width: min(21rem, 100%);
+    margin: 0.25rem auto 0.9rem;
   }
 
   .intro-copy {

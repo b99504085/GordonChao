@@ -8,7 +8,7 @@ const roleArtImages = {
 const copy = {
   zh: {
     htmlLang: "zh-Hant",
-    title: "試探氣球",
+    title: "風向球",
     eyebrow: "派對遊戲",
     switchLanguage: "切換英文",
     intro:
