@@ -1,4 +1,9 @@
 const roleTypes = ["conformer", "minority", "follower"];
+const roleCardImages = {
+  conformer: "/assets/roles/conformer-card.png",
+  minority: "/assets/roles/minority-card.png",
+  follower: "/assets/roles/follower-card.png",
+};
 
 const copy = {
   zh: {
@@ -255,6 +260,11 @@ function roleAvatar(type, size = "medium") {
   `;
 }
 
+function roleCardImage(type, size = "large") {
+  const role = t().roleText[type];
+  return `<img class="role-card-image role-card-image-${size}" src="${roleCardImages[type]}" alt="${escapeHtml(role.title)}: ${escapeHtml(role.short)}" loading="lazy" />`;
+}
+
 function logoMarkup() {
   return `
     <div class="brand-lockup">
@@ -286,11 +296,8 @@ function rulesMarkup() {
             const role = t().roleText[type];
             return `
               <article class="role-guide-card">
-                ${roleAvatar(type, "small")}
-                <div>
-                  <strong>${role.title}</strong>
-                  <p>${role.short}</p>
-                </div>
+                ${roleCardImage(type, "guide")}
+                <span class="sr-only">${role.title}: ${role.short}</span>
               </article>
             `;
           })
@@ -658,15 +665,9 @@ function renderRole(room) {
   const roleCopy = t().roleText[role.type];
   const target = role.type === "follower" ? `<p>${t().targetPlayer}<strong>${escapeHtml(role.targetName)}</strong></p>` : "";
   app.querySelector("[data-role-card]").innerHTML = `
-    <div class="role-heading">
-      ${roleAvatar(role.type)}
-      <div>
-        <div class="role-title">${roleCopy.title}</div>
-        <p>${roleCopy.short}</p>
-      </div>
-    </div>
-    <p>${roleCopy.body}</p>
-    ${target}
+    ${roleCardImage(role.type)}
+    <p class="sr-only">${roleCopy.body}</p>
+    ${target ? `<div class="role-target">${target}</div>` : ""}
   `;
 }
 
