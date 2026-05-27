@@ -21,11 +21,6 @@ const copy = {
       { title: "揭曉身份與投票", body: "完成任務可得 1 分" },
     ],
     rolesTitle: "三種秘密動機",
-    facts: [
-      { label: "適合 4-10 人", body: "朋友聚會、家庭、同事都適合" },
-      { label: "每局約 15-25 分鐘", body: "輕鬆快速，歡樂不冷場" },
-      { label: "題庫持續更新", body: "各種主題包，越玩越有趣" },
-    ],
     nameLabel: "你的名字",
     namePlaceholder: "例如：小明",
     roomInputLabel: "房號",
@@ -125,11 +120,6 @@ const copy = {
       { title: "Reveal roles and votes", body: "Complete your motive to score 1 point" },
     ],
     rolesTitle: "Three Private Motives",
-    facts: [
-      { label: "4-10 Players", body: "Great for friends, family, or colleagues" },
-      { label: "15-25 Minutes", body: "Quick to learn, fun to play" },
-      { label: "New Topics Regularly", body: "More packs, more laughs, more chaos" },
-    ],
     nameLabel: "Your name",
     namePlaceholder: "e.g. Gordon",
     roomInputLabel: "Room code",
@@ -349,18 +339,6 @@ function rulesMarkup() {
       <h3>${t().rolesTitle}</h3>
       <div class="role-guide">
         ${roleTypes.map((type) => roleInfoCard(type)).join("")}
-      </div>
-      <div class="feature-strip">
-        ${t()
-          .facts.map(
-            (fact) => `
-              <div>
-                <strong>${escapeHtml(fact.label)}</strong>
-                <span>${escapeHtml(fact.body)}</span>
-              </div>
-            `
-          )
-          .join("")}
       </div>
     </section>
   `;
