@@ -38,6 +38,8 @@ const copy = {
     startRound: "開始回合",
     needPlayers: "至少需要 3 人",
     lockAnswer: "鎖定答案",
+    skipQuestion: "換一題",
+    skipQuestionHint: "Host 可以換題，角色不會重抽。",
     locked: "已鎖定",
     lockStatus: (locked, total) => `${locked}/${total} 位玩家已鎖定`,
     resultsTitle: "本回合結果",
@@ -121,6 +123,8 @@ const copy = {
     startRound: "Start round",
     needPlayers: "Need at least 3 players",
     lockAnswer: "Lock answer",
+    skipQuestion: "Skip question",
+    skipQuestionHint: "Host can skip the question without changing roles.",
     locked: "Locked",
     lockStatus: (locked, total) => `${locked}/${total} players locked`,
     resultsTitle: "Round results",
@@ -392,6 +396,8 @@ function applyStaticGameCopy() {
   if (leaveButton) leaveButton.textContent = t().leaveRoom;
   const lockButton = app.querySelector("[data-lock-button]");
   if (lockButton) lockButton.textContent = t().lockAnswer;
+  const skipButton = app.querySelector("[data-skip-question]");
+  if (skipButton) skipButton.textContent = t().skipQuestion;
   const nextButton = app.querySelector("[data-next-button]");
   if (nextButton) nextButton.textContent = t().nextRound;
 }
@@ -425,6 +431,18 @@ function bindGameButtons() {
 
   app.querySelector("[data-lock-button]")?.addEventListener("click", () => {
     request("/api/lock", {
+      room: state.roomCode,
+      playerId: state.playerId,
+    })
+      .then((payload) => {
+        state.room = payload.room;
+        render();
+      })
+      .catch(showError);
+  });
+
+  app.querySelector("[data-skip-question]")?.addEventListener("click", () => {
+    request("/api/skip-question", {
       room: state.roomCode,
       playerId: state.playerId,
     })
@@ -628,6 +646,11 @@ function renderGame(room) {
   lockButton.hidden = false;
   lockButton.disabled = room.me.locked || room.me.choice === null;
   lockButton.textContent = room.me.locked ? t().locked : t().lockAnswer;
+
+  const skipButton = app.querySelector("[data-skip-question]");
+  skipButton.hidden = !room.me.isHost;
+  skipButton.textContent = t().skipQuestion;
+  skipButton.title = t().skipQuestionHint;
 }
 
 function renderRole(room) {

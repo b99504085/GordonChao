@@ -580,10 +580,15 @@ textarea {
 }
 
 [data-lock-button],
+[data-skip-question],
 [data-next-button],
 [data-start-button] {
   width: 100%;
   margin-top: 1rem;
+}
+
+[data-skip-question] {
+  margin-top: 0.75rem;
 }
 
 .phase-chip {

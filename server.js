@@ -284,6 +284,18 @@ function startRound(room) {
   assignRoles(room);
 }
 
+function skipQuestion(room) {
+  if (!["choosing", "discussing"].includes(room.phase)) {
+    throw new Error("Questions can only be skipped before results.");
+  }
+  room.phase = "choosing";
+  room.question = nextQuestion(room);
+  room.roundStartedAt = Date.now();
+  room.choices = {};
+  room.locks = {};
+  room.results = null;
+}
+
 function scoreRound(room) {
   const counts = {};
   for (const choice of Object.values(room.choices)) {
@@ -635,6 +647,12 @@ async function routeApi(request, response) {
     if (url.pathname === "/api/start") {
       if (!player.isHost) throw new Error("Only the host can start rounds.");
       startRound(room);
+      return sendJson(response, 200, { room: serializeRoom(room, player.id) });
+    }
+
+    if (url.pathname === "/api/skip-question") {
+      if (!player.isHost) throw new Error("Only the host can skip questions.");
+      skipQuestion(room);
       return sendJson(response, 200, { room: serializeRoom(room, player.id) });
     }
 

@@ -79,6 +79,36 @@
         { "zh": "洗澡", "en": "Shower" },
         { "zh": "整理桌面", "en": "Clear the desk" }
       ]
+    },
+    {
+      "prompt": {
+        "zh": "如果手機今晚會公開一個秘密，你比較不想被公開哪個？",
+        "en": "If your phone exposed one secret tonight, which would you least want revealed?"
+      },
+      "options": [
+        { "zh": "螢幕使用時間", "en": "Screen time" },
+        { "zh": "搜尋紀錄", "en": "Search history" }
+      ]
+    },
+    {
+      "prompt": {
+        "zh": "朋友群只能保留一種美德，你選哪個？",
+        "en": "Your friend group can keep only one virtue. Which do you choose?"
+      },
+      "options": [
+        { "zh": "準時", "en": "Being on time" },
+        { "zh": "嘴巴夠緊", "en": "Keeping secrets" }
+      ]
+    },
+    {
+      "prompt": {
+        "zh": "如果今天必須少一種社交能力，你寧可失去哪個？",
+        "en": "If you had to lose one social skill today, which would you rather lose?"
+      },
+      "options": [
+        { "zh": "假裝沒事", "en": "Pretending everything is fine" },
+        { "zh": "秒懂空氣", "en": "Reading the room instantly" }
+      ]
     }
   ],
   "threeOption": [
@@ -300,6 +330,138 @@
         { "zh": "美食挑戰", "en": "Food challenge" },
         { "zh": "房間改造", "en": "Room makeover" },
         { "zh": "假新聞播報", "en": "Fake news broadcast" }
+      ]
+    },
+    {
+      "prompt": {
+        "zh": "如果這個房間要選一個人當末日隊長，隊長最需要哪種能力？",
+        "en": "If this room had to choose an apocalypse captain, what skill matters most?"
+      },
+      "options": [
+        { "zh": "冷靜判斷", "en": "Staying calm" },
+        { "zh": "會找資源", "en": "Finding resources" },
+        { "zh": "讓大家不要吵架", "en": "Keeping everyone from fighting" }
+      ]
+    },
+    {
+      "prompt": {
+        "zh": "如果有一個 App 會誠實評價你的人生狀態，你最怕它顯示什麼？",
+        "en": "If an app honestly rated your life status, what result would scare you most?"
+      },
+      "options": [
+        { "zh": "你其實很累", "en": "You are actually exhausted" },
+        { "zh": "你逃避太多事", "en": "You avoid too many things" },
+        { "zh": "你比想像中還在意別人", "en": "You care more than you admit" }
+      ]
+    },
+    {
+      "prompt": {
+        "zh": "如果今晚每個人都要公開一個小缺點，哪種最容易被原諒？",
+        "en": "If everyone had to reveal one small flaw tonight, which is easiest to forgive?"
+      },
+      "options": [
+        { "zh": "容易已讀不回", "en": "Forgetting to reply" },
+        { "zh": "常常臨時改主意", "en": "Changing plans last minute" },
+        { "zh": "講故事會誇張一點", "en": "Exaggerating stories" }
+      ]
+    },
+    {
+      "prompt": {
+        "zh": "如果朋友群要立一條新憲法，第一條應該是什麼？",
+        "en": "If your friend group wrote a constitution, what should Article One be?"
+      },
+      "options": [
+        { "zh": "截圖不能外流", "en": "Screenshots stay inside the group" },
+        { "zh": "遲到要請飲料", "en": "Late people buy drinks" },
+        { "zh": "吵架要當天講開", "en": "Arguments must be resolved the same day" }
+      ]
+    },
+    {
+      "prompt": {
+        "zh": "如果你的個性要被做成商品，最像哪一種？",
+        "en": "If your personality became a product, what would it be?"
+      },
+      "options": [
+        { "zh": "便利商店咖啡", "en": "Convenience store coffee" },
+        { "zh": "深夜客服", "en": "Late-night customer support" },
+        { "zh": "限量盲盒", "en": "Limited mystery box" }
+      ]
+    },
+    {
+      "prompt": {
+        "zh": "如果明天開始大家都能看到你的情緒字幕，你最想隱藏哪一種？",
+        "en": "If everyone could see your emotion subtitles tomorrow, which would you hide?"
+      },
+      "options": [
+        { "zh": "我其實不想出門", "en": "I actually do not want to go out" },
+        { "zh": "我現在有點尷尬", "en": "This is a little awkward" },
+        { "zh": "我正在偷想晚餐", "en": "I am secretly thinking about dinner" }
+      ]
+    },
+    {
+      "prompt": {
+        "zh": "如果聚會中突然要選一個人代表大家發言，最重要的是什麼？",
+        "en": "If one person had to speak for the whole group, what matters most?"
+      },
+      "options": [
+        { "zh": "講話好聽", "en": "Sounding convincing" },
+        { "zh": "不會亂承諾", "en": "Not overpromising" },
+        { "zh": "知道大家底線", "en": "Knowing everyone's limits" }
+      ]
+    },
+    {
+      "prompt": {
+        "zh": "如果你可以把一種社交尷尬永久刪除，你選哪個？",
+        "en": "If you could delete one social awkwardness forever, which would you choose?"
+      },
+      "options": [
+        { "zh": "叫錯名字", "en": "Calling someone the wrong name" },
+        { "zh": "講笑話沒人笑", "en": "A joke landing with silence" },
+        { "zh": "兩個人同時讓路", "en": "Two people dodging the same way" }
+      ]
+    },
+    {
+      "prompt": {
+        "zh": "如果你的朋友群要被拍成影集，第一集最適合叫什麼？",
+        "en": "If your friend group became a series, what should Episode One be called?"
+      },
+      "options": [
+        { "zh": "我們真的有計畫嗎", "en": "Do We Actually Have a Plan?" },
+        { "zh": "先吃再說", "en": "Food First, Decisions Later" },
+        { "zh": "這句不要截圖", "en": "Do Not Screenshot That" }
+      ]
+    },
+    {
+      "prompt": {
+        "zh": "如果今晚的聊天會被變成一種天氣，最像哪個？",
+        "en": "If tonight's conversation became weather, what would it be?"
+      },
+      "options": [
+        { "zh": "午後雷陣雨", "en": "Sudden afternoon storm" },
+        { "zh": "舒服微風", "en": "Comfortable breeze" },
+        { "zh": "濃霧警報", "en": "Heavy fog warning" }
+      ]
+    },
+    {
+      "prompt": {
+        "zh": "如果可以偷看大家對你的第一印象，你最想知道哪一項？",
+        "en": "If you could see everyone's first impression of you, what would you want to know?"
+      },
+      "options": [
+        { "zh": "看起來好不好相處", "en": "Whether I seem easy to get along with" },
+        { "zh": "看起來聰不聰明", "en": "Whether I seem smart" },
+        { "zh": "看起來像不像會遲到", "en": "Whether I seem like I would be late" }
+      ]
+    },
+    {
+      "prompt": {
+        "zh": "如果每個人都有一個隱藏稱號，你最想要哪種？",
+        "en": "If everyone had a hidden title, which one would you want?"
+      },
+      "options": [
+        { "zh": "氣氛修理師", "en": "Mood Repair Specialist" },
+        { "zh": "冷場觀察員", "en": "Awkward Silence Analyst" },
+        { "zh": "臨時起義軍師", "en": "Last-Minute Strategy Captain" }
       ]
     }
   ]
