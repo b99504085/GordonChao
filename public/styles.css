@@ -226,7 +226,7 @@ h3 {
 
 .hero-mascot {
   display: block;
-  width: min(10rem, 42vw);
+  width: min(12rem, 48vw);
   margin: 0 auto 0.85rem;
 }
 
@@ -340,10 +340,12 @@ h3 {
 
 .role-art {
   display: block;
-  width: min(9rem, 70%);
-  max-height: 8rem;
+  width: min(9.5rem, 78%);
+  height: 9.5rem;
   object-fit: contain;
+  object-position: center;
   margin: 0.2rem auto 0;
+  border-radius: 6px;
 }
 
 .feature-strip {
@@ -647,7 +649,7 @@ h3 {
 
 .result-main .role-art {
   width: 4.5rem;
-  max-height: 4.5rem;
+  height: 4.2rem;
   margin: 0;
 }
 
@@ -932,9 +934,9 @@ textarea {
 
   .hero-mascot {
     position: absolute;
-    top: 4.5rem;
+    top: 3.9rem;
     right: 2.4rem;
-    width: 13rem;
+    width: 14rem;
     margin: 0;
   }
 
