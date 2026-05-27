@@ -26,6 +26,14 @@
         <h2 data-i18n="lobbyTitle"></h2>
         <p class="muted" data-i18n="lobbyBody"></p>
         <div class="players" data-player-list></div>
+        <div class="lobby-chat">
+          <h3 data-i18n="chatTitle"></h3>
+          <div class="chat-messages" data-chat-messages></div>
+          <form class="chat-form" data-chat-form>
+            <input data-chat-input maxlength="180" autocomplete="off" />
+            <button type="submit" data-i18n="sendChat"></button>
+          </form>
+        </div>
         <button data-start-button hidden></button>
       </section>
 
@@ -41,13 +49,16 @@
 
       <section class="panel compact" data-results hidden>
         <h2 data-i18n="resultsTitle"></h2>
+        <div class="winner-board" data-winner-board hidden></div>
         <div class="counts" data-counts></div>
         <div class="results-list" data-results-list></div>
+        <div class="score-board" data-score-board></div>
         <button data-next-button hidden></button>
       </section>
 
       <section class="panel compact room-settings" data-role-settings>
         <h2 data-i18n="roleSetupTitle"></h2>
+        <div class="winning-score-settings" data-winning-score-settings></div>
         <div class="mode-options" data-role-mode-options></div>
         <div class="fixed-config" data-fixed-config></div>
         <button type="button" class="secondary reset-config-button" data-reset-config hidden></button>

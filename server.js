@@ -176,6 +176,14 @@ function validateFixedRoleConfig(config, playerCount) {
   return normalized;
 }
 
+function validateWinningScore(value) {
+  const score = Number(value);
+  if (!Number.isInteger(score) || score < 1 || score > 99) {
+    throw new Error("Winning score must be a whole number between 1 and 99.");
+  }
+  return score;
+}
+
 function makePlayer(name, isHost = false) {
   return {
     id: id(),
@@ -221,8 +229,10 @@ function serializeRoom(room, playerId) {
     maxPlayers: 6,
     players: room.players.map(publicPlayer),
     hostId: room.hostId,
+    winningScore: room.winningScore || 4,
     roleMode: room.roleMode || "random",
     fixedRoleConfig: fixedRoleConfigFor(room),
+    chatMessages: room.chatMessages || [],
     question: room.question,
     choices: room.choices,
     locks: Object.fromEntries(Object.entries(room.locks).map(([id, locked]) => [id, Boolean(locked)])),
@@ -350,6 +360,16 @@ function scoreRound(room) {
   });
 
   room.phase = "results";
+  const rankings = [...room.players]
+    .sort((a, b) => b.score - a.score || a.connectedAt - b.connectedAt)
+    .map((player, index) => ({
+      playerId: player.id,
+      playerName: player.name,
+      score: player.score,
+      rank: index + 1,
+    }));
+  const topScore = rankings[0]?.score || 0;
+  const winners = topScore >= (room.winningScore || 4) ? rankings.filter((player) => player.score === topScore) : [];
   const durationSeconds = Math.max(1, Math.round((Date.now() - room.roundStartedAt) / 1000));
   const roundRecord = {
     roomCode: room.code,
@@ -367,7 +387,7 @@ function scoreRound(room) {
   room.metrics.roundsPlayed += 1;
   room.metrics.lastRoundDurationSeconds = durationSeconds;
   room.metrics.lastQuestionKey = roundRecord.questionKey;
-  room.results = { counts, uniqueMax, playerResults };
+  room.results = { counts, uniqueMax, playerResults, rankings, winners };
   sendSheetEvent("round_completed", {
     ...roundRecord,
     choices: room.choices,
@@ -540,6 +560,8 @@ function createRoom(body) {
     choices: {},
     locks: {},
     results: null,
+    winningScore: 4,
+    chatMessages: [],
     roleMode: "fixed",
     fixedRoleConfigs: {},
     feedback: {},
@@ -562,6 +584,20 @@ function createRoom(body) {
     createdAt: new Date().toISOString(),
   });
   return { room, player };
+}
+
+function addChatMessage(room, player, message) {
+  const text = String(message || "").trim().slice(0, 180);
+  if (!text) throw new Error("Chat message cannot be empty.");
+  room.chatMessages ||= [];
+  room.chatMessages.push({
+    id: id(8),
+    playerId: player.id,
+    playerName: player.name,
+    text,
+    sentAt: Date.now(),
+  });
+  room.chatMessages = room.chatMessages.slice(-80);
 }
 
 function leaveRoom(room, player) {
@@ -674,6 +710,18 @@ async function routeApi(request, response) {
       } else {
         room.fixedRoleConfigs[playerCount] = validateFixedRoleConfig(body.config, playerCount);
       }
+      return sendJson(response, 200, { room: serializeRoom(room, player.id) });
+    }
+
+    if (url.pathname === "/api/winning-score") {
+      if (!player.isHost) throw new Error("Only the host can change room settings.");
+      if (room.phase !== "lobby") throw new Error("Winning score can only be changed in the lobby.");
+      room.winningScore = validateWinningScore(body.winningScore);
+      return sendJson(response, 200, { room: serializeRoom(room, player.id) });
+    }
+
+    if (url.pathname === "/api/chat") {
+      addChatMessage(room, player, body.message);
       return sendJson(response, 200, { room: serializeRoom(room, player.id) });
     }
 

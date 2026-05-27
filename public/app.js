@@ -33,6 +33,18 @@ const copy = {
     lobbyTitle: "等朋友加入",
     lobbyBody: "3 到 6 人就能開始。把房號分享出去，人到齊後由主持人開始回合。",
     roleSetupTitle: "角色配置",
+    winningScoreTitle: "勝利分數",
+    winningScoreHelp: "先達到幾分就獲勝",
+    customWinningScore: "自訂",
+    winningScoreLabel: (score) => `${score} 分`,
+    chatTitle: "大廳聊天",
+    chatPlaceholder: "輸入訊息給房間裡的人",
+    sendChat: "送出",
+    noChatYet: "還沒有訊息，先打個招呼吧。",
+    scoreBoardTitle: "目前分數",
+    winnerTitle: "勝利者",
+    rankingTitle: "總排名",
+    winnerLine: (names, score) => `${names} 率先達到 ${score} 分，贏得本局！`,
     fixedRoleMode: "固定角色配置",
     randomRoleMode: "隨機角色配置",
     fixedRoleModeBody: "每局角色數量固定，主持人可自行調整角色配置。",
@@ -132,6 +144,18 @@ const copy = {
     lobbyTitle: "Waiting for friends",
     lobbyBody: "Start with 3 to 6 players. Share the room code, then the Host can begin once everyone arrives.",
     roleSetupTitle: "Role Setup",
+    winningScoreTitle: "Winning Score",
+    winningScoreHelp: "First to this score wins",
+    customWinningScore: "Custom",
+    winningScoreLabel: (score) => `${score} pts`,
+    chatTitle: "Lobby Chat",
+    chatPlaceholder: "Message everyone in the room",
+    sendChat: "Send",
+    noChatYet: "No messages yet. Say hello.",
+    scoreBoardTitle: "Current Scores",
+    winnerTitle: "Winner",
+    rankingTitle: "Final Ranking",
+    winnerLine: (names, score) => `${names} reached ${score} points first and won the game!`,
     fixedRoleMode: "Fixed role setup",
     randomRoleMode: "Random role setup",
     fixedRoleModeBody: "Role counts stay fixed each round, and the Host can customize the setup.",
@@ -497,6 +521,24 @@ function bindGameButtons() {
       })
       .catch(showError);
   });
+
+  app.querySelector("[data-chat-form]")?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const input = app.querySelector("[data-chat-input]");
+    const message = input.value.trim();
+    if (!message) return;
+    request("/api/chat", {
+      room: state.roomCode,
+      playerId: state.playerId,
+      message,
+    })
+      .then((payload) => {
+        input.value = "";
+        state.room = payload.room;
+        render();
+      })
+      .catch(showError);
+  });
 }
 
 function startPolling() {
@@ -552,10 +594,32 @@ function renderLobby(room) {
   lobby.hidden = room.phase !== "lobby";
   if (lobby.hidden) return;
   renderPlayers(app.querySelector("[data-player-list]"), room.players);
+  renderChat(room);
   const startButton = app.querySelector("[data-start-button]");
   startButton.hidden = !room.me.isHost;
   startButton.disabled = room.players.length < 3;
   startButton.textContent = room.players.length < 3 ? t().needPlayers : t().startRound;
+}
+
+function renderChat(room) {
+  const messages = app.querySelector("[data-chat-messages]");
+  const input = app.querySelector("[data-chat-input]");
+  if (!messages || !input) return;
+  input.placeholder = t().chatPlaceholder;
+  const chat = room.chatMessages || [];
+  messages.innerHTML = chat.length
+    ? chat
+        .map(
+          (message) => `
+            <div class="chat-message ${message.playerId === room.me.id ? "mine" : ""}">
+              <strong>${escapeHtml(message.playerName)}</strong>
+              <span>${escapeHtml(message.text)}</span>
+            </div>
+          `,
+        )
+        .join("")
+    : `<p class="muted">${t().noChatYet}</p>`;
+  messages.scrollTop = messages.scrollHeight;
 }
 
 function renderRoleSettings(room) {
@@ -565,6 +629,7 @@ function renderRoleSettings(room) {
   if (panel.hidden) return;
 
   const options = app.querySelector("[data-role-mode-options]");
+  renderWinningScoreSettings(room);
   options.innerHTML = ["fixed", "random"]
     .map((mode) => {
       const selected = room.roleMode === mode;
@@ -615,6 +680,52 @@ function renderRoleSettings(room) {
   resetButton.onclick = resetFixedRoles;
 
   app.querySelector("[data-role-mode-note]").textContent = room.me.isHost ? t().roleConfigHelp : t().hostOnlySetting;
+}
+
+function renderWinningScoreSettings(room) {
+  const panel = app.querySelector("[data-winning-score-settings]");
+  if (!panel) return;
+  if (document.activeElement?.matches("[data-winning-score-custom]")) return;
+  const winningScore = room.winningScore || 4;
+  panel.innerHTML = `
+    <div class="setting-title">
+      <strong>${t().winningScoreTitle}</strong>
+      <span>${t().winningScoreHelp}</span>
+    </div>
+    <div class="score-options">
+      ${[4, 8]
+        .map(
+          (score) => `
+            <button type="button" class="secondary ${winningScore === score ? "selected" : ""}" data-winning-score="${score}" ${room.me.isHost ? "" : "disabled"}>
+              ${t().winningScoreLabel(score)}
+            </button>
+          `,
+        )
+        .join("")}
+      <label class="custom-score">
+        <span>${t().customWinningScore}</span>
+        <input type="number" min="1" max="99" value="${winningScore}" data-winning-score-custom ${room.me.isHost ? "" : "disabled"} />
+      </label>
+    </div>
+  `;
+  panel.querySelectorAll("[data-winning-score]").forEach((button) => {
+    button.addEventListener("click", () => changeWinningScore(Number(button.dataset.winningScore)));
+  });
+  const customInput = panel.querySelector("[data-winning-score-custom]");
+  customInput?.addEventListener("change", () => changeWinningScore(Number(customInput.value)));
+}
+
+function changeWinningScore(winningScore) {
+  request("/api/winning-score", {
+    room: state.roomCode,
+    playerId: state.playerId,
+    winningScore,
+  })
+    .then((payload) => {
+      state.room = payload.room;
+      render();
+    })
+    .catch(showError);
 }
 
 function changeRoleMode(mode) {
@@ -777,6 +888,7 @@ function renderResults(room) {
   const results = app.querySelector("[data-results]");
   results.hidden = room.phase !== "results";
   if (results.hidden) return;
+  renderWinnerBoard(room);
 
   const counts = app.querySelector("[data-counts]");
   counts.innerHTML = room.question.options
@@ -817,10 +929,62 @@ function renderResults(room) {
     .join("");
 
   renderFeedback(room);
+  renderScoreBoard(room);
 
   const nextButton = app.querySelector("[data-next-button]");
   nextButton.hidden = !room.me.isHost;
   nextButton.textContent = t().nextRound;
+}
+
+function renderWinnerBoard(room) {
+  const board = app.querySelector("[data-winner-board]");
+  const winners = room.results?.winners || [];
+  const rankings = room.results?.rankings || [];
+  if (!board) return;
+  board.hidden = !winners.length;
+  if (!winners.length) {
+    board.innerHTML = "";
+    return;
+  }
+  const names = winners.map((winner) => winner.playerName).join(", ");
+  board.innerHTML = `
+    <h3>${t().winnerTitle}</h3>
+    <p>${escapeHtml(t().winnerLine(names, room.winningScore || 4))}</p>
+    <h4>${t().rankingTitle}</h4>
+    <ol class="ranking-list">
+      ${rankings
+        .map(
+          (player) => `
+            <li>
+              <span>${player.rank}. ${escapeHtml(player.playerName)}</span>
+              <strong>${player.score} ${t().point}</strong>
+            </li>
+          `,
+        )
+        .join("")}
+    </ol>
+  `;
+}
+
+function renderScoreBoard(room) {
+  const board = app.querySelector("[data-score-board]");
+  if (!board) return;
+  const rankings = room.results?.rankings || [...room.players].sort((a, b) => b.score - a.score);
+  board.innerHTML = `
+    <h3>${t().scoreBoardTitle}</h3>
+    <div class="score-list">
+      ${rankings
+        .map(
+          (player, index) => `
+            <div class="score-row">
+              <span>${index + 1}. ${escapeHtml(player.playerName || player.name)}</span>
+              <strong>${player.score} ${t().point}</strong>
+            </div>
+          `,
+        )
+        .join("")}
+    </div>
+  `;
 }
 
 function renderFeedback(room) {
@@ -828,7 +992,7 @@ function renderFeedback(room) {
   if (!feedback) {
     feedback = document.createElement("div");
     feedback.dataset.feedback = "";
-    app.querySelector("[data-results-list]").after(feedback);
+    (app.querySelector("[data-score-board]") || app.querySelector("[data-results-list]")).after(feedback);
   }
 
   const draftKey = `${room.code}:${room.round}`;

@@ -348,6 +348,99 @@ h3 {
   border-radius: 6px;
 }
 
+.setting-title {
+  display: grid;
+  gap: 0.15rem;
+  margin-bottom: 0.65rem;
+}
+
+.setting-title span {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.score-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.score-options button.selected {
+  outline: 2px solid var(--accent);
+  background: var(--accent-soft);
+}
+
+.custom-score {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.55rem;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #ffffff;
+  padding: 0.55rem;
+}
+
+.custom-score input {
+  min-height: 40px;
+  margin: 0;
+}
+
+.lobby-chat {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.chat-messages {
+  display: grid;
+  max-height: 14rem;
+  gap: 0.45rem;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.7);
+  padding: 0.65rem;
+}
+
+.chat-message {
+  display: grid;
+  gap: 0.15rem;
+  border-radius: var(--radius);
+  background: #fff6df;
+  padding: 0.55rem;
+}
+
+.chat-message.mine {
+  background: #eaf8f8;
+}
+
+.chat-message strong {
+  color: var(--brown);
+  font-size: 0.82rem;
+}
+
+.chat-message span {
+  line-height: 1.45;
+}
+
+.chat-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+}
+
+.chat-form input {
+  margin: 0;
+}
+
+.chat-form button {
+  min-width: 5rem;
+}
+
 .muted {
   color: var(--muted);
   line-height: 1.65;
@@ -649,6 +742,52 @@ h3 {
   font-size: 0.92rem;
   font-weight: 700;
   line-height: 1.4;
+}
+
+.winner-board,
+.score-board {
+  display: grid;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  border-radius: var(--radius);
+  background: #fff6df;
+  padding: 0.85rem;
+}
+
+.winner-board {
+  border: 2px solid var(--accent);
+  background: #fff1c7;
+}
+
+.winner-board h3,
+.winner-board h4,
+.score-board h3 {
+  margin: 0;
+}
+
+.winner-board p {
+  margin: 0;
+  font-weight: 850;
+  line-height: 1.45;
+}
+
+.ranking-list,
+.score-list {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ranking-list li,
+.score-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.72);
+  padding: 0.55rem 0.65rem;
 }
 
 .feedback-card {
@@ -967,6 +1106,59 @@ textarea {
     font-size: 0.96rem;
   }
 
+  .rule-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .rule-grid li {
+    min-height: 6.25rem;
+    padding: 0.75rem 0.55rem 0.65rem 2.55rem;
+  }
+
+  .rule-grid li::before {
+    left: 0.55rem;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .rule-grid strong {
+    font-size: 0.88rem;
+  }
+
+  .rule-grid span {
+    font-size: 0.78rem;
+  }
+
+  .role-guide {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.45rem;
+  }
+
+  .role-info-card {
+    gap: 0.2rem;
+    padding: 0.45rem;
+  }
+
+  .role-info-card h4 {
+    font-size: 0.95rem;
+  }
+
+  .role-short {
+    font-size: 0.76rem;
+  }
+
+  .role-goal {
+    padding: 0.4rem;
+    font-size: 0.68rem;
+    line-height: 1.25;
+  }
+
+  .role-art {
+    width: 100%;
+    height: 4.75rem;
+  }
+
   .button-row {
     grid-template-columns: 1fr;
   }
@@ -991,5 +1183,10 @@ textarea {
 
   .result-main .role-art {
     width: 3.9rem;
+    height: 3.9rem;
+  }
+
+  .chat-form {
+    grid-template-columns: 1fr;
   }
 }
