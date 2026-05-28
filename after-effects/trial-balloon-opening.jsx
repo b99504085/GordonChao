@@ -62,7 +62,6 @@
     doc.font = "Arial-BoldMT";
     doc.justification = ParagraphJustification.CENTER_JUSTIFY;
     if (width && height) {
-      doc.boxText = true;
       doc.boxTextSize = [width, height];
     }
     layer.property("Source Text").setValue(doc);
