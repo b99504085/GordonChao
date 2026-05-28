@@ -312,9 +312,9 @@ function roleAvatar(type, size = "medium") {
   `;
 }
 
-function roleArt(type) {
+function roleArt(type, loading = "lazy") {
   const role = t().roleText[type];
-  return `<img class="role-art" src="${roleArtImages[type]}" alt="${escapeHtml(role.title)}" loading="lazy" />`;
+  return `<img class="role-art" src="${roleArtImages[type]}" alt="${escapeHtml(role.title)}" loading="${loading}" decoding="async" />`;
 }
 
 function roleInfoCard(type, context = "guide") {
@@ -323,7 +323,7 @@ function roleInfoCard(type, context = "guide") {
     <article class="role-info-card role-info-card-${type} role-info-card-${context}">
       <h4>${role.title}</h4>
       <p class="role-short">${role.short}</p>
-      ${roleArt(type)}
+      ${roleArt(type, context === "active" ? "eager" : "lazy")}
       <p class="role-goal">${role.goal}</p>
     </article>
   `;
@@ -812,8 +812,12 @@ function renderGame(room) {
 function renderRole(room) {
   const role = room.me.role;
   const roleCopy = t().roleText[role.type];
+  const card = app.querySelector("[data-role-card]");
+  const renderKey = `${state.language}:${role.type}:${role.targetId || ""}:${role.targetName || ""}`;
+  if (card.dataset.renderKey === renderKey) return;
+  card.dataset.renderKey = renderKey;
   const target = role.type === "follower" ? `<p>${t().targetPlayer}<strong>${escapeHtml(role.targetName)}</strong></p>` : "";
-  app.querySelector("[data-role-card]").innerHTML = `
+  card.innerHTML = `
     ${roleInfoCard(role.type, "active")}
     <p class="sr-only">${roleCopy.body}</p>
     ${target ? `<div class="role-target">${target}</div>` : ""}
