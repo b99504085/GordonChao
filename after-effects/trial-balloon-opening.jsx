@@ -54,11 +54,12 @@
   }
 
   function addText(comp, text, position, fontSize, color, width, height, start, end, name) {
-    var layer = width && height ? comp.layers.addBoxText([width, height]) : comp.layers.addText(text);
+    var layer = comp.layers.addText(text);
     layer.name = name || text.substr(0, 24);
     var doc = layer.property("Source Text").value;
     doc.text = text;
     doc.fontSize = fontSize;
+    doc.leading = Math.round(fontSize * 1.12);
     doc.fillColor = color || [0.12, 0.1, 0.08];
     doc.font = "Arial-BoldMT";
     doc.justification = ParagraphJustification.CENTER_JUSTIFY;
@@ -94,7 +95,7 @@
       stroke.property("Stroke Width").setValue(7);
     }
     addText(comp, title, [x, y - h * 0.22], 38, [1, 0.44, 0.07], w - 44, 44, start, end, "Card Title - " + title);
-    addText(comp, body, [x, y + h * 0.16], 34, [0.12, 0.1, 0.08], w - 44, h * 0.55, start, end, "Card Body - " + title);
+    addText(comp, body, [x, y + h * 0.16], 30, [0.12, 0.1, 0.08], w - 44, h * 0.55, start, end, "Card Body - " + title);
   }
 
   function addImage(comp, footage, name, position, scale, start, end, bounce) {
@@ -121,15 +122,15 @@
     addSolid(comp, "Question Card BG", [1, 0.985, 0.95], [960, compact ? 190 : 340], compact ? [1200, 250] : [1280, 470], start, end, 18);
     var title = compact
       ? "Which moment matters most?"
-      : "When judging whether someone would be a good life partner, which moment matters most?";
-    addText(comp, title, [960, compact ? 115 : 215], compact ? 52 : 54, [0.12, 0.1, 0.08], compact ? 1120 : 1160, compact ? 76 : 140, start, end, "Question Title");
+      : "When judging whether someone would be\ra good life partner,\rwhich moment matters most?";
+    addText(comp, title, [960, compact ? 115 : 195], compact ? 52 : 48, [0.12, 0.1, 0.08], compact ? 1120 : 1160, compact ? 76 : 170, start, end, "Question Title");
 
     var y = compact ? 245 : 420;
     var w = compact ? 350 : 360;
     var h = compact ? 100 : 142;
-    addCard(comp, "A", "How they speak under pressure", 560, y, w, h, start, end, activeOption === "A" ? [1, 0.67, 0.13] : null);
-    addCard(comp, "B", "How they treat service staff", 960, y, w, h, start, end, activeOption === "B" ? [0.3, 0.68, 0.78] : null);
-    addCard(comp, "C", "How they react when plans fall apart", 1360, y, w, h, start, end, activeOption === "C" ? [1, 0.67, 0.13] : null);
+    addCard(comp, "A", "How they speak\runder pressure", 560, y, w, h, start, end, activeOption === "A" ? [1, 0.67, 0.13] : null);
+    addCard(comp, "B", "How they treat\rservice staff", 960, y, w, h, start, end, activeOption === "B" ? [0.3, 0.68, 0.78] : null);
+    addCard(comp, "C", "How they react when\rplans fall apart", 1360, y, w, h, start, end, activeOption === "C" ? [1, 0.67, 0.13] : null);
   }
 
   function addRoleCard(comp, footage, title, subtitle, x, start, end) {
@@ -153,7 +154,7 @@
   bg.moveToEnd();
 
   // Scene 1: normal conversation
-  addText(comp, "Just a normal conversation?", [960, 205], 54, [0.49, 0.21, 0.06], 720, 80, 0, 3, "Scene 1 Label");
+  addText(comp, "Just a normal\rconversation?", [960, 195], 54, [0.49, 0.21, 0.06], 720, 130, 0, 3, "Scene 1 Label");
   addImage(comp, conformer, "Yellow - Scene 1", [620, 620], 24, 0, 3, true);
   addImage(comp, minority, "Blue - Scene 1", [960, 605], 24, 0, 3, true);
   addImage(comp, follower, "Pink - Scene 1", [1300, 620], 24, 0, 3, true);
@@ -165,20 +166,20 @@
   addQuestion(comp, 6, 9, true, "A");
   addImage(comp, conformer, "Yellow - Crowd Puller", [355, 690], 32, 6, 9, true);
   addArrow(comp, 6, 9);
-  addText(comp, "Someone wants everyone on the same side.", [960, 875], 54, [0.49, 0.21, 0.06], 920, 100, 6, 9, "Crowd Puller Line");
+  addText(comp, "Someone wants everyone\ron the same side.", [960, 850], 50, [0.49, 0.21, 0.06], 920, 130, 6, 9, "Crowd Puller Line");
 
   // Scene 4: outlier
   addQuestion(comp, 9, 12, true, "B");
   addImage(comp, minority, "Blue - Outlier", [960, 710], 32, 9, 12, true);
-  addText(comp, "Someone wants to be the only exception.", [960, 875], 54, [0.49, 0.21, 0.06], 960, 100, 9, 12, "Outlier Line");
+  addText(comp, "Someone wants to be\rthe only exception.", [960, 850], 50, [0.49, 0.21, 0.06], 960, 130, 9, 12, "Outlier Line");
 
   // Scene 5: shadow
   addImage(comp, follower, "Pink - Shadow", [430, 700], 34, 12, 16, true);
   var lens = addSolid(comp, "Magnifying Glass Lens", [1, 1, 1], [1080, 540], [430, 430], 12, 16, 215);
   lens.property("Transform").property("Opacity").setValueAtTime(12, 36);
   addSolid(comp, "Thought Bubble", [1, 0.985, 0.95], [1395, 300], [560, 190], 12, 16, 26);
-  addText(comp, "\"Would they notice attitude first?\"", [1395, 295], 48, [0.12, 0.1, 0.08], 490, 150, 12, 16, "Thought Text");
-  addText(comp, "Someone is watching your thoughts.", [960, 875], 54, [0.49, 0.21, 0.06], 900, 100, 12, 16, "Shadow Line");
+  addText(comp, "\"Would they notice\rattitude first?\"", [1395, 280], 46, [0.12, 0.1, 0.08], 490, 150, 12, 16, "Thought Text");
+  addText(comp, "Someone is watching\ryour thoughts.", [960, 850], 50, [0.49, 0.21, 0.06], 900, 130, 12, 16, "Shadow Line");
 
   // Scene 6A: role cards
   addRoleCard(comp, conformer, "Crowd-Puller", "Pull the room together", 480, 16, 18.5);
