@@ -526,12 +526,13 @@ function sendStatic(request, response) {
     return;
   }
 
-  fs.readFile(filePath, (error, data) => {
-    if (error) {
+  fs.stat(filePath, (statError, stats) => {
+    if (statError || !stats.isFile()) {
       response.writeHead(404);
       response.end("Not found");
       return;
     }
+
     const ext = path.extname(filePath);
     const types = {
       ".html": "text/html; charset=utf-8",
@@ -540,8 +541,48 @@ function sendStatic(request, response) {
       ".json": "application/json; charset=utf-8",
       ".mp4": "video/mp4",
     };
-    response.writeHead(200, { "Content-Type": types[ext] || "application/octet-stream" });
-    response.end(data);
+    const contentType = types[ext] || "application/octet-stream";
+    const range = request.headers.range;
+
+    if (ext === ".mp4" && range) {
+      const match = range.match(/bytes=(\d*)-(\d*)/);
+      if (!match) {
+        response.writeHead(416, { "Content-Range": `bytes */${stats.size}` });
+        response.end();
+        return;
+      }
+
+      const start = match[1] ? Number(match[1]) : 0;
+      const end = match[2] ? Number(match[2]) : stats.size - 1;
+      if (start >= stats.size || end >= stats.size || start > end) {
+        response.writeHead(416, { "Content-Range": `bytes */${stats.size}` });
+        response.end();
+        return;
+      }
+
+      response.writeHead(206, {
+        "Content-Type": contentType,
+        "Content-Length": end - start + 1,
+        "Content-Range": `bytes ${start}-${end}/${stats.size}`,
+        "Accept-Ranges": "bytes",
+      });
+      fs.createReadStream(filePath, { start, end }).pipe(response);
+      return;
+    }
+
+    fs.readFile(filePath, (error, data) => {
+      if (error) {
+        response.writeHead(404);
+        response.end("Not found");
+        return;
+      }
+      response.writeHead(200, {
+        "Content-Type": contentType,
+        "Content-Length": stats.size,
+        "Accept-Ranges": ext === ".mp4" ? "bytes" : "none",
+      });
+      response.end(data);
+    });
   });
 }
 
