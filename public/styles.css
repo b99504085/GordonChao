@@ -234,22 +234,8 @@ h3 {
 
 .teaser-video {
   display: grid;
-  gap: 0.75rem;
   max-width: 37rem;
   margin: 1rem 0 0;
-}
-
-.teaser-video-copy h2 {
-  margin-bottom: 0.3rem;
-  font-size: 1.08rem;
-}
-
-.teaser-video-copy p {
-  margin-bottom: 0;
-  color: var(--muted);
-  font-size: 0.92rem;
-  font-weight: 700;
-  line-height: 1.45;
 }
 
 .teaser-video-player {
@@ -1148,14 +1134,6 @@ textarea {
 
   .teaser-video {
     margin-top: 0.85rem;
-  }
-
-  .teaser-video-copy h2 {
-    font-size: 1rem;
-  }
-
-  .teaser-video-copy p {
-    font-size: 0.84rem;
   }
 
   .rule-grid {

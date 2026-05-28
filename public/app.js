@@ -374,22 +374,13 @@ function renderEntry(message = "") {
   document.body.classList.remove("in-game");
   document.documentElement.lang = t().htmlLang;
   const savedName = localStorage.getItem("trialBalloonName") || "";
-  const teaserTitle = state.language === "zh" ? "10 秒形象影片" : "10-second teaser";
-  const teaserBody =
-    state.language === "zh"
-      ? "先看三個秘密動機如何在一場看似普通的聊天裡登場。"
-      : "Meet the three secret motives before the conversation begins.";
   app.innerHTML = `
     <section class="panel hero-panel">
       <button type="button" class="language-toggle" id="languageToggle">${t().switchLanguage}</button>
       ${logoMarkup()}
       <img class="hero-mascot" src="/assets/ui/hero-mascot.png" alt="" aria-hidden="true" />
       <p class="intro-copy">${t().intro}</p>
-      <section class="teaser-video" aria-label="${escapeHtml(teaserTitle)}">
-        <div class="teaser-video-copy">
-          <h2>${escapeHtml(teaserTitle)}</h2>
-          <p>${escapeHtml(teaserBody)}</p>
-        </div>
+      <section class="teaser-video" aria-label="${escapeHtml(t().title)} video">
         <video
           class="teaser-video-player"
           src="/assets/video/trial-balloon-teaser.mp4"
