@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Trial Balloon Opening MVP</title>
+    <style>
+      :root {
+        --ink: #1f1b17;
+        --paper: #fff8eb;
+        --line: #e7c9a6;
+        --orange: #ff8214;
+        --yellow: #ffd363;
+        --blue: #8de8f1;
+        --pink: #ff92aa;
+        --shadow: rgba(66, 42, 18, 0.18);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        display: grid;
+        place-items: center;
+        background:
+          linear-gradient(rgba(94, 68, 35, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(94, 68, 35, 0.04) 1px, transparent 1px),
+          #efe8db;
+        background-size: 24px 24px;
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+      }
+
+      .wrap {
+        width: min(100vw, 1280px);
+        padding: 16px;
+      }
+
+      .stage {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border: 2px solid rgba(150, 95, 40, 0.2);
+        border-radius: 8px;
+        background:
+          radial-gradient(circle at 18% 16%, rgba(255, 211, 99, 0.26), transparent 25%),
+          radial-gradient(circle at 82% 18%, rgba(255, 146, 170, 0.2), transparent 24%),
+          linear-gradient(145deg, #fffdf7, var(--paper));
+        box-shadow: 0 22px 55px var(--shadow);
+      }
+
+      .stage::before {
+        position: absolute;
+        inset: 0;
+        background-image:
+          radial-gradient(circle at 10% 20%, #f88da8 0 5px, transparent 6px),
+          radial-gradient(circle at 76% 12%, #ffd24e 0 5px, transparent 6px),
+          radial-gradient(circle at 86% 80%, #55a9ea 0 4px, transparent 5px),
+          radial-gradient(circle at 24% 82%, #ff8214 0 4px, transparent 5px);
+        opacity: 0.45;
+        content: "";
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .scene.active {
+        opacity: 1;
+      }
+
+      .mascot {
+        position: absolute;
+        display: block;
+        height: auto;
+        filter: drop-shadow(0 18px 22px rgba(67, 47, 27, 0.16));
+      }
+
+      .yellow {
+        width: 22%;
+      }
+
+      .blue {
+        width: 22%;
+      }
+
+      .pink {
+        width: 22%;
+      }
+
+      .opening.playing .bounce {
+        animation: bounce 1.2s ease-in-out infinite;
+      }
+
+      @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-14px); }
+      }
+
+      .speech,
+      .label,
+      .question-card,
+      .role-card,
+      .thought {
+        position: absolute;
+        border: 2px solid var(--line);
+        border-radius: 8px;
+        background: rgba(255, 253, 248, 0.95);
+        box-shadow: 0 14px 32px rgba(80, 50, 20, 0.12);
+      }
+
+      .label {
+        left: 50%;
+        top: 8%;
+        transform: translateX(-50%);
+        padding: 0.55rem 1rem;
+        color: #8a3f13;
+        font-size: clamp(18px, 2.4vw, 34px);
+        font-weight: 950;
+        letter-spacing: 0;
+        text-align: center;
+      }
+
+      .speech {
+        padding: 0.7rem 1rem;
+        font-size: clamp(14px, 1.8vw, 22px);
+        font-weight: 850;
+      }
+
+      .bubble {
+        position: absolute;
+        border: 3px solid rgba(69, 54, 36, 0.72);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.74);
+      }
+
+      .question-card {
+        left: 50%;
+        top: 11%;
+        width: 74%;
+        transform: translateX(-50%);
+        padding: clamp(18px, 2.2vw, 32px);
+      }
+
+      .question-card h2 {
+        margin: 0 0 1rem;
+        font-size: clamp(24px, 3vw, 44px);
+        line-height: 1.12;
+      }
+
+      .options {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.85rem;
+      }
+
+      .option {
+        min-height: 7rem;
+        display: grid;
+        align-items: center;
+        border: 2px solid var(--line);
+        border-radius: 8px;
+        background: #fffaf1;
+        padding: 1rem;
+        font-size: clamp(15px, 1.6vw, 23px);
+        font-weight: 900;
+        line-height: 1.18;
+      }
+
+      .option strong {
+        display: block;
+        color: var(--orange);
+        font-size: 1.1em;
+      }
+
+      .option.yellow-glow {
+        border-color: #e7a11b;
+        box-shadow: 0 0 0 6px rgba(255, 211, 99, 0.36);
+      }
+
+      .option.blue-glow {
+        border-color: #48a4b6;
+        box-shadow: 0 0 0 6px rgba(141, 232, 241, 0.36);
+      }
+
+      .arrow {
+        position: absolute;
+        color: var(--orange);
+        font-size: clamp(42px, 6vw, 82px);
+        font-weight: 950;
+      }
+
+      .thought {
+        width: 34%;
+        min-height: 20%;
+        padding: 1rem 1.2rem;
+        font-size: clamp(19px, 2.4vw, 36px);
+        font-weight: 950;
+        line-height: 1.15;
+      }
+
+      .lens {
+        position: absolute;
+        width: 30%;
+        aspect-ratio: 1;
+        border: 14px solid rgba(60, 55, 48, 0.92);
+        border-radius: 50%;
+        box-shadow:
+          inset 0 0 0 7px rgba(255, 255, 255, 0.56),
+          0 20px 40px rgba(40, 30, 20, 0.2);
+      }
+
+      .lens::after {
+        position: absolute;
+        right: -22%;
+        bottom: -20%;
+        width: 42%;
+        height: 13%;
+        border-radius: 999px;
+        background: #4d3b2f;
+        content: "";
+        transform: rotate(42deg);
+      }
+
+      .role-card {
+        top: 20%;
+        width: 23%;
+        min-height: 44%;
+        display: grid;
+        align-content: center;
+        justify-items: center;
+        gap: 0.7rem;
+        padding: 1rem;
+        text-align: center;
+      }
+
+      .role-card img {
+        width: 58%;
+      }
+
+      .role-card strong {
+        font-size: clamp(20px, 2.4vw, 34px);
+      }
+
+      .role-card span {
+        font-size: clamp(13px, 1.4vw, 19px);
+        font-weight: 800;
+      }
+
+      .title-lockup {
+        position: absolute;
+        left: 50%;
+        top: 48%;
+        transform: translate(-50%, -50%);
+        width: 78%;
+        text-align: center;
+      }
+
+      .title-lockup img {
+        width: 62%;
+        max-width: 680px;
+        margin-bottom: -1.4rem;
+        filter: drop-shadow(0 22px 26px rgba(70, 46, 22, 0.16));
+      }
+
+      .title-lockup h1 {
+        margin: 0;
+        font-size: clamp(56px, 8vw, 118px);
+        line-height: 0.9;
+        letter-spacing: 0;
+      }
+
+      .title-lockup p {
+        margin: 0.8rem 0 0;
+        color: #7d3c17;
+        font-size: clamp(20px, 2.7vw, 38px);
+        font-weight: 900;
+      }
+
+      .start {
+        display: inline-grid;
+        place-items: center;
+        min-width: 12rem;
+        min-height: 3.8rem;
+        margin-top: 1.3rem;
+        border-radius: 999px;
+        background: var(--orange);
+        color: #ffffff;
+        font-size: clamp(18px, 2vw, 26px);
+        font-weight: 950;
+      }
+
+      .controls {
+        display: flex;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-top: 12px;
+      }
+
+      .controls button {
+        border: 1px solid rgba(70, 46, 22, 0.2);
+        border-radius: 999px;
+        background: #ffffff;
+        padding: 0.7rem 1.15rem;
+        color: var(--ink);
+        font: inherit;
+        font-weight: 850;
+        cursor: pointer;
+      }
+
+      @media (max-width: 720px) {
+        .wrap {
+          padding: 8px;
+        }
+
+        .stage {
+          aspect-ratio: 9 / 16;
+        }
+
+        .question-card {
+          top: 8%;
+          width: 90%;
+        }
+
+        .options {
+          grid-template-columns: 1fr;
+        }
+
+        .option {
+          min-height: 4.2rem;
+        }
+
+        .yellow,
+        .blue,
+        .pink {
+          width: 37%;
+        }
+
+        .role-card {
+          width: 30%;
+        }
+
+        .title-lockup img {
+          width: 98%;
+        }
+      }
+
+      .scene-1 .yellow { left: 21%; top: 38%; }
+      .scene-1 .blue { left: 39%; top: 36%; animation-delay: 0.15s; }
+      .scene-1 .pink { left: 57%; top: 38%; animation-delay: 0.3s; }
+      .scene-1 .label { top: 12%; }
+      .scene-1 .bubble:nth-of-type(1) { left: 18%; top: 29%; width: 8%; height: 8%; }
+      .scene-1 .bubble:nth-of-type(2) { left: 67%; top: 29%; width: 10%; height: 8%; }
+
+      .scene-3 .question-card,
+      .scene-4 .question-card {
+        top: 8%;
+        width: 78%;
+        transform: translateX(-50%) scale(0.82);
+        transform-origin: top center;
+      }
+
+      .scene-3 .yellow { left: 7%; top: 45%; width: 28%; }
+      .scene-3 .arrow { left: 42%; top: 53%; }
+      .scene-3 .label { top: 75%; }
+
+      .scene-4 .blue { left: 38%; top: 46%; width: 26%; }
+      .scene-4 .label { top: 75%; }
+      .scene-4 .bubble { left: 31%; top: 50%; width: 7%; height: 7%; border-color: #48a4b6; }
+
+      .scene-5 .pink { left: 8%; top: 43%; width: 28%; }
+      .scene-5 .lens { left: 43%; top: 24%; }
+      .scene-5 .thought { right: 8%; top: 19%; }
+      .scene-5 .label { top: 78%; }
+
+      .scene-6 .role-card:nth-child(1) { left: 10%; }
+      .scene-6 .role-card:nth-child(2) { left: 38.5%; }
+      .scene-6 .role-card:nth-child(3) { right: 10%; }
+      .scene-6 .title-lockup {
+        opacity: 0;
+        transform: translate(-50%, -44%) scale(0.92);
+      }
+
+      .scene-6.final .title-lockup {
+        animation: finalTitle 0.5s ease-out forwards;
+      }
+
+      .scene-6.final .role-card {
+        opacity: 0;
+      }
+
+      @keyframes finalTitle {
+        0% { opacity: 0; transform: translate(-50%, -44%) scale(0.92); }
+        100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <section class="stage opening playing" id="stage" aria-label="Trial Balloon opening animation MVP">
+        <div class="scene scene-1">
+          <div class="label">Just a normal conversation?</div>
+          <span class="bubble"></span>
+          <span class="bubble"></span>
+          <img class="mascot yellow bounce" src="/assets/ui/role-conformer.png" alt="" />
+          <img class="mascot blue bounce" src="/assets/ui/role-minority.png" alt="" />
+          <img class="mascot pink bounce" src="/assets/ui/role-follower.png" alt="" />
+        </div>
+
+        <div class="scene scene-2">
+          <div class="question-card">
+            <h2>When judging whether someone would be a good life partner, which moment matters most?</h2>
+            <div class="options">
+              <div class="option"><strong>A</strong>How they speak under pressure</div>
+              <div class="option"><strong>B</strong>How they treat service staff</div>
+              <div class="option"><strong>C</strong>How they react when plans fall apart</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scene scene-3">
+          <div class="question-card">
+            <h2>Which moment matters most?</h2>
+            <div class="options">
+              <div class="option yellow-glow"><strong>A</strong>How they speak under pressure</div>
+              <div class="option"><strong>B</strong>How they treat service staff</div>
+              <div class="option"><strong>C</strong>How they react when plans fall apart</div>
+            </div>
+          </div>
+          <img class="mascot yellow bounce" src="/assets/ui/role-conformer.png" alt="" />
+          <div class="arrow">➜</div>
+          <div class="label">Someone wants everyone on the same side.</div>
+        </div>
+
+        <div class="scene scene-4">
+          <div class="question-card">
+            <h2>Which moment matters most?</h2>
+            <div class="options">
+              <div class="option"><strong>A</strong>How they speak under pressure</div>
+              <div class="option blue-glow"><strong>B</strong>How they treat service staff</div>
+              <div class="option"><strong>C</strong>How they react when plans fall apart</div>
+            </div>
+          </div>
+          <span class="bubble"></span>
+          <img class="mascot blue bounce" src="/assets/ui/role-minority.png" alt="" />
+          <div class="label">Someone wants to be the only exception.</div>
+        </div>
+
+        <div class="scene scene-5">
+          <img class="mascot pink bounce" src="/assets/ui/role-follower.png" alt="" />
+          <div class="lens"></div>
+          <div class="thought">“Would they notice attitude first?”</div>
+          <div class="label">Someone is watching your thoughts.</div>
+        </div>
+
+        <div class="scene scene-6">
+          <div class="role-card">
+            <img src="/assets/ui/role-conformer.png" alt="" />
+            <strong>Crowd-Puller</strong>
+            <span>Pull the room together</span>
+          </div>
+          <div class="role-card">
+            <img src="/assets/ui/role-minority.png" alt="" />
+            <strong>Outlier</strong>
+            <span>Be the only exception</span>
+          </div>
+          <div class="role-card">
+            <img src="/assets/ui/role-follower.png" alt="" />
+            <strong>Shadow</strong>
+            <span>Track your target</span>
+          </div>
+          <div class="title-lockup">
+            <img src="/assets/ui/hero-mascot.png" alt="" />
+            <h1>Trial Balloon</h1>
+            <p>A normal conversation… with secret missions.</p>
+            <span class="start">Start Game</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="controls">
+        <button type="button" id="replay">Replay 20s MVP</button>
+      </div>
+    </main>
+
+    <script>
+      const stage = document.querySelector("#stage");
+      const scenes = [...document.querySelectorAll(".scene")];
+      const timeline = [
+        { scene: 0, at: 0 },
+        { scene: 1, at: 3000 },
+        { scene: 2, at: 6000 },
+        { scene: 3, at: 9000 },
+        { scene: 4, at: 12000 },
+        { scene: 5, at: 16000 },
+        { scene: 5, at: 18500, final: true },
+      ];
+      let timers = [];
+
+      function activate(index, final = false) {
+        scenes.forEach((scene, sceneIndex) => {
+          scene.classList.toggle("active", sceneIndex === index);
+          if (sceneIndex !== index) scene.classList.remove("final");
+        });
+        scenes[index].classList.toggle("final", final);
+      }
+
+      function play() {
+        timers.forEach((timer) => clearTimeout(timer));
+        timers = [];
+        stage.classList.remove("playing");
+        void stage.offsetWidth;
+        stage.classList.add("playing");
+        timeline.forEach((step) => {
+          timers.push(setTimeout(() => activate(step.scene, Boolean(step.final)), step.at));
+        });
+      }
+
+      document.querySelector("#replay").addEventListener("click", () => {
+        play();
+      });
+      play();
+    </script>
+  </body>
+</html>
