@@ -13,7 +13,6 @@
   var scriptFile = new File($.fileName);
   var repoRoot = scriptFile.parent.parent;
   var rigDir = new Folder(repoRoot.fsName + "/after-effects/rig-assets");
-  var manifestFile = new File(rigDir.fsName + "/rig-manifest.json");
   var outputProject = new File(repoRoot.fsName + "/after-effects/TrialBalloonMascotRigs.aep");
 
   function ensureProject() {
@@ -75,7 +74,7 @@
     layer.property("Transform").property("Anchor Point").setValue(anchor);
     layer.property("Transform").property("Position").setValue([
       oldPosition[0] + anchor[0] - oldAnchor[0],
-      oldPosition[1] + anchor[1] - oldAnchor[1],
+      oldPosition[1] + anchor[1] - oldAnchor[1]
     ]);
   }
 
@@ -141,11 +140,517 @@
   }
 
   ensureProject();
-  if (!manifestFile.exists) {
-    throw new Error("Missing rig manifest: " + manifestFile.fsName);
+  var manifest = {
+  "version": 2,
+  "note": "Auto-cut MVP rig parts from flat PNG artwork. Use as AE rig draft, not final PSD-quality separation.",
+  "characters": {
+    "crowd-puller": {
+      "source": "role-conformer.png",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "parts": {
+        "body": {
+          "file": "crowd-puller/body.png",
+          "sourceBox": [
+            274,
+            209,
+            987,
+            892
+          ],
+          "center": [
+            630.5,
+            550.5
+          ],
+          "suggestedAnchor": "center"
+        },
+        "left_arm": {
+          "file": "crowd-puller/left_arm.png",
+          "sourceBox": [
+            129,
+            429,
+            401,
+            735
+          ],
+          "center": [
+            265.0,
+            582.0
+          ],
+          "suggestedAnchor": "center"
+        },
+        "right_arm": {
+          "file": "crowd-puller/right_arm.png",
+          "sourceBox": [
+            855,
+            392,
+            1125,
+            725
+          ],
+          "center": [
+            990.0,
+            558.5
+          ],
+          "suggestedAnchor": "center"
+        },
+        "left_foot": {
+          "file": "crowd-puller/left_foot.png",
+          "sourceBox": [
+            387,
+            789,
+            582,
+            985
+          ],
+          "center": [
+            484.5,
+            887.0
+          ],
+          "suggestedAnchor": "center"
+        },
+        "right_foot": {
+          "file": "crowd-puller/right_foot.png",
+          "sourceBox": [
+            694,
+            794,
+            882,
+            985
+          ],
+          "center": [
+            788.0,
+            889.5
+          ],
+          "suggestedAnchor": "center"
+        },
+        "left_eye": {
+          "file": "crowd-puller/left_eye.png",
+          "sourceBox": [
+            472,
+            503,
+            531,
+            562
+          ],
+          "center": [
+            501.5,
+            532.5
+          ],
+          "suggestedAnchor": "center"
+        },
+        "right_eye": {
+          "file": "crowd-puller/right_eye.png",
+          "sourceBox": [
+            722,
+            495,
+            781,
+            553
+          ],
+          "center": [
+            751.5,
+            524.0
+          ],
+          "suggestedAnchor": "center"
+        },
+        "mouth": {
+          "file": "crowd-puller/mouth.png",
+          "sourceBox": [
+            578,
+            537,
+            677,
+            618
+          ],
+          "center": [
+            627.5,
+            577.5
+          ],
+          "suggestedAnchor": "center"
+        },
+        "left_cheek": {
+          "file": "crowd-puller/left_cheek.png",
+          "sourceBox": [
+            409,
+            558,
+            522,
+            623
+          ],
+          "center": [
+            465.5,
+            590.5
+          ],
+          "suggestedAnchor": "center"
+        },
+        "right_cheek": {
+          "file": "crowd-puller/right_cheek.png",
+          "sourceBox": [
+            754,
+            553,
+            867,
+            618
+          ],
+          "center": [
+            810.5,
+            585.5
+          ],
+          "suggestedAnchor": "center"
+        },
+        "balloon": {
+          "file": "crowd-puller/balloon.png",
+          "source": "hero-mascot.png",
+          "sourceBox": [
+            72,
+            181,
+            234,
+            402
+          ],
+          "center": [
+            153.0,
+            291.5
+          ],
+          "suggestedAnchor": "center"
+        },
+        "balloon_string": {
+          "file": "crowd-puller/balloon_string.png",
+          "source": "hero-mascot.png",
+          "sourceBox": [
+            80,
+            350,
+            150,
+            688
+          ],
+          "center": [
+            115.0,
+            519.0
+          ],
+          "suggestedAnchor": "center"
+        }
+      }
+    },
+    "outlier": {
+      "source": "role-minority.png",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "parts": {
+        "body": {
+          "file": "outlier/body.png",
+          "sourceBox": [
+            279,
+            201,
+            982,
+            999
+          ],
+          "center": [
+            630.5,
+            600.0
+          ],
+          "suggestedAnchor": "center"
+        },
+        "left_arm": {
+          "file": "outlier/left_arm.png",
+          "sourceBox": [
+            291,
+            714,
+            448,
+            897
+          ],
+          "center": [
+            369.5,
+            805.5
+          ],
+          "suggestedAnchor": "center"
+        },
+        "right_arm": {
+          "file": "outlier/right_arm.png",
+          "sourceBox": [
+            664,
+            590,
+            892,
+            846
+          ],
+          "center": [
+            778.0,
+            718.0
+          ],
+          "suggestedAnchor": "center"
+        },
+        "left_foot": {
+          "file": "outlier/left_foot.png",
+          "sourceBox": [
+            411,
+            853,
+            582,
+            1031
+          ],
+          "center": [
+            496.5,
+            942.0
+          ],
+          "suggestedAnchor": "center"
+        },
+        "right_foot": {
+          "file": "outlier/right_foot.png",
+          "sourceBox": [
+            632,
+            853,
+            832,
+            1032
+          ],
+          "center": [
+            732.0,
+            942.5
+          ],
+          "suggestedAnchor": "center"
+        },
+        "left_eye": {
+          "file": "outlier/left_eye.png",
+          "sourceBox": [
+            485,
+            456,
+            575,
+            535
+          ],
+          "center": [
+            530.0,
+            495.5
+          ],
+          "suggestedAnchor": "center"
+        },
+        "right_eye": {
+          "file": "outlier/right_eye.png",
+          "sourceBox": [
+            711,
+            455,
+            762,
+            505
+          ],
+          "center": [
+            736.5,
+            480.0
+          ],
+          "suggestedAnchor": "center"
+        },
+        "mouth": {
+          "file": "outlier/mouth.png",
+          "sourceBox": [
+            570,
+            515,
+            679,
+            551
+          ],
+          "center": [
+            624.5,
+            533.0
+          ],
+          "suggestedAnchor": "center"
+        },
+        "left_cheek": {
+          "file": "outlier/left_cheek.png",
+          "sourceBox": [
+            414,
+            522,
+            527,
+            584
+          ],
+          "center": [
+            470.5,
+            553.0
+          ],
+          "suggestedAnchor": "center"
+        },
+        "right_cheek": {
+          "file": "outlier/right_cheek.png",
+          "sourceBox": [
+            744,
+            522,
+            857,
+            584
+          ],
+          "center": [
+            800.5,
+            553.0
+          ],
+          "suggestedAnchor": "center"
+        },
+        "star": {
+          "file": "outlier/star.png",
+          "sourceBox": [
+            755,
+            170,
+            1007,
+            419
+          ],
+          "center": [
+            881.0,
+            294.5
+          ],
+          "suggestedAnchor": "center"
+        }
+      }
+    },
+    "shadow": {
+      "source": "role-follower.png",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "parts": {
+        "body": {
+          "file": "shadow/body.png",
+          "sourceBox": [
+            330,
+            335,
+            1091,
+            1002
+          ],
+          "center": [
+            710.5,
+            668.5
+          ],
+          "suggestedAnchor": "center"
+        },
+        "left_ear": {
+          "file": "shadow/left_ear.png",
+          "sourceBox": [
+            241,
+            136,
+            530,
+            489
+          ],
+          "center": [
+            385.5,
+            312.5
+          ],
+          "suggestedAnchor": "center"
+        },
+        "right_ear": {
+          "file": "shadow/right_ear.png",
+          "sourceBox": [
+            440,
+            111,
+            684,
+            424
+          ],
+          "center": [
+            562.0,
+            267.5
+          ],
+          "suggestedAnchor": "center"
+        },
+        "left_arm": {
+          "file": "shadow/left_arm.png",
+          "sourceBox": [
+            270,
+            619,
+            472,
+            837
+          ],
+          "center": [
+            371.0,
+            728.0
+          ],
+          "suggestedAnchor": "center"
+        },
+        "right_arm": {
+          "file": "shadow/right_arm.png",
+          "sourceBox": [
+            914,
+            583,
+            1115,
+            817
+          ],
+          "center": [
+            1014.5,
+            700.0
+          ],
+          "suggestedAnchor": "center"
+        },
+        "left_foot": {
+          "file": "shadow/left_foot.png",
+          "sourceBox": [
+            430,
+            849,
+            607,
+            1049
+          ],
+          "center": [
+            518.5,
+            949.0
+          ],
+          "suggestedAnchor": "center"
+        },
+        "right_foot": {
+          "file": "shadow/right_foot.png",
+          "sourceBox": [
+            678,
+            849,
+            863,
+            1039
+          ],
+          "center": [
+            770.5,
+            944.0
+          ],
+          "suggestedAnchor": "center"
+        },
+        "eye": {
+          "file": "shadow/eye.png",
+          "sourceBox": [
+            810,
+            653,
+            857,
+            707
+          ],
+          "center": [
+            833.5,
+            680.0
+          ],
+          "suggestedAnchor": "center"
+        },
+        "mouth": {
+          "file": "shadow/mouth.png",
+          "sourceBox": [
+            645,
+            615,
+            777,
+            725
+          ],
+          "center": [
+            711.0,
+            670.0
+          ],
+          "suggestedAnchor": "center"
+        },
+        "cheek": {
+          "file": "shadow/cheek.png",
+          "sourceBox": [
+            848,
+            697,
+            958,
+            759
+          ],
+          "center": [
+            903.0,
+            728.0
+          ],
+          "suggestedAnchor": "center"
+        },
+        "magnifying_glass": {
+          "file": "shadow/magnifying_glass.png",
+          "sourceBox": [
+            320,
+            490,
+            720,
+            955
+          ],
+          "center": [
+            520.0,
+            722.5
+          ],
+          "suggestedAnchor": "center"
+        }
+      }
+    }
   }
-
-  var manifest = JSON.parse(readText(manifestFile));
+};
   var created = [];
 
   for (var characterName in manifest.characters) {
@@ -157,7 +662,7 @@
       character.sourceSize[1],
       1,
       3,
-      30,
+      30
     );
     comp.bgColor = [0.98, 0.94, 0.86];
 
@@ -214,6 +719,6 @@
   alert(
     "Mascot rig precomps created and saved:\n" +
       outputProject.fsName +
-      "\n\nOpen rig_preview_all_mascots or any rig_* precomp to inspect the layers.",
+      "\n\nOpen rig_preview_all_mascots or any rig_* precomp to inspect the layers."
   );
 })();
