@@ -37,6 +37,15 @@
     return app.project.importFile(options);
   }
 
+  function importSourceAsset(fileName) {
+    var file = new File(repoRoot.fsName + "/public/assets/ui/" + fileName);
+    if (!file.exists) {
+      throw new Error("Missing full mascot source: " + file.fsName);
+    }
+    var options = new ImportOptions(file);
+    return app.project.importFile(options);
+  }
+
   function partSize(part) {
     var box = part.sourceBox;
     return [box[2] - box[0], box[3] - box[1]];
@@ -78,6 +87,7 @@
   }
 
   function layerOrderWeight(name) {
+    if (name === "full_character_base") return 1;
     if (name === "balloon_string") return 5;
     if (name === "balloon") return 10;
     if (name.indexOf("ear") >= 0) return 15;
@@ -88,6 +98,24 @@
     if (name.indexOf("eye") >= 0 || name === "mouth") return 60;
     if (name === "star" || name === "magnifying_glass") return 70;
     return 45;
+  }
+
+  function isMvpOverlayPart(name) {
+    if (name === "balloon") return true;
+    if (name === "balloon_string") return true;
+    if (name === "star") return true;
+    if (name === "magnifying_glass") return true;
+    if (name.indexOf("eye") >= 0) return true;
+    if (name === "mouth") return true;
+    return false;
+  }
+
+  function isOptionalMvpPart(name) {
+    if (name.indexOf("arm") >= 0) return true;
+    if (name.indexOf("foot") >= 0) return true;
+    if (name.indexOf("ear") >= 0) return true;
+    if (name.indexOf("cheek") >= 0) return true;
+    return false;
   }
 
   function addGuideText(comp, text, position) {
@@ -110,6 +138,17 @@
     comp.duration = duration;
     for (var i = 1; i <= comp.layers.length; i += 1) {
       var layer = comp.layers[i];
+      if (layer.name === "Character Bob Control") {
+        var bodyPos = layer.property("Transform").property("Position");
+        var bp = bodyPos.value;
+        bodyPos.setValueAtTime(0, bp);
+        bodyPos.setValueAtTime(1.0, [bp[0], bp[1] - 18]);
+        bodyPos.setValueAtTime(2.0, bp);
+        var bodyScale = layer.property("Transform").property("Scale");
+        bodyScale.setValueAtTime(0, [100, 100]);
+        bodyScale.setValueAtTime(1.0, [101, 99]);
+        bodyScale.setValueAtTime(2.0, [100, 100]);
+      }
       if (layer.name.indexOf("left_arm") >= 0 || layer.name.indexOf("right_arm") >= 0) {
         var rotation = layer.property("Transform").property("Rotation");
         rotation.setValueAtTime(0, -8);
@@ -129,11 +168,12 @@
         pos.setValueAtTime(1.0, [p[0], p[1] - 18]);
         pos.setValueAtTime(2.0, p);
       }
-      if (layer.name === "body") {
-        var scale = layer.property("Transform").property("Scale");
-        scale.setValueAtTime(0, [100, 100]);
-        scale.setValueAtTime(1.0, [101.5, 98.5]);
-        scale.setValueAtTime(2.0, [100, 100]);
+      if (layer.name.indexOf("eye") >= 0) {
+        var eyeScale = layer.property("Transform").property("Scale");
+        eyeScale.setValueAtTime(0, [100, 100]);
+        eyeScale.setValueAtTime(1.45, [100, 100]);
+        eyeScale.setValueAtTime(1.52, [100, 12]);
+        eyeScale.setValueAtTime(1.62, [100, 100]);
       }
     }
   }
@@ -665,6 +705,23 @@
     );
     comp.bgColor = [0.98, 0.94, 0.86];
 
+    var controller = comp.layers.addNull();
+    controller.name = "Character Bob Control";
+    controller.property("Transform").property("Position").setValue([
+      character.sourceSize[0] / 2,
+      character.sourceSize[1] / 2
+    ]);
+    controller.enabled = false;
+
+    var fullFootage = importSourceAsset(character.source);
+    var fullLayer = comp.layers.add(fullFootage);
+    fullLayer.name = "full_character_base";
+    fullLayer.property("Transform").property("Position").setValue([
+      character.sourceSize[0] / 2,
+      character.sourceSize[1] / 2
+    ]);
+    fullLayer.parent = controller;
+
     var parts = [];
     for (var partName in character.parts) {
       if (!character.parts.hasOwnProperty(partName)) continue;
@@ -684,11 +741,24 @@
       var center = partCenter(item.data);
       layer.property("Transform").property("Position").setValue(compPoint(character, center));
       setLayerAnchorKeepingPosition(layer, suggestedAnchor(item.name, size));
+      layer.parent = controller;
+
+      if (isOptionalMvpPart(item.name)) {
+        layer.name = "optional_" + item.name;
+        layer.enabled = false;
+      } else if (!isMvpOverlayPart(item.name) && item.name !== "body") {
+        layer.enabled = false;
+      }
+
+      if (item.name === "body") {
+        layer.name = "old_cutout_body_disabled";
+        layer.enabled = false;
+      }
     }
 
     addGuideText(
       comp,
-      "MVP rig assembled from flat PNG cutouts. Use Puppet Pin or rotation keyframes for motion.",
+      "MVP hybrid rig: full mascot base prevents broken seams. Optional cutout limbs are disabled by default.",
       [38, 54]
     );
     animateSample(comp, characterName);
