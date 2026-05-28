@@ -31,6 +31,17 @@ Use these contact sheets to quickly inspect the current cut quality:
 
 `rig-manifest.json` records each part file, original crop box, and suggested center anchor.
 
+## Assembly Script
+
+Run `../assemble-mascot-rigs.jsx` in After Effects to automatically create:
+
+- `rig_crowd-puller`
+- `rig_outlier`
+- `rig_shadow`
+- `rig_preview_all_mascots`
+
+The script places every part back into its original relative position and sets practical anchor points for arms, feet, ears, balloon, star, and magnifying glass. It also adds a small sample motion so you can quickly check whether the parts rotate in a usable way.
+
 ## Important Note
 
 These are MVP rig parts created from already flattened PNG images. They are useful for testing After Effects rigging, Puppet Pins, and simple character motion.
