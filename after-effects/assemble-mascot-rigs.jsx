@@ -48,8 +48,7 @@
   }
 
   function compPoint(character, point) {
-    var sourceSize = character.sourceSize;
-    return [point[0] - sourceSize[0] / 2, point[1] - sourceSize[1] / 2];
+    return [point[0], point[1]];
   }
 
   function suggestedAnchor(partName, size) {
@@ -690,7 +689,7 @@
     addGuideText(
       comp,
       "MVP rig assembled from flat PNG cutouts. Use Puppet Pin or rotation keyframes for motion.",
-      [-character.sourceSize[0] / 2 + 38, -character.sourceSize[1] / 2 + 54],
+      [38, 54]
     );
     animateSample(comp, characterName);
     created.push(comp.name);
