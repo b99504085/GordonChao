@@ -54,16 +54,14 @@
   }
 
   function addText(comp, text, position, fontSize, color, width, height, start, end, name) {
-    var layer = comp.layers.addText(text);
+    var layer = width && height ? comp.layers.addBoxText([width, height]) : comp.layers.addText(text);
     layer.name = name || text.substr(0, 24);
     var doc = layer.property("Source Text").value;
+    doc.text = text;
     doc.fontSize = fontSize;
     doc.fillColor = color || [0.12, 0.1, 0.08];
     doc.font = "Arial-BoldMT";
     doc.justification = ParagraphJustification.CENTER_JUSTIFY;
-    if (width && height) {
-      doc.boxTextSize = [width, height];
-    }
     layer.property("Source Text").setValue(doc);
     layer.property("Transform").property("Position").setValue(position);
     setOpacity(layer, start, end);
