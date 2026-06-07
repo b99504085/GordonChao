@@ -7,6 +7,7 @@ const crypto = require("crypto");
 const PORT = Number(process.env.PORT || 3000);
 const PUBLIC_DIR = path.join(__dirname, "public");
 const QUESTION_FILE = path.join(__dirname, "data", "questions.json");
+const MEMORY_FILE = path.join(__dirname, "data", "memories.json");
 const SHEETS_WEBHOOK_URL = process.env.GOOGLE_SHEETS_WEBHOOK_URL || "";
 const SHEETS_WEBHOOK_SECRET = process.env.GOOGLE_SHEETS_WEBHOOK_SECRET || "";
 
@@ -58,6 +59,29 @@ function hasLocalizedText(value) {
 
 function id(size = 12) {
   return crypto.randomBytes(size).toString("base64url");
+}
+
+function loadMemories() {
+  try {
+    return JSON.parse(fs.readFileSync(MEMORY_FILE, "utf8"));
+  } catch {
+    return { memories: [] };
+  }
+}
+
+function saveMemories(data) {
+  fs.writeFileSync(MEMORY_FILE, JSON.stringify(data, null, 2), "utf8");
+}
+
+const ALLOWED_CATEGORIES = ["🍳 料理", "🏠 家事", "🛒 購物", "👨‍👩‍👧 家人喜好", "📝 其他"];
+
+function validateMemoryFields(body) {
+  const title = String(body.title || "").trim().slice(0, 60);
+  const content = String(body.content || "").trim().slice(0, 2000);
+  const category = ALLOWED_CATEGORIES.includes(body.category) ? body.category : "📝 其他";
+  if (!title) throw new Error("標題不能為空。");
+  if (!content) throw new Error("內容不能為空。");
+  return { title, content, category };
 }
 
 function localizedText(value, locale = "zh") {
@@ -695,6 +719,40 @@ async function routeApi(request, response) {
 
     if (request.method === "GET" && url.pathname === "/api/analytics") {
       return sendJson(response, 200, analyticsSummary());
+    }
+
+    if (request.method === "GET" && url.pathname === "/api/memories") {
+      return sendJson(response, 200, loadMemories());
+    }
+
+    if (request.method === "POST" && url.pathname === "/api/memories") {
+      const memBody = await readBody(request);
+      const fields = validateMemoryFields(memBody);
+      const store = loadMemories();
+      store.memories.unshift({ id: id(8), ...fields, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+      saveMemories(store);
+      return sendJson(response, 200, store);
+    }
+
+    if (request.method === "POST" && url.pathname === "/api/memories/update") {
+      const memBody = await readBody(request);
+      const store = loadMemories();
+      const idx = store.memories.findIndex((m) => m.id === memBody.id);
+      if (idx === -1) throw new Error("找不到這筆記錄。");
+      const fields = validateMemoryFields(memBody);
+      store.memories[idx] = { ...store.memories[idx], ...fields, updatedAt: new Date().toISOString() };
+      saveMemories(store);
+      return sendJson(response, 200, store);
+    }
+
+    if (request.method === "POST" && url.pathname === "/api/memories/delete") {
+      const memBody = await readBody(request);
+      const store = loadMemories();
+      const before = store.memories.length;
+      store.memories = store.memories.filter((m) => m.id !== memBody.id);
+      if (store.memories.length === before) throw new Error("找不到這筆記錄。");
+      saveMemories(store);
+      return sendJson(response, 200, store);
     }
 
     if (request.method !== "POST") {
