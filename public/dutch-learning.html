@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🇳🇱 荷蘭語造句練習</title>
+  <link rel="stylesheet" href="dutch-styles.css">
+</head>
+<body>
+
+  <!-- Home Screen -->
+  <div id="screen-home" class="screen active">
+    <header class="home-header">
+      <div class="home-logo">🇳🇱</div>
+      <h1 class="home-title">荷蘭語造句練習</h1>
+      <p class="home-subtitle">每天10分鐘，開口說荷蘭語</p>
+      <div class="level-badge">A1 – A2 日常生活</div>
+    </header>
+    <div id="categories-grid" class="categories-grid"></div>
+    <p class="home-tip">點擊主題開始練習 👆</p>
+  </div>
+
+  <!-- Exercise Screen -->
+  <div id="screen-exercise" class="screen">
+    <header class="ex-header">
+      <button id="btn-back" class="btn-icon">←</button>
+      <div class="ex-meta">
+        <span id="ex-category-label" class="ex-category-label"></span>
+        <div class="progress-track">
+          <div id="progress-fill" class="progress-fill"></div>
+        </div>
+      </div>
+      <div id="streak-badge" class="streak-badge">🔥 0</div>
+    </header>
+
+    <div class="ex-body">
+      <div class="ex-counter-row">
+        <span id="ex-counter" class="ex-counter"></span>
+      </div>
+
+      <div class="prompt-card">
+        <div class="prompt-label">中文</div>
+        <div id="chinese-prompt" class="chinese-prompt"></div>
+      </div>
+
+      <div class="answer-zone">
+        <div class="answer-zone-label">你的答案</div>
+        <div id="answer-words" class="answer-words" data-placeholder="點擊下方單字來組句"></div>
+      </div>
+
+      <div id="word-bank" class="word-bank"></div>
+
+      <div class="action-row">
+        <button id="btn-hint" class="btn-soft">💡 提示</button>
+        <button id="btn-clear" class="btn-soft">↩ 清除</button>
+        <button id="btn-check" class="btn-check" disabled>確認 ✓</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback Overlay -->
+  <div id="feedback-overlay" class="feedback-overlay hidden">
+    <div id="feedback-panel" class="feedback-panel">
+      <div id="feedback-icon" class="feedback-icon"></div>
+      <div id="feedback-msg" class="feedback-msg"></div>
+      <div class="answer-reveal">
+        <div class="answer-reveal-label">正確荷蘭語</div>
+        <div id="correct-sentence" class="correct-sentence"></div>
+      </div>
+      <div id="tip-box" class="tip-box"></div>
+      <button id="btn-next" class="btn-next">下一句 →</button>
+    </div>
+  </div>
+
+  <!-- Completion Screen -->
+  <div id="screen-completion" class="screen">
+    <div class="completion-wrap">
+      <div class="completion-trophy">🏆</div>
+      <h2 class="completion-title">練習完成！</h2>
+      <p class="completion-sub" id="completion-category"></p>
+      <div id="completion-stats" class="completion-stats"></div>
+      <div class="completion-actions">
+        <button id="btn-retry" class="btn-check">再練一次 🔁</button>
+        <button id="btn-home" class="btn-soft" style="margin-top:12px">← 回首頁</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="dutch-app.js"></script>
+</body>
+</html>
