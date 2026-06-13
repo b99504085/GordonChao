@@ -290,13 +290,33 @@ class DutchApp {
   }
 
   bindGlobal() {
-    document.getElementById("btn-back").onclick = () => this.showHome();
-    document.getElementById("btn-hint").onclick = () => this.useHint();
-    document.getElementById("btn-clear").onclick = () => this.clearAnswer();
-    document.getElementById("btn-check").onclick = () => this.checkAnswer();
-    document.getElementById("btn-next").onclick = () => this.nextSentence();
-    document.getElementById("btn-retry").onclick = () => this.startCategory(this.currentCategory.id);
-    document.getElementById("btn-home").onclick = () => this.showHome();
+    document.getElementById("btn-back").onclick   = () => this.showHome();
+    document.getElementById("btn-hint").onclick   = () => this.useHint();
+    document.getElementById("btn-clear").onclick  = () => this.clearAnswer();
+    document.getElementById("btn-check").onclick  = () => this.checkAnswer();
+    document.getElementById("btn-next").onclick   = () => this.nextSentence();
+    document.getElementById("btn-retry").onclick  = () => this.startCategory(this.currentCategory.id);
+    document.getElementById("btn-home").onclick   = () => this.showHome();
+    document.getElementById("btn-replay").onclick = () => this.speak(this._lastDutch);
+  }
+
+  showHome() {
+    window.speechSynthesis && window.speechSynthesis.cancel();
+    this.renderHome();
+  }
+
+  speak(text) {
+    if (!text || !('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang  = 'nl-NL';
+    utter.rate  = 0.88;
+    utter.pitch = 1;
+    const btn = document.getElementById("btn-replay");
+    utter.onstart = () => btn && btn.classList.add("playing");
+    utter.onend   = () => btn && btn.classList.remove("playing");
+    utter.onerror = () => btn && btn.classList.remove("playing");
+    window.speechSynthesis.speak(utter);
   }
 
   renderHome() {
@@ -427,6 +447,7 @@ class DutchApp {
   }
 
   showFeedback(isCorrect, sentence) {
+    this._lastDutch = sentence.dutch;
     const panel = document.getElementById("feedback-panel");
     panel.className = `feedback-panel ${isCorrect ? "correct" : "wrong"}`;
 
@@ -446,6 +467,7 @@ class DutchApp {
     }
 
     document.getElementById("feedback-overlay").classList.remove("hidden");
+    setTimeout(() => this.speak(sentence.dutch), 500);
   }
 
   nextSentence() {

@@ -194,6 +194,18 @@ button, a { touch-action: manipulation; }
 .btn-next { width: 100%; min-height: 54px; background: var(--blue); color: #fff; border: none; border-radius: 14px; font-size: 18px; font-weight: 700; cursor: pointer; letter-spacing: .3px; }
 .btn-next:active { background: #1a3a7a; transform: scale(.98); }
 
+.correct-sentence-row { display: flex; align-items: center; gap: 12px; }
+.btn-replay {
+  background: var(--blue); color: #fff; border: none;
+  border-radius: 50%; width: 48px; height: 48px; min-width: 48px;
+  font-size: 22px; cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .1s, background .15s;
+}
+.btn-replay:active { transform: scale(.88); background: #1a3a7a; }
+.btn-replay.playing { animation: pulse .7s ease infinite; }
+@keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.12);} }
+
 /* Completion */
 #screen-completion { overflow-y: auto; -webkit-overflow-scrolling: touch; padding-top: var(--safe-top); padding-bottom: var(--safe-bottom); }
 .completion-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px calc(40px + var(--safe-bottom)); text-align: center; min-height: 100dvh; }
@@ -272,7 +284,10 @@ button, a { touch-action: manipulation; }
       <div id="feedback-msg" class="feedback-msg"></div>
       <div class="answer-reveal">
         <div class="answer-reveal-label">正確荷蘭語</div>
-        <div id="correct-sentence" class="correct-sentence"></div>
+        <div class="correct-sentence-row">
+          <div id="correct-sentence" class="correct-sentence"></div>
+          <button id="btn-replay" class="btn-replay" title="重播發音">🔊</button>
+        </div>
       </div>
       <div id="tip-box" class="tip-box"></div>
       <button id="btn-next" class="btn-next">下一句 →</button>
@@ -524,6 +539,26 @@ class DutchApp {
     document.getElementById("btn-next").onclick   = () => this.nextSentence();
     document.getElementById("btn-retry").onclick  = () => this.startCategory(this.currentCategory.id);
     document.getElementById("btn-home").onclick   = () => this.showHome();
+    document.getElementById("btn-replay").onclick = () => this.speak(this._lastDutch);
+  }
+
+  showHome() {
+    window.speechSynthesis && window.speechSynthesis.cancel();
+    this.renderHome();
+  }
+
+  speak(text) {
+    if (!text || !('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang  = 'nl-NL';
+    utter.rate  = 0.88;
+    utter.pitch = 1;
+    const btn = document.getElementById("btn-replay");
+    utter.onstart = () => btn && btn.classList.add("playing");
+    utter.onend   = () => btn && btn.classList.remove("playing");
+    utter.onerror = () => btn && btn.classList.remove("playing");
+    window.speechSynthesis.speak(utter);
   }
   renderHome() {
     this.showScreen("home");
@@ -619,6 +654,7 @@ class DutchApp {
     this.showFeedback(isCorrect, s);
   }
   showFeedback(isCorrect, s) {
+    this._lastDutch = s.dutch;
     const panel = document.getElementById("feedback-panel");
     panel.className = `feedback-panel ${isCorrect ? "correct" : "wrong"}`;
     document.getElementById("feedback-icon").textContent = isCorrect ? "✅" : "❌";
@@ -630,6 +666,8 @@ class DutchApp {
     tip.textContent = s.tip || "";
     tip.style.display = s.tip ? "" : "none";
     document.getElementById("feedback-overlay").classList.remove("hidden");
+    // Auto-play after panel slides in
+    setTimeout(() => this.speak(s.dutch), 500);
   }
   nextSentence() {
     document.getElementById("feedback-overlay").classList.add("hidden");

@@ -464,6 +464,27 @@ button, a { touch-action: manipulation; }
 }
 .btn-next:active { background: #1a3a7a; transform: scale(.98); }
 
+.correct-sentence-row { display: flex; align-items: center; gap: 12px; }
+.btn-replay {
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  font-size: 22px;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .1s, background .15s;
+}
+.btn-replay:active { transform: scale(.88); background: #1a3a7a; }
+.btn-replay.playing { animation: pulse .7s ease infinite; }
+@keyframes pulse { 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.12); } }
+
 /* ── Completion Screen ───────────────────────── */
 #screen-completion {
   overflow-y: auto;
