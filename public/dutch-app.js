@@ -281,7 +281,23 @@ class DutchApp {
     this.selectedWords = [];
     this.bankWords = [];
     this.hintUsed = false;
+    this._lastDutch = '';
+    this._voices = [];
+    this._loadVoices();
     this.init();
+  }
+
+  _loadVoices() {
+    if (!('speechSynthesis' in window)) return;
+    const update = () => { this._voices = window.speechSynthesis.getVoices(); };
+    update();
+    window.speechSynthesis.onvoiceschanged = update;
+  }
+
+  _dutchVoice() {
+    return this._voices.find(v => v.lang === 'nl-NL')
+        || this._voices.find(v => v.lang === 'nl_NL')
+        || this._voices.find(v => v.lang.toLowerCase().startsWith('nl'));
   }
 
   init() {
@@ -308,10 +324,19 @@ class DutchApp {
   speak(text) {
     if (!text || !('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
+
+    const nlVoice = this._dutchVoice();
+    if (this._voices.length > 0 && !nlVoice) {
+      document.getElementById("voice-hint").style.display = "";
+      return;
+    }
+
     const utter = new SpeechSynthesisUtterance(text);
     utter.lang  = 'nl-NL';
     utter.rate  = 0.88;
     utter.pitch = 1;
+    if (nlVoice) utter.voice = nlVoice;
+
     const btn = document.getElementById("btn-replay");
     utter.onstart = () => btn && btn.classList.add("playing");
     utter.onend   = () => btn && btn.classList.remove("playing");

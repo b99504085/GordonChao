@@ -485,6 +485,22 @@ button, a { touch-action: manipulation; }
 .btn-replay.playing { animation: pulse .7s ease infinite; }
 @keyframes pulse { 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.12); } }
 
+.voice-hint {
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+.voice-hint-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+.voice-hint-body { font-size: 13px; line-height: 1.7; color: #5d4037; }
+.voice-hint-close {
+  margin-top: 12px; width: 100%; padding: 10px;
+  background: #fff; border: 1px solid #ffc107;
+  border-radius: 8px; font-size: 14px; font-weight: 600;
+  color: #7a5c00; cursor: pointer;
+}
+
 /* ── Completion Screen ───────────────────────── */
 #screen-completion {
   overflow-y: auto;
