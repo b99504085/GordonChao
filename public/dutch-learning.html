@@ -2,7 +2,10 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#FF6B35">
   <title>🇳🇱 荷蘭語造句練習</title>
   <link rel="stylesheet" href="dutch-styles.css">
 </head>
@@ -14,7 +17,7 @@
       <div class="home-logo">🇳🇱</div>
       <h1 class="home-title">荷蘭語造句練習</h1>
       <p class="home-subtitle">每天10分鐘，開口說荷蘭語</p>
-      <div class="level-badge">A1 – A2 日常生活</div>
+      <div class="level-badge">A1–A2 日常生活</div>
     </header>
     <div id="categories-grid" class="categories-grid"></div>
     <p class="home-tip">點擊主題開始練習 👆</p>
@@ -33,7 +36,8 @@
       <div id="streak-badge" class="streak-badge">🔥 0</div>
     </header>
 
-    <div class="ex-body">
+    <!-- Scrollable content area -->
+    <div class="ex-scroll">
       <div class="ex-counter-row">
         <span id="ex-counter" class="ex-counter"></span>
       </div>
@@ -49,16 +53,17 @@
       </div>
 
       <div id="word-bank" class="word-bank"></div>
+    </div>
 
-      <div class="action-row">
-        <button id="btn-hint" class="btn-soft">💡 提示</button>
-        <button id="btn-clear" class="btn-soft">↩ 清除</button>
-        <button id="btn-check" class="btn-check" disabled>確認 ✓</button>
-      </div>
+    <!-- Fixed bottom action bar -->
+    <div class="action-bar">
+      <button id="btn-hint" class="btn-soft">💡 提示</button>
+      <button id="btn-clear" class="btn-soft">↩ 清除</button>
+      <button id="btn-check" class="btn-check" disabled>確認 ✓</button>
     </div>
   </div>
 
-  <!-- Feedback Overlay -->
+  <!-- Feedback Overlay (bottom sheet) -->
   <div id="feedback-overlay" class="feedback-overlay hidden">
     <div id="feedback-panel" class="feedback-panel">
       <div id="feedback-icon" class="feedback-icon"></div>
